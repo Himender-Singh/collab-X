@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import img from "../../assets/logo.png"; // Ensure the path to your logo is correct
 import axios from "axios";
 import { toast } from "react-toastify"; // Import toast for notifications
+import { server } from "@/main";
 
 const Signup = () => {
   const [error, setError] = useState("");
@@ -24,7 +25,7 @@ const Signup = () => {
     console.log("Request body:", input); // Log input before sending
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/v1/user/register",
+        `${server}/user/register`,
         input,
         {
           headers: {

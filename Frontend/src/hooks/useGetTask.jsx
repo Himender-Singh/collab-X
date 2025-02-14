@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { setTasks } from "@/redux/authSlice";
+import { server } from "@/main";
 
 const useGetTask = () => {
     const dispatch = useDispatch();
@@ -10,7 +11,7 @@ const useGetTask = () => {
     useEffect(() => {
         const fetchTask = async () => {
             try {
-                const res = await axios.get('http://localhost:8080/api/v1/task/getUserTask', {
+                const res = await axios.get(`${server}/task/getUserTask`, {
                     withCredentials: true,
                 });
                 // console.log(res);

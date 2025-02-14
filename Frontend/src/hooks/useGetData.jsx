@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setChat, setSelected } from "@/redux/authSlice";
+import { server } from "@/main";
 
 const useGetChat = () => {
   const dispatch = useDispatch();
@@ -10,7 +11,7 @@ const useGetChat = () => {
     const fetchChats = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/chat/all",
+          `${server}/chat/all`,
           {
             withCredentials: true, // Ensure credentials are sent with the request
           }

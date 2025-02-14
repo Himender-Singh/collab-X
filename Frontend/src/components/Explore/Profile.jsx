@@ -9,6 +9,7 @@ import useGetUserProfile from '@/hooks/useGetUserProfile';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { followingUpdate } from '@/redux/authSlice';
+import { server } from '@/main';
 
 const Profile = () => {
     const params = useParams();
@@ -37,7 +38,7 @@ const Profile = () => {
     const followAndUnfollowHandler = async () => {
         try {
             axios.defaults.withCredentials = true;
-            const res = await axios.post(`http://localhost:8080/api/v1/user/followorunfollow/${userProfile?._id}`, { userId: user?._id });
+            const res = await axios.post(`${server}/user/followorunfollow/${userProfile?._id}`, { userId: user?._id });
             dispatch(followingUpdate(userProfile?._id)); // Update the following state in Redux
             toast.success(res.data.message);
         } catch (error) {

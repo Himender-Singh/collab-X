@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/redux/authSlice';
+import { server } from '@/main';
 
 const LeftNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +52,7 @@ const LeftNavbar = () => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/v1/user/logout', {
+      const res = await axios.get(`${server}/user/logout`, {
         withCredentials: true,
       });
       if (res.data.success) {
@@ -120,7 +121,7 @@ const LeftNavbar = () => {
         <div className="mt-8 flex flex-col space-y-3">
           <button
             onClick={logoutHandler}
-            className="flex items-center space-x-3 bg-red-500 px-3 py-2 rounded-md hover:bg-blue-600 transition-all duration-200"
+            className="flex items-center space-x-3 bg-red-500 px-3 py-2 rounded-md hover:bg-red-700 transition-all duration-200"
           >
             <FontAwesomeIcon icon={faSignOutAlt} className="w-5 h-5" />
             <span>Logout</span>

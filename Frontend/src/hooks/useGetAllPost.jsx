@@ -1,3 +1,4 @@
+import { server } from "@/main";
 import { setPosts } from "@/redux/postSlice";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ const useGetAllPost = () => {
         const fetchAllPost = async () => {
             setLoading(true); 
             try {
-                const res = await axios.get('http://localhost:8080/api/v1/post/all', { withCredentials: true });
+                const res = await axios.get(`${server}/post/all`, { withCredentials: true });
                 if (res.data.success) { 
                     dispatch(setPosts(res.data.posts));
                 } else {

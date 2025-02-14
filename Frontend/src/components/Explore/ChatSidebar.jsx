@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import useGetChat from "@/hooks/useGetChat";
 import { setChat, setSelected } from "@/redux/authSlice";
 import useGetSelectMessages from "@/hooks/useGetSelectMessages";
+import { server } from "@/main";
 
 const ChatSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -77,7 +78,7 @@ const ChatSidebar = () => {
   const handleDeleteChat = async (chatId) => {
     try {
       // Send DELETE request to server
-      await axios.delete(`http://localhost:8000/api/v1/chat/${chatId}`, {
+      await axios.delete(`${server}/chat/${chatId}`, {
         withCredentials: true, // Include credentials if needed
       });
 

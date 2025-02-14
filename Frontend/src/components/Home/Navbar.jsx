@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { logout } from "../../redux/authSlice";
+import { server } from "@/main";
 
 const Navbar = () => {
   const location = useLocation();
@@ -31,13 +32,13 @@ const Navbar = () => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
+      const res = await axios.get(`${server}/user/logout`, {
         withCredentials: true,
       });
       if (res.data.success) {
         dispatch(logout());
         toast.success(res.data.message);
-        navigate("/login");
+        navigate('/login')
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Logout failed");

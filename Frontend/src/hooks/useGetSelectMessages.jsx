@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setChat } from "@/redux/authSlice";
 import { setMessages } from "@/redux/chatSlice";
+import { server } from "@/main";
 
 const useGetSelectMessages = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const useGetSelectMessages = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/chat/${select._id}`,
+          `${server}/chat/${select._id}`,
           {
             withCredentials: true,
           }

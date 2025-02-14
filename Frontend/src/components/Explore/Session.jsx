@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { setTasks } from "@/redux/authSlice";
 import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
+import { server } from "@/main";
 
 const Session = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,7 @@ const Session = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/v1/task/addTask",
+        `${server}/task/addTask`,
         input,
         {
           headers: { "Content-Type": "application/json" },

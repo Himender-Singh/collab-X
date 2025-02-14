@@ -12,6 +12,7 @@ import { Badge } from "../ui/badge";
 import { toast } from "react-toastify";
 import { followingUpdate } from "@/redux/authSlice";
 import { Link } from "react-router-dom";
+import { server } from "@/main";
 
 const Post = ({ post }) => {
   const [text, setText] = useState("");
@@ -29,7 +30,7 @@ const Post = ({ post }) => {
   const followAndUnfollowHandler = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:8080/api/v1/user/followorunfollow/${post.author._id}`,
+        `${server}/user/followorunfollow/${post.author._id}`,
         { userId: user._id }
       );
       setIsFollowing(!isFollowing); // Toggle follow state locally
@@ -50,7 +51,7 @@ const Post = ({ post }) => {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `http://localhost:8080/api/v1/post/${post._id}/${action}`,
+        `${server}/post/${post._id}/${action}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -81,7 +82,7 @@ const Post = ({ post }) => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8080/api/v1/post/${post._id}/comment`,
+        `${server}/post/${post._id}/comment`,
         { text },
         {
           headers: { "Content-Type": "application/json" },
@@ -111,7 +112,7 @@ const Post = ({ post }) => {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:8080/api/v1/post/delete/${post?._id}`,
+        `${server}/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -130,7 +131,7 @@ const Post = ({ post }) => {
   const bookmarkHandler = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/v1/post/${post?._id}/bookmark`,
+        `${server}/post/${post?._id}/bookmark`,
         { withCredentials: true }
       );
       if (res.data.success) {

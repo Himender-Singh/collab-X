@@ -28,7 +28,7 @@ import About from "./components/Home/About";
 import Error from "./Error";
 
 const persist = persistStore(store);
-export const server = "http://localhost:8080";
+export const server = "http://localhost:8080/api/v1";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

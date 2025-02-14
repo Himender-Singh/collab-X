@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify"; // Import toast
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../../redux/authSlice";
+import { server } from "@/main";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -28,7 +29,7 @@ const Login = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        `http://localhost:8080/api/v1/user/login`,
+        `${server}/user/login`,
         input,
         {
           headers: {
