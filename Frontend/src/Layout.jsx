@@ -8,7 +8,7 @@ const Layout = () => {
   const location = useLocation();
 
   // Hide the LeftNavbar on the home page
-  const hideNavbar = location.pathname === '/' || location.pathname === '/ask' || location.pathname === '/about' ;
+  const hideNavbar = location.pathname === '/' || location.pathname === '/ask' || location.pathname === '/login' || location.pathname === '/signup';
 
   return (
     <div className="">

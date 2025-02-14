@@ -11,10 +11,14 @@
 html, body {
   overflow-x: hidden;
   @apply bg-gradient-to-br from-[#020106] to-[#060000]; /* Neon gradient background */
-  background-size: 510% 510%; /* To enhance the gradient effect */
-  animation: gradientAnimation 5s ease infinite; /* Optional animation */
+  background-size: 510% 510%;
+  animation: gradientAnimation 5s ease infinite;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #fbf7ff #020106; /* Thumb & Track for Firefox */
+  scroll-behavior: smooth;
 }
 
+/* Animation for Background */
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;

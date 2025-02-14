@@ -48,7 +48,6 @@ const Section = ({ children, animation }) => {
 const Home = () => {
   return (
     <div>
-       
       <Section animation={animations.fadeInUp}>
         <LandingHome />
       </Section>
