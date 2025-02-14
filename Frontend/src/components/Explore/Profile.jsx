@@ -92,7 +92,7 @@ const Profile = () => {
                             <Badge className='w-fit bg-gray-700 hover:bg-white hover:text-gray-700 text-gray-300'>
                                 <AtSign /> <span className='pl-1'>{userProfile?.username}</span>
                             </Badge>
-                            <span>🤯 Learn code with patel mernstack style</span>
+                            <span>🤯 Learn code with </span>
                             <span>🤯 Turning code into fun</span>
                             <span>🤯 DM for collaboration</span>
                         </div>
