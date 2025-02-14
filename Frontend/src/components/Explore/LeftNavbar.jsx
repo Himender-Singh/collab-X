@@ -10,7 +10,6 @@ import {
   faEnvelope,
   faClipboardList,
   faComments,
-  faBookmark,
   faSignOutAlt,
   faSquarePlus,
   faUser,
@@ -31,7 +30,7 @@ const LeftNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useSelector(store => store.auth);
+  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const hiddenRoutes = ['/login', '/signup'];
@@ -58,10 +57,10 @@ const LeftNavbar = () => {
       if (res.data.success) {
         dispatch(logout());
         toast.success(res.data.message);
-        navigate('/login')
+        navigate('/login');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Logout failed");
+      toast.error(error.response?.data?.message || 'Logout failed');
     }
   };
 
@@ -69,23 +68,27 @@ const LeftNavbar = () => {
     setIsModalOpen(true);
   };
 
+  const handleLinkClick = () => {
+    setIsOpen(false); // Hide the navbar
+  };
+
   return (
     <>
       <button
-        className="lg:hidden fixed top-4 left-4 text-white z-50"
+        className="lg:hidden fixed top-4 right-4 text-white z-[1000]"
         onClick={() => setIsOpen(!isOpen)}
       >
         <FontAwesomeIcon icon={isOpen ? faTimes : faBars} className="w-6 h-6" />
       </button>
 
       <div
-        className={`fixed border-r-2 border-r-gray-600 overflow-y-auto top-0 left-0 h-screen w-80 bg-[#080101] p-5 font-poppins text-white shadow-md shadow-gray-800/10 z-40 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'
-          } lg:translate-x-0 lg:block`}
+        className={`fixed border-r-2 z-50 border-gray-900 overflow-y-auto top-0 left-0 h-screen w-80 bg-[#1c1c1c] p-5 font-poppins text-white shadow-md shadow-gray-800 transition-transform duration-300 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 lg:block`}
       >
-        <div className="mb-4">
-          <Link to="/" className="flex items-center space-x-3">
-            <img src={logo} alt="Logo" className="w-12" />
-          </Link>
+        <div className="mb-4 flex items-center space-x-3">
+          <img src={logo} alt="Logo" className="w-12" />
+          <span className="text-xl font-semibold">CollabX</span>
         </div>
 
         <nav className="flex flex-col space-y-4">
@@ -93,8 +96,11 @@ const LeftNavbar = () => {
             <Link
               key={to}
               to={to}
-              className="flex items-center space-x-3 hover:bg-blue-500 hover:rounded-md p-2 transition-all duration-200"
-              onClick={to === '/inbox' ? handleInboxClick : undefined}
+              className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
+              onClick={() => {
+                handleLinkClick(); // Close navbar when clicking link
+                if (to === '/inbox') handleInboxClick();
+              }}
             >
               <FontAwesomeIcon icon={icon} className="w-5 h-5" />
               <span>{label}</span>
@@ -104,14 +110,14 @@ const LeftNavbar = () => {
             href="https://chatbot-last-bf47.onrender.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center space-x-3 hover:bg-blue-500 hover:rounded-md p-2 transition-all duration-200"
+            className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
           >
             <FontAwesomeIcon icon={faQuestionCircle} className="w-5 h-5" />
             <span>Ask</span>
           </a>
           <button
             onClick={() => setOpenCreateModal(true)}
-            className="flex items-center space-x-3 hover:bg-blue-500 hover:rounded-md p-2 transition-all duration-200"
+            className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
           >
             <FontAwesomeIcon icon={faSquarePlus} className="w-5 h-5" />
             <span>Create</span>
@@ -121,7 +127,7 @@ const LeftNavbar = () => {
         <div className="mt-8 flex flex-col space-y-3">
           <button
             onClick={logoutHandler}
-            className="flex items-center space-x-3 bg-red-500 px-3 py-2 rounded-md hover:bg-red-700 transition-all duration-200"
+            className="flex items-center space-x-3 bg-red-600 px-3 py-2 rounded-md hover:bg-red-700 transition-all duration-200"
           >
             <FontAwesomeIcon icon={faSignOutAlt} className="w-5 h-5" />
             <span>Logout</span>
