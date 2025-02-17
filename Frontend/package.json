@@ -25,6 +25,7 @@
     "backend": "file:..",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "emoji-picker-react": "^4.12.0",
     "framer-motion": "^11.11.10",
     "lucide-react": "^0.453.0",
     "motion": "^12.0.11",

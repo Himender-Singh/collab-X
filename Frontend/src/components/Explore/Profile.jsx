@@ -11,6 +11,8 @@ import axios from "axios";
 import { followingUpdate } from "@/redux/authSlice";
 import { server } from "@/main";
 import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
+import { setSelectedPost } from "@/redux/postSlice"; // Import the action
+import CommentDialog from "./CommentDialog";
 
 const Profile = () => {
   const params = useParams();
@@ -18,11 +20,12 @@ const Profile = () => {
   useGetUserProfile(userId); // Fetch user profile based on userId
   const [activeTab, setActiveTab] = useState("posts");
   const { userProfile, user } = useSelector((store) => store.auth);
+  const { selectedPost } = useSelector((store) => store.post); // Get selectedPost from Redux store
   const dispatch = useDispatch();
-
   const data = useGetSuggestedUser();
   const [matchedFollowers, setMatchedFollowers] = useState([]);
   const [matchedFollowing, setMatchedFollowing] = useState([]);
+  const [open, setOpen] = useState(false);
 
   // Check if userProfile data is still loading
   if (!userProfile) {
@@ -101,7 +104,7 @@ const Profile = () => {
       });
       setMatchedFollowing(matched.filter((following) => following !== null));
     }
-  }, [data, userProfile?.following]);
+  }, [data, userProfile?.following]);  
 
   return (
     <div className="flex flex-col sm:flex-row sm:max-w-5xl justify-center mx-auto p-5 md:p-8 lg:p-10 text-gray-100">
@@ -240,7 +243,7 @@ const Profile = () => {
               matchedFollowers.length > 0 ? (
                 matchedFollowers.map((follower) => (
                   <div
-                    key={follower._id} // Use follower._id as the key
+                    key={follower._id}
                     className="flex items-center gap-4 p-4 bg-gray-800 rounded-lg shadow-md"
                   >
                     <Avatar className="h-10 w-10">
@@ -278,7 +281,7 @@ const Profile = () => {
               matchedFollowing.length > 0 ? (
                 matchedFollowing.map((following) => (
                   <div
-                    key={following._id} // Use following._id as the key
+                    key={following._id}
                     className="flex items-center gap-4 p-4 bg-gray-800 rounded-lg shadow-md"
                   >
                     <Avatar className="h-10 w-10">
@@ -314,18 +317,17 @@ const Profile = () => {
               )
             ) : (
               displayedPost.map((post) => (
-                <div key={post?._id} className="relative group cursor-pointer">
+                <div
+                  key={post?._id}
+                  className="relative border rounded-md group cursor-pointer"
+                  onClick={() => handlePostClick(post)} // Handle post click
+                >
                   <img
                     src={post.image}
                     alt="postimage"
                     className="rounded-sm my-2 w-full aspect-square object-cover"
                   />
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div>
-                    <button className="flex capitalize mb-4 items-center gap-2 hover:text-gray-300 px-6 py-2 bg-gray-800 rounded-full ">
-                      <span>{post.caption || ""}</span>
-                    </button>
-                    </div>
                     <div className="flex items-center text-white space-x-4">
                       <button className="flex items-center gap-2 hover:text-gray-300">
                         <Heart />

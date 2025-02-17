@@ -86,10 +86,12 @@ const LeftNavbar = () => {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0 lg:block`}
       >
+        <Link to={'/'}>
         <div className="mb-4 flex items-center space-x-3">
           <img src={logo} alt="Logo" className="w-12" />
           <span className="text-xl font-semibold">CollabX</span>
         </div>
+        </Link>
 
         <nav className="flex flex-col space-y-4">
           {navLinks.map(({ to, icon, label }) => (
