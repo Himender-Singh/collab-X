@@ -7,13 +7,13 @@ import {
   faSearch,
   faUsers,
   faQuestionCircle,
-  faEnvelope,
   faClipboardList,
   faComments,
   faSignOutAlt,
   faSquarePlus,
   faUser,
   faEdit,
+  faCompactDisc,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../../assets/logo.png';
 import Create from './Create';
@@ -23,6 +23,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/redux/authSlice';
 import { server } from '@/main';
+import { faConnectdevelop } from '@fortawesome/free-brands-svg-icons';
 
 const LeftNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,11 +39,12 @@ const LeftNavbar = () => {
   const navLinks = [
     { to: '/feed', icon: faClipboardList, label: 'Feed' },
     { to: '/search', icon: faSearch, label: 'Search' },
-    { to: '/mentors', icon: faUsers, label: 'Mock Interview' },
+    { to: '/dsa-sheet-code-editor', icon: faUsers, label: 'DSA Sheet' },
+    { to: '/code-editor', icon: faCompactDisc, label: 'Compiler' },
     { to: user ? `/profile/${user._id}` : '#', icon: faUser, label: 'Profile' },
     { to: '/edit', icon: faEdit, label: 'Edit' },
     { to: '/session', icon: faComments, label: 'Sessions' },
-    { to: '/inbox', icon: faEnvelope, label: 'Inbox' },
+    { to: '/inbox', icon: faConnectdevelop, label: 'Mock Interview' },
   ];
 
   if (hiddenRoutes.includes(location.pathname)) {

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const InterviewMode = ({ isOpen, onClose, onSubmit }) => {
   const [selectedType, setSelectedType] = useState("");
   const [selectedMode, setSelectedMode] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const interviewTypes = [
     "Data Structures & Algorithms (DSA)",
-    "System Design",
     "Behavioral Interview",
     "Full-stack Development Questions",
     "Company-specific Mock Interviews (Google, Amazon, etc.)",
@@ -28,11 +29,25 @@ const InterviewMode = ({ isOpen, onClose, onSubmit }) => {
     }
     setError("");
     setIsSubmitting(true);
+    if(selectedType === "Data Structures & Algorithms (DSA)" && selectedMode === "Self-practice mode – AI evaluation.") {
+      setTimeout(() => {  
+        navigate("/code-editor");
+      }, 3000);
+      onClose()
+      return;
+    }
+    if(selectedType === "Company-specific Mock Interviews (Google, Amazon, etc.)" && selectedMode === "Self-practice mode – AI evaluation.") {
+      setTimeout(() => {  
+        navigate("/dsa-sheet-code-editor");
+      }, 3000);
+      onClose()
+      return;
+    }
     setTimeout(() => {
       onSubmit({ selectedType, selectedMode });
       setIsSubmitting(false);
       onClose();
-    }, 1000);
+    }, 5000);
   };
 
   if (!isOpen) return null;

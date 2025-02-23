@@ -27,6 +27,7 @@ import Modal from "./components/Explore/Modal";
 import About from "./components/Home/About";
 import Error from "./Error";
 import CodeEditor from "./components/Pages/CodeEditor";
+import QuestionList from "./components/Pages/QuestionList";
 
 const persist = persistStore(store);
 export const server = "http://localhost:8000/api/v1";
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
       <Route path="roadmaps" element={<Roadmaps />} />
       <Route path="about" element={<About />} />
       <Route path="code-editor" element={<CodeEditor />} />
+      <Route path="dsa-sheet-code-editor" element={<QuestionList/>} />
       <Route path="*" element={<Error />} /> {/* Catch-all route for unmatched paths */}
     </Route>
   )

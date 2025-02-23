@@ -1,0 +1,983 @@
+{
+  "Array": [
+    {
+      "question_name": "Two Sum",
+      "link": "https://leetcode.com/problems/two-sum/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Best Time to Buy and Sell Stock",
+      "link": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+      "tags": ["Amazon", "Goldman Sachs", "Facebook"]
+    },
+    {
+      "question_name": "Find the Duplicate Number",
+      "link": "https://leetcode.com/problems/find-the-duplicate-number/",
+      "tags": ["Google", "Microsoft", "Adobe"]
+    },
+    {
+      "question_name": "Merge Intervals",
+      "link": "https://leetcode.com/problems/merge-intervals/",
+      "tags": ["Google", "Uber", "Amazon"]
+    },
+    {
+      "question_name": "Subarray Sum Equals K",
+      "link": "https://leetcode.com/problems/subarray-sum-equals-k/",
+      "tags": ["Facebook", "Amazon", "Bloomberg"]
+    },
+    {
+      "question_name": "Next Permutation",
+      "link": "https://leetcode.com/problems/next-permutation/",
+      "tags": ["Google", "Microsoft", "Adobe"]
+    },
+    {
+      "question_name": "Maximum Product Subarray",
+      "link": "https://leetcode.com/problems/maximum-product-subarray/",
+      "tags": ["Amazon", "Facebook", "Google"]
+    },
+    {
+      "question_name": "Majority Element",
+      "link": "https://leetcode.com/problems/majority-element/",
+      "tags": ["Facebook", "Google", "Adobe"]
+    },
+    {
+      "question_name": "Missing Number",
+      "link": "https://leetcode.com/problems/missing-number/",
+      "tags": ["Microsoft", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Trapping Rain Water",
+      "link": "https://leetcode.com/problems/trapping-rain-water/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Product of Array Except Self",
+      "link": "https://leetcode.com/problems/product-of-array-except-self/",
+      "tags": ["Microsoft", "Google", "Facebook"]
+    },
+    {
+      "question_name": "Find All Duplicates in an Array",
+      "link": "https://leetcode.com/problems/find-all-duplicates-in-an-array/",
+      "tags": ["Google", "Amazon", "Adobe"]
+    },
+    {
+      "question_name": "Rotate Array",
+      "link": "https://leetcode.com/problems/rotate-array/",
+      "tags": ["Amazon", "Facebook", "Microsoft"]
+    },
+    {
+      "question_name": "3Sum",
+      "link": "https://leetcode.com/problems/3sum/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Set Matrix Zeroes",
+      "link": "https://leetcode.com/problems/set-matrix-zeroes/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    },
+    {
+      "question_name": "Search in Rotated Sorted Array",
+      "link": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+      "tags": ["Microsoft", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find Peak Element",
+      "link": "https://leetcode.com/problems/find-peak-element/",
+      "tags": ["Google", "Microsoft", "Facebook"]
+    },
+    {
+      "question_name": "Sort Colors",
+      "link": "https://leetcode.com/problems/sort-colors/",
+      "tags": ["Facebook", "Amazon", "Google"]
+    },
+    {
+      "question_name": "Minimum Swaps to Make Binary String Alternating",
+      "link": "https://leetcode.com/problems/minimum-swaps-to-make-binary-string-alternating/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Count Inversions in an Array",
+      "link": "https://www.geeksforgeeks.org/counting-inversions/",
+      "tags": ["Adobe", "Amazon", "Facebook"]
+    },
+    {
+      "question_name": "Kth Largest Element in an Array",
+      "link": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Container With Most Water",
+      "link": "https://leetcode.com/problems/container-with-most-water/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    },
+    {
+      "question_name": "Maximum Subarray",
+      "link": "https://leetcode.com/problems/maximum-subarray/",
+      "tags": ["Amazon", "Microsoft", "Google"]
+    },
+    {
+      "question_name": "Jump Game",
+      "link": "https://leetcode.com/problems/jump-game/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Merge Sorted Array",
+      "link": "https://leetcode.com/problems/merge-sorted-array/",
+      "tags": ["Microsoft", "Amazon", "Google"]
+    },
+    {
+      "question_name": "Find Minimum in Rotated Sorted Array",
+      "link": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Search a 2D Matrix",
+      "link": "https://leetcode.com/problems/search-a-2d-matrix/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Longest Consecutive Sequence",
+      "link": "https://leetcode.com/problems/longest-consecutive-sequence/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    },
+    {
+      "question_name": "Combination Sum",
+      "link": "https://leetcode.com/problems/combination-sum/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Word Search",
+      "link": "https://leetcode.com/problems/word-search/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    }
+  ],
+  "String": [
+    {
+      "question_name": "Longest Substring Without Repeating Characters",
+      "link": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+      "tags": ["Amazon", "Microsoft", "Facebook"]
+    },
+    {
+      "question_name": "Valid Parentheses",
+      "link": "https://leetcode.com/problems/valid-parentheses/",
+      "tags": ["Adobe", "Amazon", "Google"]
+    },
+    {
+      "question_name": "Group Anagrams",
+      "link": "https://leetcode.com/problems/group-anagrams/",
+      "tags": ["Facebook", "Amazon", "Bloomberg"]
+    },
+    {
+      "question_name": "Valid Anagram",
+      "link": "https://leetcode.com/problems/valid-anagram/",
+      "tags": ["Adobe", "Microsoft", "Amazon"]
+    },
+    {
+      "question_name": "Longest Common Prefix",
+      "link": "https://leetcode.com/problems/longest-common-prefix/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    },
+    {
+      "question_name": "Check if Two Strings Are Anagrams",
+      "link": "https://www.geeksforgeeks.org/check-whether-two-strings-are-anagram-of-each-other/",
+      "tags": ["Amazon", "Microsoft", "Google"]
+    },
+    {
+      "question_name": "Reverse Words in a String",
+      "link": "https://leetcode.com/problems/reverse-words-in-a-string/",
+      "tags": ["Facebook", "Google", "Adobe"]
+    },
+    {
+      "question_name": "Isomorphic Strings",
+      "link": "https://leetcode.com/problems/isomorphic-strings/",
+      "tags": ["Microsoft", "Amazon", "Google"]
+    },
+    {
+      "question_name": "Minimum Window Substring",
+      "link": "https://leetcode.com/problems/minimum-window-substring/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find All Anagrams in a String",
+      "link": "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+      "tags": ["Google", "Amazon", "Facebook"]
+    },
+    {
+      "question_name": "Longest Palindromic Substring",
+      "link": "https://leetcode.com/problems/longest-palindromic-substring/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Palindromic Substrings",
+      "link": "https://leetcode.com/problems/palindromic-substrings/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    },
+    {
+      "question_name": "String to Integer (atoi)",
+      "link": "https://leetcode.com/problems/string-to-integer-atoi/",
+      "tags": ["Microsoft", "Amazon", "Google"]
+    },
+    {
+      "question_name": "Implement strStr()",
+      "link": "https://leetcode.com/problems/implement-strstr/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    },
+    {
+      "question_name": "Longest Palindromic Subsequence",
+      "link": "https://leetcode.com/problems/longest-palindromic-subsequence/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Decode Ways",
+      "link": "https://leetcode.com/problems/decode-ways/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Count and Say",
+      "link": "https://leetcode.com/problems/count-and-say/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Longest Repeating Character Replacement",
+      "link": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Longest Substring with At Most K Distinct Characters",
+      "link": "https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Longest Substring with At Least K Repeating Characters",
+      "link": "https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    }
+  ],
+  "StackQueue": [
+    {
+      "question_name": "Valid Parentheses",
+      "link": "https://leetcode.com/problems/valid-parentheses/",
+      "tags": ["Amazon", "Google", "Facebook"]
+    },
+    {
+      "question_name": "Min Stack",
+      "link": "https://leetcode.com/problems/min-stack/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Evaluate Reverse Polish Notation",
+      "link": "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Generate Parentheses",
+      "link": "https://leetcode.com/problems/generate-parentheses/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Daily Temperatures",
+      "link": "https://leetcode.com/problems/daily-temperatures/",
+      "tags": ["Amazon", "Google", "Facebook"]
+    },
+    {
+      "question_name": "Next Greater Element I",
+      "link": "https://leetcode.com/problems/next-greater-element-i/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Next Greater Element II",
+      "link": "https://leetcode.com/problems/next-greater-element-ii/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Next Greater Element III",
+      "link": "https://leetcode.com/problems/next-greater-element-iii/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Implement Queue using Stacks",
+      "link": "https://leetcode.com/problems/implement-queue-using-stacks/",
+      "tags": ["Amazon", "Google", "Facebook"]
+    },
+    {
+      "question_name": "Implement Stack using Queues",
+      "link": "https://leetcode.com/problems/implement-stack-using-queues/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Inorder Traversal",
+      "link": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Tree Preorder Traversal",
+      "link": "https://leetcode.com/problems/binary-tree-preorder-traversal/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Postorder Traversal",
+      "link": "https://leetcode.com/problems/binary-tree-postorder-traversal/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Flatten Nested List Iterator",
+      "link": "https://leetcode.com/problems/flatten-nested-list-iterator/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Basic Calculator",
+      "link": "https://leetcode.com/problems/basic-calculator/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Basic Calculator II",
+      "link": "https://leetcode.com/problems/basic-calculator-ii/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Basic Calculator III",
+      "link": "https://leetcode.com/problems/basic-calculator-iii/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Decode String",
+      "link": "https://leetcode.com/problems/decode-string/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Remove K Digits",
+      "link": "https://leetcode.com/problems/remove-k-digits/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Largest Rectangle in Histogram",
+      "link": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Sliding Window Maximum",
+      "link": "https://leetcode.com/problems/sliding-window-maximum/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Asteroid Collision",
+      "link": "https://leetcode.com/problems/asteroid-collision/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Remove All Adjacent Duplicates In String",
+      "link": "https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Remove All Adjacent Duplicates In String II",
+      "link": "https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Simplify Path",
+      "link": "https://leetcode.com/problems/simplify-path/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Valid Parenthesis String",
+      "link": "https://leetcode.com/problems/valid-parenthesis-string/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Design Circular Queue",
+      "link": "https://leetcode.com/problems/design-circular-queue/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Design Circular Deque",
+      "link": "https://leetcode.com/problems/design-circular-deque/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Design Front Middle Back Queue",
+      "link": "https://leetcode.com/problems/design-front-middle-back-queue/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    }
+  ],
+  "Tree": [
+    {
+      "question_name": "Maximum Depth of Binary Tree",
+      "link": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Same Tree",
+      "link": "https://leetcode.com/problems/same-tree/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Invert Binary Tree",
+      "link": "https://leetcode.com/problems/invert-binary-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Maximum Path Sum",
+      "link": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Construct Binary Tree from Preorder and Inorder Traversal",
+      "link": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Construct Binary Tree from Inorder and Postorder Traversal",
+      "link": "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Tree Level Order Traversal",
+      "link": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Zigzag Level Order Traversal",
+      "link": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Tree Level Order Traversal II",
+      "link": "https://leetcode.com/problems/binary-tree-level-order-traversal-ii/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Vertical Order Traversal",
+      "link": "https://leetcode.com/problems/binary-tree-vertical-order-traversal/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Tree Right Side View",
+      "link": "https://leetcode.com/problems/binary-tree-right-side-view/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Lowest Common Ancestor of a Binary Tree",
+      "link": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Serialize and Deserialize Binary Tree",
+      "link": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Balanced Binary Tree",
+      "link": "https://leetcode.com/problems/balanced-binary-tree/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Symmetric Tree",
+      "link": "https://leetcode.com/problems/symmetric-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Path Sum",
+      "link": "https://leetcode.com/problems/path-sum/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Path Sum II",
+      "link": "https://leetcode.com/problems/path-sum-ii/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Path Sum III",
+      "link": "https://leetcode.com/problems/path-sum-iii/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Sum Root to Leaf Numbers",
+      "link": "https://leetcode.com/problems/sum-root-to-leaf-numbers/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Flatten Binary Tree to Linked List",
+      "link": "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Tree Paths",
+      "link": "https://leetcode.com/problems/binary-tree-paths/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Diameter of Binary Tree",
+      "link": "https://leetcode.com/problems/diameter-of-binary-tree/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Subtree of Another Tree",
+      "link": "https://leetcode.com/problems/subtree-of-another-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Tilt",
+      "link": "https://leetcode.com/problems/binary-tree-tilt/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find Bottom Left Tree Value",
+      "link": "https://leetcode.com/problems/find-bottom-left-tree-value/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Pruning",
+      "link": "https://leetcode.com/problems/binary-tree-pruning/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Cousins in Binary Tree",
+      "link": "https://leetcode.com/problems/cousins-in-binary-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Cameras",
+      "link": "https://leetcode.com/problems/binary-tree-cameras/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Tree Coloring Game",
+      "link": "https://leetcode.com/problems/binary-tree-coloring-game/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Binary Tree Longest Consecutive Sequence",
+      "link": "https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Tree Longest Consecutive Sequence II",
+      "link": "https://leetcode.com/problems/binary-tree-longest-consecutive-sequence-ii/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    }
+  ],
+  "Binary_Search": [
+    {
+      "question_name": "Binary Search",
+      "link": "https://leetcode.com/problems/binary-search/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Search in Rotated Sorted Array",
+      "link": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Search a 2D Matrix",
+      "link": "https://leetcode.com/problems/search-a-2d-matrix/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Find Minimum in Rotated Sorted Array",
+      "link": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find Peak Element",
+      "link": "https://leetcode.com/problems/find-peak-element/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Search in Rotated Sorted Array II",
+      "link": "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find First and Last Position of Element in Sorted Array",
+      "link": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Search Insert Position",
+      "link": "https://leetcode.com/problems/search-insert-position/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find K Closest Elements",
+      "link": "https://leetcode.com/problems/find-k-closest-elements/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Find Minimum in Rotated Sorted Array II",
+      "link": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Kth Smallest Element in a Sorted Matrix",
+      "link": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Median of Two Sorted Arrays",
+      "link": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Search in a Binary Search Tree",
+      "link": "https://leetcode.com/problems/search-in-a-binary-search-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Insert into a Binary Search Tree",
+      "link": "https://leetcode.com/problems/insert-into-a-binary-search-tree/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Delete Node in a BST",
+      "link": "https://leetcode.com/problems/delete-node-in-a-bst/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Kth Smallest Element in a BST",
+      "link": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Lowest Common Ancestor of a BST",
+      "link": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Validate Binary Search Tree",
+      "link": "https://leetcode.com/problems/validate-binary-search-tree/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Convert Sorted Array to Binary Search Tree",
+      "link": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Convert Sorted List to Binary Search Tree",
+      "link": "https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Balanced Binary Search Tree",
+      "link": "https://leetcode.com/problems/balance-a-binary-search-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Closest Binary Search Tree Value",
+      "link": "https://leetcode.com/problems/closest-binary-search-tree-value/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Inorder Successor in BST",
+      "link": "https://leetcode.com/problems/inorder-successor-in-bst/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Range Sum of BST",
+      "link": "https://leetcode.com/problems/range-sum-of-bst/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Trim a Binary Search Tree",
+      "link": "https://leetcode.com/problems/trim-a-binary-search-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Two Sum IV - Input is a BST",
+      "link": "https://leetcode.com/problems/two-sum-iv-input-is-a-bst/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Binary Search Tree Iterator",
+      "link": "https://leetcode.com/problems/binary-search-tree-iterator/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Smallest String Starting From Leaf",
+      "link": "https://leetcode.com/problems/smallest-string-starting-from-leaf/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Recover Binary Search Tree",
+      "link": "https://leetcode.com/problems/recover-binary-search-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "All Elements in Two Binary Search Trees",
+      "link": "https://leetcode.com/problems/all-elements-in-two-binary-search-trees/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    }
+  ],
+  "Graph": [
+    {
+      "question_name": "Number of Islands",
+      "link": "https://leetcode.com/problems/number-of-islands/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Clone Graph",
+      "link": "https://leetcode.com/problems/clone-graph/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Course Schedule",
+      "link": "https://leetcode.com/problems/course-schedule/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Course Schedule II",
+      "link": "https://leetcode.com/problems/course-schedule-ii/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Graph Valid Tree",
+      "link": "https://leetcode.com/problems/graph-valid-tree/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Word Ladder",
+      "link": "https://leetcode.com/problems/word-ladder/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Word Ladder II",
+      "link": "https://leetcode.com/problems/word-ladder-ii/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Minimum Height Trees",
+      "link": "https://leetcode.com/problems/minimum-height-trees/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Redundant Connection",
+      "link": "https://leetcode.com/problems/redundant-connection/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Redundant Connection II",
+      "link": "https://leetcode.com/problems/redundant-connection-ii/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find the Town Judge",
+      "link": "https://leetcode.com/problems/find-the-town-judge/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Network Delay Time",
+      "link": "https://leetcode.com/problems/network-delay-time/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Cheapest Flights Within K Stops",
+      "link": "https://leetcode.com/problems/cheapest-flights-within-k-stops/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Critical Connections in a Network",
+      "link": "https://leetcode.com/problems/critical-connections-in-a-network/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Alien Dictionary",
+      "link": "https://leetcode.com/problems/alien-dictionary/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Reconstruct Itinerary",
+      "link": "https://leetcode.com/problems/reconstruct-itinerary/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Accounts Merge",
+      "link": "https://leetcode.com/problems/accounts-merge/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Evaluate Division",
+      "link": "https://leetcode.com/problems/evaluate-division/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    }
+  ],
+  "DP": [
+    {
+      "question_name": "Climbing Stairs",
+      "link": "https://leetcode.com/problems/climbing-stairs/",
+      "tags": ["Amazon", "Google", "Apple"]
+    },
+    {
+      "question_name": "Longest Increasing Subsequence",
+      "link": "https://leetcode.com/problems/longest-increasing-subsequence/",
+      "tags": ["Microsoft", "Google", "Facebook"]
+    },
+    {
+      "question_name": "Coin Change",
+      "link": "https://leetcode.com/problems/coin-change/",
+      "tags": ["Amazon", "Google", "Uber"]
+    },
+    {
+      "question_name": "0/1 Knapsack Problem",
+      "link": "https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/",
+      "tags": ["Amazon", "Microsoft", "Adobe"]
+    },
+    {
+      "question_name": "Edit Distance",
+      "link": "https://leetcode.com/problems/edit-distance/",
+      "tags": ["Google", "Facebook", "Microsoft"]
+    },
+    {
+      "question_name": "Maximum Subarray",
+      "link": "https://leetcode.com/problems/maximum-subarray/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Unique Paths",
+      "link": "https://leetcode.com/problems/unique-paths/",
+      "tags": ["Google", "Facebook", "Amazon"]
+    },
+    {
+      "question_name": "House Robber",
+      "link": "https://leetcode.com/problems/house-robber/",
+      "tags": ["Google", "Microsoft", "Amazon"]
+    },
+    {
+      "question_name": "Decode Ways",
+      "link": "https://leetcode.com/problems/decode-ways/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Word Break",
+      "link": "https://leetcode.com/problems/word-break/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Longest Common Subsequence",
+      "link": "https://leetcode.com/problems/longest-common-subsequence/",
+      "tags": ["Google", "Microsoft", "Amazon"]
+    },
+    {
+      "question_name": "Partition Equal Subset Sum",
+      "link": "https://leetcode.com/problems/partition-equal-subset-sum/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Target Sum",
+      "link": "https://leetcode.com/problems/target-sum/",
+      "tags": ["Google", "Microsoft", "Amazon"]
+    },
+    {
+      "question_name": "Best Time to Buy and Sell Stock",
+      "link": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Best Time to Buy and Sell Stock with Cooldown",
+      "link": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
+      "tags": ["Google", "Amazon", "Facebook"]
+    },
+    {
+      "question_name": "Minimum Path Sum",
+      "link": "https://leetcode.com/problems/minimum-path-sum/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Maximum Product Subarray",
+      "link": "https://leetcode.com/problems/maximum-product-subarray/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Palindrome Partitioning II",
+      "link": "https://leetcode.com/problems/palindrome-partitioning-ii/",
+      "tags": ["Google", "Amazon", "Facebook"]
+    },
+    {
+      "question_name": "Burst Balloons",
+      "link": "https://leetcode.com/problems/burst-balloons/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Super Egg Drop",
+      "link": "https://leetcode.com/problems/super-egg-drop/",
+      "tags": ["Google", "Amazon", "Facebook"]
+    }
+  ],
+  "Heap": [
+    {
+      "question_name": "Kth Largest Element in an Array",
+      "link": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+      "tags": ["Amazon", "Google", "Facebook"]
+    },
+    {
+      "question_name": "Merge K Sorted Lists",
+      "link": "https://leetcode.com/problems/merge-k-sorted-lists/",
+      "tags": ["Microsoft", "Amazon", "Google"]
+    },
+    {
+      "question_name": "Top K Frequent Elements",
+      "link": "https://leetcode.com/problems/top-k-frequent-elements/",
+      "tags": ["Facebook", "Google", "Amazon"]
+    },
+    {
+      "question_name": "Find Median from Data Stream",
+      "link": "https://leetcode.com/problems/find-median-from-data-stream/",
+      "tags": ["Google", "Microsoft", "Amazon"]
+    },
+    {
+      "question_name": "Sliding Window Maximum",
+      "link": "https://leetcode.com/problems/sliding-window-maximum/",
+      "tags": ["Amazon", "Google", "Uber"]
+    },
+    {
+      "question_name": "Kth Smallest Element in a Sorted Matrix",
+      "link": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/",
+      "tags": ["Google", "Amazon", "Facebook"]
+    },
+    {
+      "question_name": "K Closest Points to Origin",
+      "link": "https://leetcode.com/problems/k-closest-points-to-origin/",
+      "tags": ["Amazon", "Google", "Facebook"]
+    },
+    {
+      "question_name": "Task Scheduler",
+      "link": "https://leetcode.com/problems/task-scheduler/",
+      "tags": ["Google", "Facebook", "Microsoft"]
+    },
+    {
+      "question_name": "Reorganize String",
+      "link": "https://leetcode.com/problems/reorganize-string/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Minimum Cost to Connect Sticks",
+      "link": "https://leetcode.com/problems/minimum-cost-to-connect-sticks/",
+      "tags": ["Amazon", "Google", "Microsoft"]
+    },
+    {
+      "question_name": "Furthest Building You Can Reach",
+      "link": "https://leetcode.com/problems/furthest-building-you-can-reach/",
+      "tags": ["Google", "Amazon", "Facebook"]
+    },
+    {
+      "question_name": "Maximum Performance of a Team",
+      "link": "https://leetcode.com/problems/maximum-performance-of-a-team/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Find K Pairs with Smallest Sums",
+      "link": "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/",
+      "tags": ["Google", "Amazon", "Facebook"]
+    },
+    {
+      "question_name": "IPO",
+      "link": "https://leetcode.com/problems/ipo/",
+      "tags": ["Google", "Amazon", "Microsoft"]
+    },
+    {
+      "question_name": "Sort Characters By Frequency",
+      "link": "https://leetcode.com/problems/sort-characters-by-frequency/",
+      "tags": ["Amazon", "Google", "Facebook"]
+    }
+  ]
+}
