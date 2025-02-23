@@ -29,6 +29,7 @@ const Post = ({ post }) => {
   const { posts } = useSelector((store) => store.post);
   const [liked, setLiked] = useState(post.likes.includes(user?._id));
   const [postLike, setPostLike] = useState(post.likes.length);
+  const [readmore, setReadMore] = useState(false);
   const [comment, setComment] = useState(post.comments || []);
   const dispatch = useDispatch();
   const [isFollowing, setIsFollowing] = useState(
@@ -47,7 +48,7 @@ const Post = ({ post }) => {
       );
       setIsFollowing(!isFollowing);
       dispatch(followingUpdate(post.author._id));
-      toast.success(res.data.message);
+      // toast.success(res.data.message);
     } catch (error) {
       console.error("Error following/unfollowing:", error.response);
       toast.error(error.response.data.message);
@@ -82,7 +83,7 @@ const Post = ({ post }) => {
             : p
         );
         dispatch(setPosts(updatedPostData));
-        toast.success(res.data.message);
+        // toast.success(res.data.message);
       }
     } catch (error) {
       console.error(error);
@@ -110,7 +111,7 @@ const Post = ({ post }) => {
           p._id === post._id ? { ...p, comments: updatedCommentData } : p
         );
         dispatch(setPosts(updatedPostData));
-        toast.success(res.data.message);
+        // toast.success(res.data.message);
         setText("");
       }
     } catch (error) {
@@ -143,7 +144,7 @@ const Post = ({ post }) => {
         withCredentials: true,
       });
       if (res.data.success) {
-        toast.success(res.data.message);
+        // toast.success(res.data.message);
         const newBookmarkState = !bookmark;
         setBookmark(newBookmarkState);
 
@@ -180,7 +181,7 @@ const Post = ({ post }) => {
           text: `Check out this post!`, // Custom share text
           url: shareUrl, // Link to the specific post
         });
-        toast.success("Post shared successfully!");
+        toast.success("Post shared in progress!");
       } catch (error) {
         console.error("Error sharing post:", error);
         toast.error("Failed to share post.");
@@ -201,7 +202,7 @@ const Post = ({ post }) => {
   if (!post || !post.author) return null;
 
   return (
-    <div className="my-8 bg-gray-800 rounded-lg p-4 text-white w-full max-w-md mx-auto shadow-md transition-all duration-300 ease-in-out">
+    <div className="my-8 bg-gray-800 p-4 text-white w-full max-w-lg mx-auto shadow-md transition-all duration-300 ease-in-out">
       {/* Post Header */}
       <div className="flex items-center justify-between mb-2">
         <Link to={`/profile/${post?.author._id}`}>
@@ -276,7 +277,7 @@ const Post = ({ post }) => {
             className="cursor-pointer hover:text-gray-600 transition-colors duration-200"
           />
           <Share
-            onClick={sharePost} // Use the new sharePost function here
+            // Use the new sharePost function here
             className="cursor-pointer hover:text-gray-600 transition-colors duration-200"
           />
         </div>
@@ -296,10 +297,29 @@ const Post = ({ post }) => {
         )}
       </div>
       <span className="font-medium block mb-2">{postLike} likes</span>
+
       <p className="text-sm mb-2">
         <span className="font-medium">{post.author?.username}</span>{" "}
-        {post.caption}
+        {readmore ? (
+          post.caption.split('\n').map((line, index) => (
+            <p key={index} className="mb-2">
+              {line.split(' ').map((word, idx) => (
+                <span key={idx} className={word.startsWith(':') && word.endsWith(':') ? 'font-bold' : ''}>
+                  {word}{' '}
+                </span>
+              ))}
+            </p>
+          ))
+        ) : `${post.caption.substring(0, 100)}...`}
+        <span
+          className="text-blue-500 cursor-pointer"
+          onClick={() => setReadMore(!readmore)}
+        >
+          {readmore ? " Show less" : " Read more"}
+        </span>
       </p>
+
+      {/* Comments Section */}
       {comment.length > 0 && (
         <div className="comments-section">
           <p className="text-sm text-gray-400">

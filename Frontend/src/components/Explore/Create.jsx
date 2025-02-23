@@ -50,6 +50,7 @@ const Create = ({ open, setOpen }) => {
       if (res.data.success) {
         dispatch(setPosts([res.data.post, ...posts]));
         toast.success(res.data.message);
+        window.location.reload();   
         setOpen(false);
       }
     } catch (error) {

@@ -26,6 +26,7 @@ import { persistStore } from "redux-persist";
 import Modal from "./components/Explore/Modal";
 import About from "./components/Home/About";
 import Error from "./Error";
+import CodeEditor from "./components/Pages/CodeEditor";
 
 const persist = persistStore(store);
 export const server = "http://localhost:8000/api/v1";
@@ -48,6 +49,7 @@ const router = createBrowserRouter(
       <Route path="session" element={<Session />} />
       <Route path="roadmaps" element={<Roadmaps />} />
       <Route path="about" element={<About />} />
+      <Route path="code-editor" element={<CodeEditor />} />
       <Route path="*" element={<Error />} /> {/* Catch-all route for unmatched paths */}
     </Route>
   )

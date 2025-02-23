@@ -48,8 +48,9 @@ const Profile = () => {
         `${server}/user/followorunfollow/${userProfile?._id}`,
         { userId: user?._id }
       );
+      window.location.reload();
       dispatch(followingUpdate(userProfile?._id)); // Update the following state in Redux
-      toast.success(res.data.message);
+      // toast.success(res.data.message);
     } catch (error) {
       console.error("Error following/unfollowing:", error.response);
       toast.error(error.response.data.message);
@@ -197,9 +198,6 @@ const Profile = () => {
               <Badge className="w-fit bg-gray-700 hover:bg-white hover:text-gray-700 text-gray-300">
                 <AtSign /> <span className="pl-1">{userProfile?.username}</span>
               </Badge>
-              <span>🤯 Learn code with </span>
-              <span>🤯 Turning code into fun</span>
-              <span>🤯 DM for collaboration</span>
             </div>
           </section>
         </div>
@@ -337,6 +335,9 @@ const Profile = () => {
                         <MessageCircle />
                         <span>{post?.comments?.length || 0}</span>
                       </button>
+                    </div>
+                    <div className="flex p-3 text-justify flex-col mt-2">
+                      {post.caption.substring(0, 800)}....
                     </div>
                   </div>
                 </div>

@@ -12,7 +12,7 @@ import { setPosts } from "@/redux/postSlice";
 import Comment from "./Comment";
 import { server } from "@/main";
 import Picker from "emoji-picker-react";
-import { FaThumbsUp, FaBookmark, FaShareSquare } from "react-icons/fa"; // Importing react-icons
+import { FaThumbsUp, FaComment, FaEye, FaShareSquare, FaEllipsisH } from "react-icons/fa"; // Importing react-icons
 
 const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [text, setText] = useState("");
@@ -20,6 +20,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [comments, setComments] = useState(initialComments || []);
   const [liked, setLiked] = useState(false);
   const [postLikes, setPostLikes] = useState(selectedPost?.likes?.length || 0);
+  const [showComments, setShowComments] = useState(true); // State to toggle comments and caption
   const dispatch = useDispatch();
   const prevComments = useRef(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -99,20 +100,6 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     }
   };
 
-  const bookmarkHandler = async () => {
-    try {
-      const res = await axios.get(`${server}/post/${selectedPost._id}/bookmark`, {
-        withCredentials: true,
-      });
-      if (res.data.success) {
-        toast.success(res.data.message);
-      }
-    } catch (error) {
-      console.error("Error bookmarking post:", error);
-      toast.error("Failed to bookmark post.");
-    }
-  };
-
   const sharePost = async () => {
     if (navigator.share) {
       try {
@@ -131,7 +118,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     }
   };
 
-  const onEmojiClick = (event, emojiObject) => {
+  const onEmojiClick = (event) => {
     setText((prevText) => prevText + event.emoji);
     setShowEmojiPicker(false);
   };
@@ -142,7 +129,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-5xl max-h-[80vh] overflow-y-auto p-0 flex flex-col">
+      <DialogContent className="max-w-5xl max-h-[80vh] overflow-y-auto p-0 flex flex-col rounded-lg shadow-lg bg-gray-900 text-white">
         <div className="flex flex-1">
           <div className="w-1/2 max-h-[60vh] overflow-hidden">
             <img
@@ -152,7 +139,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
             />
           </div>
           <div className="w-1/2 flex flex-col justify-between">
-            <div className="flex items-center justify-between p-4">
+            <div className="flex items-center justify-between p-4 border-b border-gray-700">
               <div className="flex gap-3 items-center">
                 <Link to={`/profile/${selectedPost.author?._id}`}>
                   <Avatar>
@@ -163,32 +150,42 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 <div>
                   <Link
                     to={`/profile/${selectedPost.author?._id}`}
-                    className="font-semibold text-xs"
+                    className="font-semibold text-sm text-gray-300"
                   >
                     {selectedPost.author?.username || "Unknown User"}
                   </Link>
                 </div>
               </div>
               <div className="relative">
-                <FontAwesomeIcon
-                  icon={faEllipsisH}
-                  className="cursor-pointer"
-                />
+                <FaEllipsisH className="cursor-pointer text-gray-400" />
               </div>
             </div>
-            <hr />
-            <div className="flex-1 overflow-y-auto max-h-72 p-2">
-              {comments.length > 0 ? (
-                comments.map((comment) => (
-                  <div key={comment._id} className="my-1">
-                    <Comment comment={comment} />
-                  </div>
-                ))
+            <div className="flex-1 overflow-y-auto max-h-72 p-4">
+              {showComments ? (
+                comments.length > 0 ? (
+                  comments.map((comment) => (
+                    <div key={comment._id} className="my-2">
+                      <Comment comment={comment} />
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-center">No comments yet.</p>
+                )
               ) : (
-                <p className="text-gray-500 text-center">No comments yet.</p>
+                <div className="text-gray-300 text-justify">
+                  {selectedPost.caption.split('\n').map((line, index) => (
+                    <p key={index} className="mb-2">
+                      {line.split(' ').map((word, idx) => (
+                        <span key={idx} className={word.startsWith(':') && word.endsWith(':') ? 'font-bold' : ''}>
+                          {word}{' '}
+                        </span>
+                      ))}
+                    </p>
+                  ))}
+                </div>
               )}
             </div>
-            <div className="p-4">
+            <div className="p-4 border-t border-gray-700">
               <div className="flex items-center gap-2">
                 <div className="relative flex-grow">
                   <input
@@ -196,7 +193,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                     value={text}
                     onChange={changeEventHandler}
                     placeholder="Add a comment..."
-                    className="w-full outline-none border text-sm border-gray-300 p-2 rounded"
+                    className="w-full outline-none border text-sm border-gray-600 p-2 rounded bg-gray-800 text-white"
                   />
                   <button
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -214,19 +211,23 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                   disabled={!text.trim()}
                   onClick={sendMessageHandler}
                   variant="outline"
+                  className="bg-blue-500 text-white hover:text-white hover:bg-blue-600"
                 >
                   Send
                 </Button>
               </div>
             </div>
-            <div className="flex justify-between p-4">
-              <Button onClick={likeOrDislikeHandler} variant="outline">
+            <div className="flex justify-between p-4 text-black border-t border-gray-700">
+              <Button onClick={likeOrDislikeHandler} variant="outline" className="flex items-center gap-2 text-gray-800">
                 <FaThumbsUp /> {postLikes}
               </Button>
-              <Button onClick={bookmarkHandler} variant="outline">
-                <FaBookmark />
+              <Button onClick={() => setShowComments(true)} variant="outline" className="flex items-center gap-2 text-gray-800">
+                <FaComment />
               </Button>
-              <Button onClick={sharePost} variant="outline">
+              <Button onClick={() => setShowComments(false)} variant="outline" className="flex items-center gap-2 text-gray-800">
+                <FaEye />
+              </Button>
+              <Button onClick={sharePost} variant="outline" className="flex items-center gap-2 text-gray-800">
                 <FaShareSquare />
               </Button>
             </div>

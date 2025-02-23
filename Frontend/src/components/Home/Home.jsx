@@ -8,6 +8,7 @@ import Faq from './Faq';
 import Rate from './Rate';
 import SearchBar from './SearchBar';
 import LandingHome from './LandingHome';
+import CodeEditor from '../Pages/CodeEditor';
 
 // Define transition animations
 const animations = {

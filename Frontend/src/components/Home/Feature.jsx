@@ -1,5 +1,5 @@
 import React from "react";
-import img1 from "../../assets/w3.png";
+import img1 from "../../assets/w4.png";
 import img2 from "../../assets/w2.png";
 import img3 from "../../assets/w1.png";
 import img4 from "../../assets/image.png";
@@ -17,16 +17,7 @@ const Feature = () => {
         "Prepares students and professionals for job interviews at top tech companies.",
       main: "It provides an immersive environment where students can practice technical and behavioral interview questions. Receive valuable feedback on your performance.",
     },
-    {
-      img: img1,
-      title: "Peer Matching System 🤖",
-      desc1:
-        "Connects individuals based on skills or complementary needs (e.g., frontend with backend).",
-      desc2: "Encourages collaboration, knowledge-sharing, and teamwork.",
-      desc3:
-        "A supportive space for learning, networking, and professional growth.",
-      main: "Our intelligent peer-matching system connects individuals based on their skills or complementary needs, such as pairing a frontend developer with a backend specialist.",
-    },
+    
     {
       img: img3,
       title: "Use Your Favourite Tools to Code. No Limits. 👥",
@@ -36,6 +27,16 @@ const Feature = () => {
         "Enables pair programming, where two users can work on the same code in real-time.",
       desc3: "Supports C, C++, Java, Python, and other programming languages.",
       main: "Our built-in code editor provides seamless support for multiple programming languages, making it a versatile tool for coders of all levels.",
+    },
+    {
+      img: img1,
+      title: "Peer Matching System 🤖",
+      desc1:
+        "Connects individuals based on skills or complementary needs (e.g., frontend with backend).",
+      desc2: "Encourages collaboration, knowledge-sharing, and teamwork.",
+      desc3:
+        "A supportive space for learning, networking, and professional growth.",
+      main: "Our intelligent peer-matching system connects individuals based on their skills or complementary needs, such as pairing a frontend developer with a backend specialist.",
     },
     {
       img: img4,

@@ -87,7 +87,6 @@ const EditProfile = () => {
           sessions: res.data.user?.sessions,
         };
         dispatch(setAuthUser(updatedUserData));
-        navigate(`/feed`);
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -107,10 +106,10 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="flex text-black max-w-2xl mx-auto p-1">
+    <div className="flex text-white max-w-2xl mx-auto p-4 bg-black rounded-lg shadow-lg">
       <section className="flex flex-col gap-6 w-full my-8">
-        <h1 className="font-bold text-xl">Edit Profile</h1>
-        <div className="flex items-center justify-between bg-gray-100 rounded-xl p-4">
+        <h1 className="font-bold text-2xl text-center">Edit Profile</h1>
+        <div className="flex items-center justify-between bg-gray-800 rounded-xl p-4">
           <div className="flex items-center gap-3">
             <div className="rounded-full overflow-hidden w-16 h-16">
               <img
@@ -124,8 +123,8 @@ const EditProfile = () => {
               />
             </div>
             <div>
-              <h1 className="font-bold text-sm text-black pb-2">{user?.username}</h1>
-              <span className="text-white font-semibold p-1 rounded bg-black">
+              <h1 className="font-bold text-lg text-white pb-2">{user?.username}</h1>
+              <span className="text-black font-semibold p-1 rounded bg-white">
                 {user?.role || "Role here..."}
               </span>
             </div>
@@ -138,7 +137,7 @@ const EditProfile = () => {
           />
           <button
             onClick={() => imageRef?.current.click()}
-            className="bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-400 flex items-center gap-2"
+            className="bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-500 flex items-center gap-2"
           >
             <FontAwesomeIcon icon={faCamera} />
             Change photo
@@ -151,77 +150,73 @@ const EditProfile = () => {
             onChange={(e) => setInput({ ...input, bio: e.target.value })}
             name="bio"
             placeholder="Bio here..."
-            className="w-full p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div>
-          <h1 className="font-bold mb-2">Gender</h1>
+          <h1 className="font-bold text-xl mb-2">Gender</h1>
           <select
             value={input.gender}
             onChange={(e) => selectChangeHandler(e.target.value)}
-            className="w-full p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
         </div>
         <div>
-          <h1 className="font-bold mb-2">Experience</h1>
+          <h1 className="font-bold text-xl mb-2">Experience</h1>
           <input
             type="text"
             value={input.experience}
             onChange={(e) => setInput({ ...input, experience: e.target.value })}
-            className="w-full p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
             placeholder="Enter your experience"
           />
         </div>
         <div>
-          <h1 className="font-bold mb-2">Skills</h1>
+          <h1 className="font-bold text-xl mb-2">Skills</h1>
           <input
             type="text"
             value={input.skills}
             onChange={(e) => setInput({ ...input, skills: e.target.value })}
-            className="w-full p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
             placeholder="Comma-separated skills"
           />
         </div>
         <div>
-          <h1 className="font-bold mb-2">Role</h1>
+          <h1 className="font-bold text-xl mb-2">Role</h1>
           <select
             value={input.role}
             onChange={(e) => setInput({ ...input, role: e.target.value })}
-            className="w-full p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="student">Student</option>
             <option value="counselor">Counselor</option>
           </select>
         </div>
-        {input.role === "counselor" && ( // Conditionally render this section
-          <>
-            <div>
-              <h1 className="font-bold mb-2">Sessions</h1>
-              <input
-                type="number"
-                value={input.sessions}
-                onChange={(e) =>
-                  setInput({ ...input, sessions: e.target.value })
-                }
-                className="w-full p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Number of sessions"
-              />
-            </div>
-          </>
+        {input.role === "counselor" && (
+          <div>
+            <h1 className="font-bold text-xl mb-2">Sessions</h1>
+            <input
+              type="number"
+              value={input.sessions}
+              onChange={(e) => setInput({ ...input, sessions: e.target.value })}
+              className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Number of sessions"
+            />
+          </div>
         )}
         <div className="flex justify-end">
           {loading ? (
-            <button className="w-fit bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-400 flex items-center gap-2">
+            <button className="w-fit bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-500 flex items-center gap-2">
               <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
               Please wait
             </button>
           ) : (
             <button
               onClick={editProfileHandler}
-              className="w-fit bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-400"
+              className="w-fit bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-500"
             >
               Submit
             </button>

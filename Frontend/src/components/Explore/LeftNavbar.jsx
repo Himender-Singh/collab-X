@@ -38,7 +38,7 @@ const LeftNavbar = () => {
   const navLinks = [
     { to: '/feed', icon: faClipboardList, label: 'Feed' },
     { to: '/search', icon: faSearch, label: 'Search' },
-    { to: '/mentors', icon: faUsers, label: 'Mentors' },
+    { to: '/mentors', icon: faUsers, label: 'Mock Interview' },
     { to: user ? `/profile/${user._id}` : '#', icon: faUser, label: 'Profile' },
     { to: '/edit', icon: faEdit, label: 'Edit' },
     { to: '/session', icon: faComments, label: 'Sessions' },

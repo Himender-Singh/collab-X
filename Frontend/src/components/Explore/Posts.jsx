@@ -3,7 +3,6 @@ import useGetAllPost from '@/hooks/useGetAllPost';
 import { useSelector } from 'react-redux';
 import Post from './Post';
 
-
 const Posts = () => {
   // Call the custom hook to fetch posts
   const { loading, error } = useGetAllPost();
@@ -18,7 +17,7 @@ const Posts = () => {
 
   return (
     <div className="p-4 space-y-4">
-      {posts.map((post) => (
+      {posts.slice().reverse().map((post) => (
         <Suspense key={post._id} fallback={<p className="text-center">Loading post...</p>}>
           <Post post={post} />
         </Suspense>
