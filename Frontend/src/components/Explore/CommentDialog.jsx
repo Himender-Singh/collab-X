@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +12,13 @@ import { setPosts } from "@/redux/postSlice";
 import Comment from "./Comment";
 import { server } from "@/main";
 import Picker from "emoji-picker-react";
-import { FaThumbsUp, FaComment, FaEye, FaShareSquare, FaEllipsisH } from "react-icons/fa"; // Importing react-icons
+import {
+  FaThumbsUp,
+  FaComment,
+  FaEye,
+  FaShareSquare,
+  FaEllipsisH,
+} from "react-icons/fa"; // Importing react-icons
 
 const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [text, setText] = useState("");
@@ -22,15 +28,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [postLikes, setPostLikes] = useState(selectedPost?.likes?.length || 0);
   const [showComments, setShowComments] = useState(true); // State to toggle comments and caption
   const dispatch = useDispatch();
-  const prevComments = useRef(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-  useEffect(() => {
-    if (JSON.stringify(prevComments.current) !== JSON.stringify(initialComments)) {
-      prevComments.current = initialComments; // Store last known comments
-      setComments(initialComments || []);
-    }
-  }, [initialComments]);
 
   const changeEventHandler = (e) => {
     setText(e.target.value.trim() ? e.target.value : "");
@@ -73,9 +71,12 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
-      const res = await axios.get(`${server}/post/${selectedPost._id}/${action}`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${server}/post/${selectedPost._id}/${action}`,
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
         const updatedLikes = liked ? postLikes - 1 : postLikes + 1;
         setPostLikes(updatedLikes);
@@ -118,6 +119,22 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     }
   };
 
+  const [pdfModalOpen, setPdfModalOpen] = useState(false); // State for PDF modal
+
+  // Determine the file type based on the URL
+  const getFileType = (url) => {
+    if (url.match(/\.(jpeg|jpg|gif|png)$/i)) {
+      return "image";
+    } else if (url.match(/\.(mp4|mov|avi|mkv)$/i)) {
+      return "video";
+    } else if (url.includes("raw/upload")) {
+      return "pdf";
+    }
+    return "unknown";
+  };
+
+  const fileType = getFileType(selectedPost.image);
+
   const onEmojiClick = (event) => {
     setText((prevText) => prevText + event.emoji);
     setShowEmojiPicker(false);
@@ -129,14 +146,59 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-5xl max-h-[80vh] overflow-y-auto p-0 flex flex-col rounded-lg shadow-lg bg-gray-900 text-white">
-        <div className="flex flex-1">
-          <div className="w-1/2 max-h-[60vh] overflow-hidden">
-            <img
-              src={selectedPost.image}
-              alt="post_img"
-              className="w-full h-full object-cover rounded-l-lg"
-            />
+      <DialogContent className="max-w-5xl h-[40rem] overflow-y-auto p-0 flex flex-col rounded-lg shadow-lg bg-gray-900 text-white">
+        <div className="flex h-full p-4 flex-1">
+          <div className="w-1/2 h-full overflow-hidden">
+            {/* Post Media */}
+            {fileType === "image" && (
+              <img
+                className="rounded-lg my-2 w-full aspect-square h-full object-fill"
+                src={selectedPost.image}
+                alt="selectedPost_img"
+              />
+            )}
+            {fileType === "video" && (
+              <video
+                className="rounded-lg my-2 w-[28rem] aspect-square h-full object-fill"
+                controls
+                autoPlay
+              >
+                <source src={selectedPost.image} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+            {fileType === "pdf" && (
+              <div className="flex flex-col p-2 gap-2">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <iframe
+                      className="rounded-lg my-2 w-full h-full cursor-pointer"
+                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                        selectedPost.image
+                      )}&embedded=true`}
+                      title="PDF Viewer"
+                      onClick={() => setPdfModalOpen(true)}
+                    />
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl h-[90vh]">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                        selectedPost.image
+                      )}&embedded=true`}
+                      title="PDF Viewer"
+                    />
+                  </DialogContent>
+                </Dialog>
+                <a
+                  href={selectedPost.image}
+                  download
+                  className="text-blue-500 hover:underline text-center"
+                >
+                  Download PDF
+                </a>
+              </div>
+            )}
           </div>
           <div className="w-1/2 flex flex-col justify-between">
             <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -173,11 +235,18 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 )
               ) : (
                 <div className="text-gray-300 text-justify">
-                  {selectedPost.caption.split('\n').map((line, index) => (
+                  {selectedPost.caption.split("\n").map((line, index) => (
                     <p key={index} className="mb-2">
-                      {line.split(' ').map((word, idx) => (
-                        <span key={idx} className={word.startsWith(':') && word.endsWith(':') ? 'font-bold' : ''}>
-                          {word}{' '}
+                      {line.split(" ").map((word, idx) => (
+                        <span
+                          key={idx}
+                          className={
+                            word.startsWith(":") && word.endsWith(":")
+                              ? "font-bold"
+                              : ""
+                          }
+                        >
+                          {word}{" "}
                         </span>
                       ))}
                     </p>
@@ -218,16 +287,32 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
               </div>
             </div>
             <div className="flex justify-between p-4 text-black border-t border-gray-700">
-              <Button onClick={likeOrDislikeHandler} variant="outline" className="flex items-center gap-2 text-gray-800">
+              <Button
+                onClick={likeOrDislikeHandler}
+                variant="outline"
+                className="flex items-center gap-2 text-gray-800"
+              >
                 <FaThumbsUp /> {postLikes}
               </Button>
-              <Button onClick={() => setShowComments(true)} variant="outline" className="flex items-center gap-2 text-gray-800">
+              <Button
+                onClick={() => setShowComments(true)}
+                variant="outline"
+                className="flex items-center gap-2 text-gray-800"
+              >
                 <FaComment />
               </Button>
-              <Button onClick={() => setShowComments(false)} variant="outline" className="flex items-center gap-2 text-gray-800">
+              <Button
+                onClick={() => setShowComments(false)}
+                variant="outline"
+                className="flex items-center gap-2 text-gray-800"
+              >
                 <FaEye />
               </Button>
-              <Button onClick={sharePost} variant="outline" className="flex items-center gap-2 text-gray-800">
+              <Button
+                onClick={sharePost}
+                variant="outline"
+                className="flex items-center gap-2 text-gray-800"
+              >
                 <FaShareSquare />
               </Button>
             </div>

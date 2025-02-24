@@ -12,6 +12,8 @@ import { followingUpdate } from "@/redux/authSlice";
 import { server } from "@/main";
 import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
 import { setSelectedPost } from "@/redux/postSlice"; // Import the action
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"; // Import Dialog components
+import clsx from "clsx";
 import CommentDialog from "./CommentDialog";
 
 const Profile = () => {
@@ -26,6 +28,38 @@ const Profile = () => {
   const [matchedFollowers, setMatchedFollowers] = useState([]);
   const [matchedFollowing, setMatchedFollowing] = useState([]);
   const [open, setOpen] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState(null); // State for selected post
+  const [comment, setComment] = useState([]); // State for comments
+
+  // Safely determine the file type based on the URL
+  const getFileType = (url) => {
+    if (!url) return "unknown"; // Handle undefined or null URLs
+    if (typeof url !== "string") return "unknown"; // Ensure URL is a string
+
+    if (url.match(/\.(jpeg|jpg|gif|png)$/i)) {
+      return "image";
+    } else if (url.match(/\.(mp4|mov|avi|mkv)$/i)) {
+      return "video";
+    } else if (url.includes("raw/upload")) {
+      return "pdf";
+    }
+    return "unknown";
+  };
+
+  
+
+  // Handle post click to open modal
+  const handlePostClick = (post) => {
+    if (!post || !post.image) {
+      toast.error("Invalid post data.");
+      return;
+    }
+    setComment(post.comments);
+    dispatch(setSelectedPost(post));
+    setSelectedMedia(post); // Set the entire post object
+    setOpen(true); // Open the modal
+    setComment(post.comments);
+  };
 
   // Check if userProfile data is still loading
   if (!userProfile) {
@@ -50,7 +84,6 @@ const Profile = () => {
       );
       window.location.reload();
       dispatch(followingUpdate(userProfile?._id)); // Update the following state in Redux
-      // toast.success(res.data.message);
     } catch (error) {
       console.error("Error following/unfollowing:", error.response);
       toast.error(error.response.data.message);
@@ -105,11 +138,12 @@ const Profile = () => {
       });
       setMatchedFollowing(matched.filter((following) => following !== null));
     }
-  }, [data, userProfile?.following]);  
+  }, [data, userProfile?.following]);
 
   return (
     <div className="flex flex-col sm:flex-row sm:max-w-5xl justify-center mx-auto p-5 md:p-8 lg:p-10 text-gray-100">
       <div className="flex flex-col gap-10 sm:gap-20 p-5 sm:p-10 w-full">
+        {/* Profile Header */}
         <div className="flex flex-col sm:flex-row sm:gap-10">
           <section className="flex justify-center sm:w-1/3">
             <Avatar className="h-32 w-32 shadow-lg">
@@ -201,6 +235,8 @@ const Profile = () => {
             </div>
           </section>
         </div>
+
+        {/* Posts, Followers, Following Section */}
         <div className="border-t border-t-gray-700 mt-4">
           <div className="flex justify-center md:text-lg text-xs gap-4 md:gap-10 text-gray-300">
             <span
@@ -236,6 +272,8 @@ const Profile = () => {
               FOLLOWING
             </span>
           </div>
+
+          {/* Display Posts, Followers, or Following */}
           <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
             {activeTab === "followers" ? (
               matchedFollowers.length > 0 ? (
@@ -314,38 +352,58 @@ const Profile = () => {
                 </p>
               )
             ) : (
-              displayedPost.map((post) => (
-                <div
-                  key={post?._id}
-                  className="relative border rounded-md group cursor-pointer"
-                  onClick={() => handlePostClick(post)} // Handle post click
-                >
-                  <img
-                    src={post.image}
-                    alt="postimage"
-                    className="rounded-sm my-2 w-full aspect-square object-cover"
-                  />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="flex items-center text-white space-x-4">
-                      <button className="flex items-center gap-2 hover:text-gray-300">
-                        <Heart />
-                        <span>{post?.likes?.length || 0}</span>
-                      </button>
-                      <button className="flex items-center gap-2 hover:text-gray-300">
-                        <MessageCircle />
-                        <span>{post?.comments?.length || 0}</span>
-                      </button>
-                    </div>
-                    <div className="flex p-3 text-justify flex-col mt-2">
-                      {post.caption.substring(0, 800)}....
+              displayedPost.map((post) => {
+                const fileType = getFileType(post?.image);
+                return (
+                  <div
+                    key={post?._id}
+                    className="relative border rounded-md group cursor-pointer"
+                    onClick={() => handlePostClick(post)} // Handle post click
+                  >
+                    {fileType === "image" && (
+                      <img
+                        src={post.image}
+                        alt={post.caption}
+                        className="w-full h-96 object-cover rounded-md"
+                      />
+                    )}
+                    {fileType === "video" && (
+                      <video
+                        src={post.image}
+                        className="w-full h-96 object-cover rounded-md"
+                      />
+                    )}
+                    {fileType === "pdf" && (
+                      <div className="w-full h-96 flex items-center justify-center bg-gray-700 rounded-md">
+                        <span className="text-white">PDF Preview</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="flex items-center text-white space-x-4">
+                        <button className="flex items-center gap-2 hover:text-gray-300">
+                          <Heart />
+                          <span>{post?.likes?.length || 0}</span>
+                        </button>
+                        <button className="flex items-center gap-2 hover:text-gray-300">
+                          <MessageCircle />
+                          <span>{post?.comments?.length || 0}</span>
+                        </button>
+                      </div>
+                      <div className="flex p-3 text-justify flex-col mt-2">
+                        {post.caption.substring(0, 500)}....
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <CommentDialog open={open} setOpen={setOpen} comments={selectedPost.comments} />
+      </Dialog>
     </div>
   );
 };
