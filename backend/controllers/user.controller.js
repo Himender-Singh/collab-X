@@ -61,7 +61,7 @@ export const login = async (req, res) => {
             });
         }
 
-        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '7d' });
         // Populate posts array
         const populatedPosts = await Post.find({ _id: { $in: user.posts }, author: user._id });
 
@@ -76,7 +76,7 @@ export const login = async (req, res) => {
             posts: populatedPosts
         };
 
-        return res.cookie('token', token, { httpOnly: true, sameSite: 'strict', maxAge: 1 * 24 * 60 * 60 * 1000 }).json({
+        return res.cookie('token', token, { httpOnly: true, sameSite: 'strict', maxAge: 7 * 24 * 60 * 60 * 1000 }).json({
             message: `Welcome back ${user.username}`,
             success: true,
             user
