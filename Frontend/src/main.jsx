@@ -28,9 +28,13 @@ import About from "./components/Home/About";
 import Error from "./Error";
 import CodeEditor from "./components/Pages/CodeEditor";
 import QuestionList from "./components/Pages/QuestionList";
+import RequireRole from "./components/Global/RequireRole";
+import AiBot from "./components/Global/AiBot";
+import AskBot from "./components/Global/AskBot";
 
 const persist = persistStore(store);
 export const server = "http://localhost:8000/api/v1";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,18 +44,55 @@ const router = createBrowserRouter(
       <Route path="signup" element={<Signup />} />
       <Route path="explore" element={<Explore />} />
       <Route path="feed" element={<Feed />} />
-      <Route path="create" element={<Create />} />
-      <Route path="search" element={<Search />} />
-      <Route path="mentors" element={<Mentors />} />
-      <Route path="profile/:id?" element={<Profile />} /> {/* Allows optional ID */}
+      <Route path="collabx-ai-chatbot" element={<AskBot />} />
+      <Route path="create" element={
+        <RequireRole>
+          <Create />
+        </RequireRole>
+      } />
+      <Route path="search" element={
+        <RequireRole>
+          <Search />
+        </RequireRole>
+      } />
+      <Route path="mentors" element={
+        <RequireRole>
+          <Mentors />
+        </RequireRole>
+      } />
+      <Route path="profile/:id?" element={
+        <RequireRole>
+          <Profile />
+        </RequireRole>
+      } /> {/* Allows optional ID */}
       <Route path="edit" element={<EditProfile />} />
-      <Route path="ask/:id?" element={<Ask />} />
+      <Route path="ask/:id?" element={
+        <RequireRole>
+          <Ask />
+        </RequireRole>
+      } />
       <Route path="inbox" element={<Modal />} />
-      <Route path="session" element={<Session />} />
-      <Route path="roadmaps" element={<Roadmaps />} />
+      <Route path="session" element={
+        <RequireRole>
+          <Session />
+        </RequireRole>
+      } />
+      <Route path="roadmaps" element={
+        <RequireRole>
+          <Roadmaps />
+        </RequireRole>
+      } />
       <Route path="about" element={<About />} />
-      <Route path="code-editor" element={<CodeEditor />} />
-      <Route path="dsa-sheet-code-editor" element={<QuestionList/>} />
+      <Route path="code-editor" element={
+        <RequireRole>
+          <CodeEditor />
+        </RequireRole>
+      } />
+      <Route path="dsa-sheet-code-editor" element={
+        <RequireRole>
+          <QuestionList />
+        </RequireRole>
+      } />
       <Route path="*" element={<Error />} /> {/* Catch-all route for unmatched paths */}
     </Route>
   )

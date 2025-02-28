@@ -125,7 +125,7 @@ const EditProfile = () => {
             <div>
               <h1 className="font-bold text-lg text-white pb-2">{user?.username}</h1>
               <span className="text-black font-semibold p-1 rounded bg-white">
-                {user?.role || "Role here..."}
+                {user?.role || "student..."}
               </span>
             </div>
           </div>

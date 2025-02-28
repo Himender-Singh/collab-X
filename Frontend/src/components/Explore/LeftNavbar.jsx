@@ -110,15 +110,13 @@ const LeftNavbar = () => {
               <span>{label}</span>
             </Link>
           ))}
-          <a
-            href="https://chatbot-last-bf47.onrender.com"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/collabx-ai-chatbot"
             className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
           >
             <FontAwesomeIcon icon={faQuestionCircle} className="w-5 h-5" />
             <span>Ask</span>
-          </a>
+          </Link>
           <button
             onClick={() => setOpenCreateModal(true)}
             className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"

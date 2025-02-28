@@ -1,156 +1,122 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBook,
-  faPhone,
   faSearch,
   faUsers,
+  faCodeBranch,
+  faLaptopCode,
+  faLightbulb,
 } from "@fortawesome/free-solid-svg-icons";
-import { faSteamSquare } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import img from "../../assets/bg1.svg";
-import Card from "./Card"; // Import the Card component
 import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
+import Card from "./Card";
+import img from "../../assets/bg1.svg";
+import { Link } from "react-router-dom";
 
 const Search = () => {
   const { suggestedUsers } = useGetSuggestedUser() || { suggestedUsers: [] };
   const { user } = useSelector((state) => state.auth);
   const userId = user?._id;
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({
-    experience: "",
-    ratings: "",
-    sessions: "",
-  });
 
-  // Handler for search input
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
-  // Handler for filters
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
-  };
-
-  // Filtered list based on search term and filters
-  const filteredUsers = suggestedUsers.filter((user) => {
-    const matchesSearchTerm = user.username
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesExperience =
-      filters.experience === "" || user.experience === filters.experience;
-    const matchesRatings =
-      filters.ratings === "" || user.ratings === filters.ratings;
-    const matchesSessions =
-      filters.sessions === "" || user.sessions === filters.sessions;
-    return (
-      matchesSearchTerm &&
-      matchesExperience &&
-      matchesRatings &&
-      matchesSessions
-    );
-  });
+  const filteredUsers = suggestedUsers.filter((user) =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div
-      className="relative w-full bg-[#020617] h-auto"
-      style={{
-        backgroundImage: `url(${img})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* Heading */}
-      <div className="relative max-w-screen-lg sm:text-center mx-auto z-10 text-white pt-10 px-4">
-        <h2 className="text-2xl font-bold mb-4 sm:text-4xl md:text-5xl">
-          Our Mentor's
-        </h2>
-        <p className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl">
-          Discover your ideal mentor with our AI-powered smart search, designed
-          to align with your unique skills and career goals. Effortlessly
-          explore relevant profiles and mentorship opportunities to elevate your
-          journey to success!
-        </p>
-      </div>
-
-      {/* Search Bar */}
-      <div className="flex items-center justify-center pt-14 sm:pt-20">
-        <div className="relative w-full max-w-screen-lg">
+    <div className="relative w-full min-h-screen text-white">
+      {/* search bar */}
+      <div className="flex items-center justify-center mt-10">
+        <div className="relative w-full max-w-xl">
           <input
             type="text"
-            className="w-full pl-12 pr-16 py-3 sm:py-4 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            placeholder='Try "I want a roadmap for Data Science..."'
+            className="w-full pl-12 pr-16 py-3 rounded-full bg-[#1b1f2a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+            placeholder="Search for a peer..."
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          {/* Search Button */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-            <button className="flex items-center justify-center w-28 sm:w-32 h-10 sm:h-12 bg-blue-500 text-white rounded-full">
+            <button className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-full">
               <FontAwesomeIcon icon={faSearch} />
-              <span className="pl-2 sm:pl-3">Search</span>
+              <span className="pl-2">Search</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Content Section */}
-      <div className="flex flex-col p-2 sm:flex-row justify-between items-start pt-10 sm:pt-12 mx-auto max-w-screen-lg relative z-10">
-        {/* Cards Section */}
-        <div className="flex flex-wrap justify-start items-start w-full sm:w-3/4">
-          {filteredUsers.map((user) => (
+      <div className="flex flex-col md:flex-row justify-between font-mono my-20 mx-6 md:mx-12">
+  {/* Left Section */}
+  <div className="w-full md:w-2/3 text-center md:text-left">
+    <h2 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white">
+      Find Your Coding Partner!
+    </h2>
+    <p className="text-gray-300 w-full md:w-[42rem] mt-3 text-lg md:text-2xl">
+      Connect with like-minded peers, collaborate on projects, and enhance your skills with real-time coding and discussions.
+    </p>
+    <div className="mt-6 md:mt-8">
+      <Link to="/code-editor">
+        <button className="bg-blue-100 shadow-green-400 duration-1000 text-black text-lg md:text-2xl font-semibold rounded-full shadow-lg transition-shadow p-3 md:p-4 hover:shadow-blue-400">
+          Let's Code Together!
+        </button>
+      </Link>
+    </div>
+  </div>
+
+  {/* Features Section */}
+  <div className="bg-gradient-to-b duration-1000 mt-8 md:mt-0 md:w-96 shadow-2xl shadow-blue-300 hover:shadow-green-800 from-[#131820] to-[#1b2330] rounded-2xl p-6 md:p-8 w-full text-gray-200 border border-gray-700">
+    <h3 className="text-lg md:text-xl font-bold text-white text-center mb-4 tracking-wide">
+      🚀 Why <span className="text-red-500">CollabX?</span>
+    </h3>
+    <ul className="mt-4 space-y-4">
+      {[
+        { icon: faUsers, text: "Work with skilled peers & learn together.", color: "bg-red-600" },
+        { icon: faCodeBranch, text: "Build real-world projects & improve coding.", color: "bg-blue-500" },
+        { icon: faLaptopCode, text: "Participate in hackathons & challenges.", color: "bg-yellow-500" },
+        { icon: faLightbulb, text: "Gain mentorship & networking opportunities.", color: "bg-green-500" },
+      ].map(({ icon, text, color }, index) => (
+        <li key={index} className="flex items-center group">
+          <div className={`w-12 h-12 flex-shrink-0 flex items-center justify-center ${color} rounded-full text-white shadow-md transition-transform transform group-hover:scale-110`}>
+            <FontAwesomeIcon icon={icon} className="text-lg" />
+          </div>
+          <span className="ml-4 text-gray-300 group-hover:text-white transition-colors duration-300">
+            {text}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+
+      {/* Results Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto pt-12 px-4">
+        {/* User Cards Section */}
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => (
             <Card
               key={user._id}
               title={user.username}
               content={user.bio}
-              author={`${user.username}`}
-              role={`${user.role}`}
-              experience={`${user.experience} years of experience`}
-              ratings={`${user.ratings} Ratings`}
-              sessions={`${user.sessions} Sessions`}
+              author={user.username}
+              role={user.role}
+              experience={`${user.experience} years`}
               skills={user.skills}
               userImage={
                 user.profilePicture || "https://via.placeholder.com/64"
               }
-              buttons={user.buttons}
               userId={user._id}
             />
-          ))}
-        </div>
-
-        {/* Information Section */}
-        <div className="bg-white hidden sm:block sticky sm:bottom-4 top-12 rounded-lg py-4 px-6 shadow-lg w-auto lg:w-96 ml-4 mt-6 sm:mt-0">
-          <h3 className="text-lg font-semibold mb-2">What our Mentor offers</h3>
-          <ul className="list-inside text-white list-none space-y-2">
-            <li className="p-6 bg-black rounded">
-              <FontAwesomeIcon icon={faPhone} className="pr-2 text-green-600" />
-              Audio/Video Sessions
-            </li>
-            <li className="p-6 bg-black rounded">
-              <FontAwesomeIcon icon={faUsers} className="pr-2 text-blue-600" />
-              Mock Interviews & Talk Sessions
-            </li>
-            <li className="p-6 bg-black rounded">
-              <FontAwesomeIcon
-                icon={faSteamSquare}
-                className="pr-2 text-green-600"
-              />
-              Goal Setting & Follow Ups
-            </li>
-            <li className="p-6 bg-black rounded">
-              <FontAwesomeIcon icon={faBook} className="pr-2 text-blue-600" />
-              Resume Reviews & Job Referrals
-            </li>
-          </ul>
-        </div>
+          ))
+        ) : (
+          <p className="text-gray-400 text-lg col-span-full text-center">
+            No matching peers found.
+          </p>
+        )}
       </div>
     </div>
   );
 };
 
 export default Search;
-

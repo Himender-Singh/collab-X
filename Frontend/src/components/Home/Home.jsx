@@ -9,6 +9,7 @@ import Rate from './Rate';
 import SearchBar from './SearchBar';
 import LandingHome from './LandingHome';
 import CodeEditor from '../Pages/CodeEditor';
+import AiBot from '../Global/AiBot';
 
 // Define transition animations
 const animations = {
@@ -48,7 +49,7 @@ const Section = ({ children, animation }) => {
 
 const Home = () => {
   return (
-    <div>
+    <div className='relative'>
       <Section animation={animations.fadeInUp}>
         <LandingHome />
       </Section>
@@ -67,6 +68,7 @@ const Home = () => {
       <Section animation={animations.fadeInLeft}>
         <Faq />
       </Section>
+      
     </div>
   );
 };

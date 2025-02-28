@@ -49,7 +49,7 @@ const CodeEditor = () => {
       <div className="w-2/3 h-full p-4 border border-gray-300 rounded-lg shadow-lg bg-[#131212]">
         <div className="flex justify-between items-center mb-2">
           {/* Logo Section */}
-          <Link to="/feed" target="_blank" className="flex items-center">
+          <Link to="/feed" className="flex items-center">
             <span className="text-2xl text-white"> HOME </span>
           </Link>
 

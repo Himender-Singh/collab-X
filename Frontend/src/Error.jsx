@@ -1,27 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import img from "./assets/a1.svg"
+import { AiOutlineClose } from 'react-icons/ai'; // Importing close icon
+import { AiOutlineExclamationCircle } from 'react-icons/ai'; // Importing open icon
 
 const Error = () => {
     const navigate = useNavigate();
 
-    const goToHome = () => {
-        navigate('/');
+    useEffect(() => {
+        // Redirect to home page after a delay
+        const timer = setTimeout(() => {
+            navigate('/');
+        }, 5000); // Redirects after 5 seconds
+
+        // Cleanup the timer
+        return () => clearTimeout(timer);
+    }, [navigate]);
+
+    const handleClose = () => {
+        navigate('/'); // Close button redirects to home
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-black">
-            <img src={img} alt="Error" className="w-1/2 mb-8" /> {/* Error image */}
-            <div className="text-center">
-                <h1 className="text-9xl font-bold text-red-500">404</h1>
-                <h2 className="mt-4 text-2xl font-semibold text-white">Page Not Found</h2>
-                <p className="mt-2 text-gray-400">The page you are looking for does not exist.</p>
-                <button
-                    onClick={goToHome}
-                    className="mt-6 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-                >
-                    Go to Homepage
-                </button>
+        <div className="flex relative items-center justify-center h-screen bg-opacity-50">
+            <div className="bg-white absolute rounded-lg shadow-lg p-8 max-w-md text-center">
+                <div className="flex justify-between items-center">
+                    <div className="text-yellow-500 text-3xl">
+                        <AiOutlineExclamationCircle />
+                    </div>
+                    <button onClick={handleClose} className="text-gray-500 hover:text-gray-700">
+                        <AiOutlineClose size={24} />
+                    </button>
+                </div>
+                <h1 className="text-4xl font-bold mt-4">404</h1>
+                <p className="text-gray-700 mt-2">Page Not Found</p>
+                <p className="text-gray-500 mt-2">You will be redirected to the home page shortly.</p>
             </div>
         </div>
     );

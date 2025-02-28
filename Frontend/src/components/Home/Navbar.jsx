@@ -145,9 +145,7 @@ const Navbar = () => {
                 </button>
 
                 <Link
-                  to="/code-editor"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  to="/collabx-ai-chatbot"
                   className="hover:text-blue-500"
                 >
                   Ask
@@ -273,9 +271,7 @@ const Navbar = () => {
               </button>
 
               <Link
-                to="/code-editor"
-                target="_blank"
-                rel="noopener noreferrer"
+                to="/collabx-ai-chatbot"
                 className="hover:text-blue-500 w-full py-4 border-b-2"
               >
                 Ask

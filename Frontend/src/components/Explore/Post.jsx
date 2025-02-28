@@ -353,16 +353,18 @@ const Post = ({ post }) => {
           </div>
 
           {bookmark ? (
+            <FaBookmark
+            onClick={bookmarkHandler}
+            size={24}
+            className="cursor-pointer hover:text-gray-600 transition-colors duration-200"
+          />
+          ) : (
+            
+
             <Bookmark
               onClick={bookmarkHandler}
               size={24}
               className="cursor-pointer  transition-transform transform hover:scale-110"
-            />
-          ) : (
-            <FaBookmark
-              onClick={bookmarkHandler}
-              size={24}
-              className="cursor-pointer hover:text-gray-600 transition-colors duration-200"
             />
           )}
         </div>
