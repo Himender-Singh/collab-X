@@ -79,3 +79,8 @@ This project is licensed under the MIT License.
 
 ### Join CollabX and take your coding journey to the next level! 🚀
 
+access this project by using the below email and password(only for testing purpose).
+
+email = "john@gmail.com"
+pass = "1234"
+
