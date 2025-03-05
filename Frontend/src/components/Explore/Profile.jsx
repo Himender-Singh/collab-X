@@ -15,6 +15,7 @@ import { setSelectedPost } from "@/redux/postSlice"; // Import the action
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"; // Import Dialog components
 import clsx from "clsx";
 import CommentDialog from "./CommentDialog";
+import Create from "./Create";
 
 const Profile = () => {
   const params = useParams();
@@ -31,6 +32,8 @@ const Profile = () => {
   const [selectedMedia, setSelectedMedia] = useState(null); // State for selected post
   const [comment, setComment] = useState([]); // State for comments
 
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+
   // Safely determine the file type based on the URL
   const getFileType = (url) => {
     if (!url) return "unknown"; // Handle undefined or null URLs
@@ -45,8 +48,6 @@ const Profile = () => {
     }
     return "unknown";
   };
-
-  
 
   // Handle post click to open modal
   const handlePostClick = (post) => {
@@ -82,7 +83,9 @@ const Profile = () => {
         `${server}/user/followorunfollow/${userProfile?._id}`,
         { userId: user?._id }
       );
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      },50);
       dispatch(followingUpdate(userProfile?._id)); // Update the following state in Redux
     } catch (error) {
       console.error("Error following/unfollowing:", error.response);
@@ -174,14 +177,16 @@ const Profile = () => {
                       variant="secondary"
                       className="hover:bg-gray-700 hover:text-white h-8 sm:h-10 text-sm sm:text-base"
                     >
-                      View Archive
+                      Cloud editor
                     </Button>
                     <Button
                       variant="secondary"
-                      className="hover:bg-gray-700 hover:text-white  h-8 sm:h-10 text-sm sm:text-base"
+                      onClick={() => setOpenCreateModal(true)}
+                      className="hover:bg-gray-700 hover:text-white text-blue-800  h-8 sm:h-10 text-sm sm:text-base"
                     >
-                      Ad Tools
+                      Give advice
                     </Button>
+                    <Create open={openCreateModal} setOpen={setOpenCreateModal} />
                   </div>
                 </div>
               ) : (
@@ -402,7 +407,11 @@ const Profile = () => {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <CommentDialog open={open} setOpen={setOpen} comments={selectedPost.comments} />
+        <CommentDialog
+          open={open}
+          setOpen={setOpen}
+          comments={selectedPost.comments}
+        />
       </Dialog>
     </div>
   );

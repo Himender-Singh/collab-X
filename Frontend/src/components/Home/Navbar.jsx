@@ -150,7 +150,7 @@ const Navbar = () => {
                 >
                   Ask
                 </Link>
-                <Link to="/about" className="hover:text-blue-500">
+                <Link to="/code-editor" className="hover:text-blue-500">
                   <span className="text-white  px-7 py-2 text-md rounded-full bg-gradient-to-l from-pink-500 to-purple-500 hover:from-purple-500 hover:to-pink-500 transition-all duration-300">
                     Let's code!
                   </span>
@@ -277,7 +277,7 @@ const Navbar = () => {
                 Ask
               </Link>
               <Link
-                to="/about"
+                to="/code-editor"
                 className="hover:text-blue-500 w-full py-4 border-b-2"
                 onClick={(e) => handleLinkClick(e, "/about")}
               >

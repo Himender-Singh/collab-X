@@ -5,15 +5,15 @@ import {
   faBars,
   faTimes,
   faSearch,
-  faUsers,
-  faQuestionCircle,
-  faClipboardList,
   faComments,
   faSignOutAlt,
   faSquarePlus,
   faUser,
   faEdit,
-  faCompactDisc,
+  faCode,
+  faSheetPlastic,
+  faHome,
+  faBrain,
 } from '@fortawesome/free-solid-svg-icons';
 import logo from '../../assets/logo.png';
 import Create from './Create';
@@ -23,7 +23,9 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/redux/authSlice';
 import { server } from '@/main';
-import { faConnectdevelop } from '@fortawesome/free-brands-svg-icons';
+import { VscRemoteExplorer } from "react-icons/vsc";
+import { faWpexplorer } from '@fortawesome/free-brands-svg-icons';
+
 
 const LeftNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,14 +39,14 @@ const LeftNavbar = () => {
   const hiddenRoutes = ['/login', '/signup'];
 
   const navLinks = [
-    { to: '/feed', icon: faClipboardList, label: 'Feed' },
+    { to: '/feed', icon: faHome, label: 'Feed' },
     { to: '/search', icon: faSearch, label: 'Search' },
-    { to: '/dsa-sheet-code-editor', icon: faUsers, label: 'DSA Sheet' },
-    { to: '/code-editor', icon: faCompactDisc, label: 'Compiler' },
+    { to: '/dsa-sheet-code-editor', icon: faSheetPlastic, label: 'DSA Sheet' },
+    { to: '/code-editor', icon: faCode, label: 'Compiler' },
     { to: user ? `/profile/${user._id}` : '#', icon: faUser, label: 'Profile' },
     { to: '/edit', icon: faEdit, label: 'Edit' },
     { to: '/session', icon: faComments, label: 'Sessions' },
-    { to: '/inbox', icon: faConnectdevelop, label: 'Mock Interview' },
+    { to: '/inbox', icon: faWpexplorer , label: 'Mock Interview' },
   ];
 
   if (hiddenRoutes.includes(location.pathname)) {
@@ -88,7 +90,7 @@ const LeftNavbar = () => {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0 lg:block`}
       >
-        <Link to={'/'}>
+        <Link to={'/feed'}>
         <div className="mb-4 flex items-center space-x-3">
           <img src={logo} alt="Logo" className="w-12" />
           <span className="text-xl font-semibold">CollabX</span>
@@ -114,8 +116,8 @@ const LeftNavbar = () => {
             to="/collabx-ai-chatbot"
             className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
           >
-            <FontAwesomeIcon icon={faQuestionCircle} className="w-5 h-5" />
-            <span>Ask</span>
+            <FontAwesomeIcon icon={faBrain} className="w-5 h-5" />
+            <span>AI ChatBot</span>
           </Link>
           <button
             onClick={() => setOpenCreateModal(true)}

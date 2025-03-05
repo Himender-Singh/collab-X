@@ -106,7 +106,7 @@ const Post = ({ post }) => {
             : p
         );
         dispatch(setPosts(updatedPostData));
-        toast.success(res.data.message);
+        // toast.success(res.data.message);
       }
     } catch (error) {
       console.error(error);
@@ -134,7 +134,7 @@ const Post = ({ post }) => {
           p._id === post._id ? { ...p, comments: updatedCommentData } : p
         );
         dispatch(setPosts(updatedPostData));
-        toast.success(res.data.message);
+        // toast.success(res.data.message);
         setText("");
       }
     } catch (error) {
@@ -167,7 +167,7 @@ const Post = ({ post }) => {
         withCredentials: true,
       });
       if (res.data.success) {
-        toast.success(res.data.message);
+        // toast.success(res.data.message);
         const newBookmarkState = !bookmark;
         setBookmark(newBookmarkState);
 
@@ -282,7 +282,7 @@ const Post = ({ post }) => {
         )}
         {fileType === "video" && (
           <video
-            className="rounded-lg my-2 w-full aspect-square object-fill"
+            className="rounded-lg my-2 w-full aspect-square object-cover"
             controls
           >
             <source src={post.image} type="video/mp4" />

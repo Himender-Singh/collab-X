@@ -78,10 +78,10 @@ const Create = ({ open, setOpen }) => {
           </Avatar>
           <div>
             <h1 className='font-semibold text-xs'>{user?.username}</h1>
-            <span className='text-gray-600 text-xs'>Bio here...</span>
+            <span className='text-gray-600 text-xs'>{user?.bio}</span>
           </div>
         </div>
-        <Textarea value={caption} onChange={(e) => setCaption(e.target.value)} className="focus-visible:ring-transparent border-none" placeholder="Write a caption..." />
+        <Textarea value={caption} onChange={(e) => setCaption(e.target.value)} className="focus-visible:ring-transparent border-none" placeholder="Share your thoughts..." />
         {preview && <div className='w-full h-64 flex items-center justify-center'>{preview}</div>}
         <input ref={imageRef} type='file' className='hidden' onChange={fileChangeHandler} accept="image/*,video/*,application/pdf" />
         <Button onClick={() => imageRef.current.click()} className='w-fit mx-auto bg-[#0095F6] hover:bg-[#258bcf] '>Select from computer</Button>

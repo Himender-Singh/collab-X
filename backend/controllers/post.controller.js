@@ -11,23 +11,29 @@ export const addNewPost = async (req, res) => {
     const file = req.file; // This can be an image, PDF, or video
     const authorId = req.id;
 
+
     if (!file) return res.status(400).json({ message: "File required" });
 
     let cloudResponse;
 
     if (file.mimetype.startsWith("image")) {
       // Handle image upload
-      const optimizedImageBuffer = await sharp(file.buffer)
-        .resize({ width: 800, height: 800, fit: "inside" })
-        .toFormat("jpeg", { quality: 80 })
-        .toBuffer();
+      try {
+        const optimizedImageBuffer = await sharp(file.buffer)
+          .resize({ width: 800, height: 800, fit: "inside" })
+          .toFormat("jpeg", { quality: 80 })
+          .toBuffer();
 
-      const fileUri = `data:image/jpeg;base64,${optimizedImageBuffer.toString(
-        "base64"
-      )}`;
-      cloudResponse = await cloudinary.uploader.upload(fileUri, {
-        resource_type: "image",
-      });
+        const fileUri = `data:image/jpeg;base64,${optimizedImageBuffer.toString(
+          "base64"
+        )}`;
+        cloudResponse = await cloudinary.uploader.upload(fileUri, {
+          resource_type: "image",
+        });
+      } catch (error) {
+        console.error("Error processing image:", error);
+        return res.status(400).json({ message: "Invalid image file" });
+      }
     } else if (file.mimetype.startsWith("video")) {
       // Handle video upload
       const fileUri = `data:${file.mimetype};base64,${file.buffer.toString(
@@ -70,7 +76,7 @@ export const addNewPost = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error in addNewPost:", error);
     return res
       .status(500)
       .json({ message: "Internal server error", error: error.message });

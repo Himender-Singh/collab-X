@@ -17,7 +17,7 @@ const Posts = () => {
 
   return (
     <div className="p-4 space-y-4">
-      {posts.slice().reverse().map((post) => (
+      {posts.slice().map((post) => (
         <Suspense key={post._id} fallback={<p className="text-center">Loading post...</p>}>
           <Post post={post} />
         </Suspense>

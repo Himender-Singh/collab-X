@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -18,7 +16,11 @@ import {
   FaEye,
   FaShareSquare,
   FaEllipsisH,
-} from "react-icons/fa"; // Importing react-icons
+  FaFolder,
+  FaHeart,
+  FaBookmark,
+} from "react-icons/fa";
+import { Bookmark, Command, Folder, Heart, Share } from "lucide-react";
 
 const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [text, setText] = useState("");
@@ -26,12 +28,42 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [comments, setComments] = useState(initialComments || []);
   const [liked, setLiked] = useState(false);
   const [postLikes, setPostLikes] = useState(selectedPost?.likes?.length || 0);
-  const [showComments, setShowComments] = useState(true); // State to toggle comments and caption
+  const [showComments, setShowComments] = useState(true);
   const dispatch = useDispatch();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [bookmark, setBookmark] = useState(
+    (selectedPost.bookmarks || []).includes(user?._id) || false
+  );
 
   const changeEventHandler = (e) => {
     setText(e.target.value.trim() ? e.target.value : "");
+  };
+
+  const bookmarkHandler = async () => {
+    try {
+      const res = await axios.get(
+        `${server}/post/${selectedPost._id}/bookmark`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        const newBookmarkState = !bookmark;
+        setBookmark(newBookmarkState);
+
+        // Update Redux state
+        const updatedPosts = posts.map((p) =>
+          p._id === selectedPost._id
+            ? { ...p, bookmarks: res.data.updatedBookmarks }
+            : p
+        );
+        dispatch(setPosts(updatedPosts));
+      }
+    } catch (error) {
+      console.error("Error bookmarking post:", error);
+      toast.error("Failed to bookmark post.");
+    }
   };
 
   const sendMessageHandler = async () => {
@@ -119,9 +151,8 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     }
   };
 
-  const [pdfModalOpen, setPdfModalOpen] = useState(false); // State for PDF modal
+  const [pdfModalOpen, setPdfModalOpen] = useState(false);
 
-  // Determine the file type based on the URL
   const getFileType = (url) => {
     if (url.match(/\.(jpeg|jpg|gif|png)$/i)) {
       return "image";
@@ -141,25 +172,24 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   };
 
   if (!selectedPost) {
-    return null; // Don't render if no post is selected
+    return null;
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-5xl h-[40rem] overflow-y-auto p-0 flex flex-col rounded-lg shadow-lg bg-gray-900 text-white">
-        <div className="flex h-full p-4 flex-1">
-          <div className="w-1/2 h-full overflow-hidden">
-            {/* Post Media */}
+      <DialogContent className="max-w-7xl h-[42rem] border-none overflow-y-auto p-0 flex flex-col bg-gray-900 text-white">
+        <div className="flex h-full flex-1">
+          <div className="w-2/3 border-r border-gray-700 h-full overflow-hidden">
             {fileType === "image" && (
               <img
-                className="rounded-lg my-2 w-full aspect-square h-full object-fill"
+                className="w-full aspect-square h-full object-fill"
                 src={selectedPost.image}
                 alt="selectedPost_img"
               />
             )}
             {fileType === "video" && (
               <video
-                className="rounded-lg my-2 w-[28rem] aspect-square h-full object-fill"
+                className="w-full aspect-square h-full object-fill"
                 controls
                 autoPlay
               >
@@ -172,7 +202,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 <Dialog>
                   <DialogTrigger asChild>
                     <iframe
-                      className="rounded-lg my-2 w-full h-full cursor-pointer"
+                      className="my-2 w-full h-[35rem] cursor-pointer"
                       src={`https://docs.google.com/viewer?url=${encodeURIComponent(
                         selectedPost.image
                       )}&embedded=true`}
@@ -182,7 +212,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                   </DialogTrigger>
                   <DialogContent className="max-w-4xl h-[90vh]">
                     <iframe
-                      className="w-full h-full"
+                      className="w-[28rem] h-full"
                       src={`https://docs.google.com/viewer?url=${encodeURIComponent(
                         selectedPost.image
                       )}&embedded=true`}
@@ -190,17 +220,19 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                     />
                   </DialogContent>
                 </Dialog>
-                <a
-                  href={selectedPost.image}
-                  download
-                  className="text-blue-500 hover:underline text-center"
-                >
-                  Download PDF
-                </a>
+                <div className="flex justify-center items-center">
+                  <a
+                    href={selectedPost.image}
+                    download
+                    className="text-gray-50 rounded-lg p-2 bg-blue-600 hover:underline text-center"
+                  >
+                    Download PDF
+                  </a>
+                </div>
               </div>
             )}
           </div>
-          <div className="w-1/2 flex flex-col justify-between">
+          <div className="w-[40%] flex flex-col justify-between">
             <div className="flex items-center justify-between p-4 border-b border-gray-700">
               <div className="flex gap-3 items-center">
                 <Link to={`/profile/${selectedPost.author?._id}`}>
@@ -222,7 +254,50 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 <FaEllipsisH className="cursor-pointer text-gray-400" />
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto max-h-72 p-4">
+            <div className="flex-1 overflow-y-auto max-h-96 p-4">
+              {/* Caption as the first comment */}
+              {selectedPost.caption && (
+                <div className="my-2">
+                  <div className="flex items-start gap-3">
+                    <Link to={`/profile/${selectedPost.author?._id}`}>
+                      <Avatar>
+                        <AvatarImage
+                          src={selectedPost.author?.profilePicture}
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </Link>
+                    <div className="flex flex-col">
+                      <Link
+                        to={`/profile/${selectedPost.author?._id}`}
+                        className="font-semibold text-sm mb-4 w-20 border-b-2 border-b-green-600 text-gray-300"
+                      >
+                        {selectedPost.author?.username || "Unknown User"}
+                      </Link>
+                      <div className="text-gray-300 text-justify">
+                        {selectedPost.caption.split("\n").map((line, index) => (
+                          <p key={index} className="mb-2">
+                            {line.split(" ").map((word, idx) => (
+                              <span
+                                key={idx}
+                                className={
+                                  word.startsWith(":") && word.endsWith(":")
+                                    ? "font-bold"
+                                    : ""
+                                }
+                              >
+                                {word}{" "}
+                              </span>
+                            ))}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Display Comments */}
               {showComments ? (
                 comments.length > 0 ? (
                   comments.map((comment) => (
@@ -254,15 +329,58 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 </div>
               )}
             </div>
+            <div className="border-t w-full border-gray-700 pt-4">
+              <div className="flex gap-10 text-xl p-4 text-gray-50">
+                <button
+                  onClick={likeOrDislikeHandler}
+                  className="flex items-center gap-2 text-gray-50"
+                >
+                  <Heart className={liked ? "text-red-500" : "text-gray-50"} />
+                </button>
+                <button
+                  onClick={() => setShowComments(true)}
+                  className="flex items-center gap-2 text-gray-50"
+                >
+                  <Command />
+                </button>
+
+                <button
+                  onClick={sharePost}
+                  className="flex items-center gap-2 text-gray-50"
+                >
+                  <Share />
+                </button>
+                {bookmark ? (
+                  <FaBookmark
+                    onClick={bookmarkHandler}
+                    size={24}
+                    className="cursor-pointer hover:text-gray-600 transition-colors duration-200 ml-auto"
+                  />
+                ) : (
+                  <Bookmark
+                    onClick={bookmarkHandler}
+                    size={24}
+                    className="cursor-pointer transition-transform transform hover:scale-110 ml-auto"
+                  />
+                )}
+              </div>
+              <div>
+                {postLikes && (
+                  <div className="text-gray-50 p-4 text-start">
+                    {postLikes} {postLikes === 1 ? "like" : "likes"}
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="p-4 border-t border-gray-700">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center mt-4 gap-2">
                 <div className="relative flex-grow">
                   <input
                     type="text"
                     value={text}
                     onChange={changeEventHandler}
                     placeholder="Add a comment..."
-                    className="w-full outline-none border text-sm border-gray-600 p-2 rounded bg-gray-800 text-white"
+                    className="w-full outline-none text-sm border-b border-gray-600 p-2 bg-transparent text-white"
                   />
                   <button
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -276,45 +394,14 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                     </div>
                   )}
                 </div>
-                <Button
+                <button
                   disabled={!text.trim()}
                   onClick={sendMessageHandler}
-                  variant="outline"
-                  className="bg-blue-500 text-white hover:text-white hover:bg-blue-600"
+                  className="text-blue-500 font-bold hover:text-blue-600"
                 >
-                  Send
-                </Button>
+                  Post
+                </button>
               </div>
-            </div>
-            <div className="flex justify-between p-4 text-black border-t border-gray-700">
-              <Button
-                onClick={likeOrDislikeHandler}
-                variant="outline"
-                className="flex items-center gap-2 text-gray-800"
-              >
-                <FaThumbsUp /> {postLikes}
-              </Button>
-              <Button
-                onClick={() => setShowComments(true)}
-                variant="outline"
-                className="flex items-center gap-2 text-gray-800"
-              >
-                <FaComment />
-              </Button>
-              <Button
-                onClick={() => setShowComments(false)}
-                variant="outline"
-                className="flex items-center gap-2 text-gray-800"
-              >
-                <FaEye />
-              </Button>
-              <Button
-                onClick={sharePost}
-                variant="outline"
-                className="flex items-center gap-2 text-gray-800"
-              >
-                <FaShareSquare />
-              </Button>
             </div>
           </div>
         </div>
