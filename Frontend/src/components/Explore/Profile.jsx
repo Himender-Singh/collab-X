@@ -85,7 +85,7 @@ const Profile = () => {
       );
       setTimeout(() => {
         window.location.reload();
-      },50);
+      }, 50);
       dispatch(followingUpdate(userProfile?._id)); // Update the following state in Redux
     } catch (error) {
       console.error("Error following/unfollowing:", error.response);
@@ -173,12 +173,14 @@ const Profile = () => {
                     </Button>
                   </Link>
                   <div className="hidden sm:flex gap-2">
-                    <Button
-                      variant="secondary"
-                      className="hover:bg-gray-700 hover:text-white h-8 sm:h-10 text-sm sm:text-base"
-                    >
-                      Cloud editor
-                    </Button>
+                    <Link to={"/code-editor"}>
+                      <Button
+                        variant="secondary"
+                        className="hover:bg-gray-700 hover:text-white h-8 sm:h-10 text-sm sm:text-base"
+                      >
+                        Cloud editor
+                      </Button>
+                    </Link>
                     <Button
                       variant="secondary"
                       onClick={() => setOpenCreateModal(true)}
@@ -186,7 +188,10 @@ const Profile = () => {
                     >
                       Give advice
                     </Button>
-                    <Create open={openCreateModal} setOpen={setOpenCreateModal} />
+                    <Create
+                      open={openCreateModal}
+                      setOpen={setOpenCreateModal}
+                    />
                   </div>
                 </div>
               ) : (

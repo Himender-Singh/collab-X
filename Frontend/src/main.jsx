@@ -16,7 +16,7 @@ import Search from "./components/Explore/Search.jsx";
 import Mentors from "./components/Explore/Mentors.jsx";
 import Profile from "./components/Explore/Profile.jsx";
 import EditProfile from "./components/Explore/EditProfile.jsx";
-import Ask from "./components/Explore/Ask.jsx";
+import Ask from "./components/Explore/Chats.jsx";
 import Session from "./components/Explore/Session.jsx";
 import Roadmaps from "./components/Explore/Roadmaps.jsx";
 import { Provider } from "react-redux";
@@ -31,6 +31,7 @@ import QuestionList from "./components/Pages/QuestionList";
 import RequireRole from "./components/Global/RequireRole";
 import AiBot from "./components/Global/AiBot";
 import AskBot from "./components/Global/AskBot";
+import ChatSidebar from "./components/Explore/ChatSidebar";
 
 const persist = persistStore(store);
 export const server = "http://localhost:8000/api/v1";
@@ -123,10 +124,18 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="dsa-sheet-code-editor"
+        path="code-editor"
         element={
           <RequireRole>
-            <QuestionList />
+            <CodeEditor />
+          </RequireRole>
+        }
+      />
+      <Route
+        path="chat"
+        element={
+          <RequireRole>
+            <ChatSidebar />
           </RequireRole>
         }
       />

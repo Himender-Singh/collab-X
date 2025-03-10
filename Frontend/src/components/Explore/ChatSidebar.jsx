@@ -1,193 +1,145 @@
-import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUserCircle,
-  faMinimize,
-  faMaximize,
-  faPlus,
-  faTrash,
-  faSpinner,
-  faRobot,
-} from "@fortawesome/free-solid-svg-icons";
-import logo from "../../assets/logo.png";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import useGetChat from "@/hooks/useGetChat";
-import { setChat, setSelected } from "@/redux/authSlice";
-import useGetSelectMessages from "@/hooks/useGetSelectMessages";
-import { server } from "@/main";
+import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
+import Chats from "./Chats";
 
 const ChatSidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const chats = useSelector(store => store.auth.chat);
-  const selectedChat = useSelector((store) => store.auth.selected);
-  const loggedInUser = useSelector((store) => store.auth);
+  const { user } = useSelector((store) => store.auth);
+  const [matchedFollowers, setMatchedFollowers] = useState([]);
+  const [matchedFollowing, setMatchedFollowing] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const data = useGetSuggestedUser();
 
-  useGetChat();
+  console.log(data);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const dispatch = useDispatch();
-
+  const isFollowersLoaded = useRef(false);
+  const isFollowingLoaded = useRef(false);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
+    if (isFollowersLoaded.current) return;
 
-  const handleNewChat = async (e) => {
-    e.preventDefault();
-  
-    try {
-      setLoading(true); // Start loading before the API call
-  
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/chat/new",
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-  
-      if (res.data && res.data._id) {
-        // Dispatch the action to add the new chat to the Redux state
-        const newChats = {
-          _id: res.data._id,
-          latestMessage: res.data.latestMessage || "New Chat",
-          name: res.data.name || "New Chat", // Ensure you include a name
-        };
-        dispatch(setChat((prevChats) => [...prevChats, newChats]));
-        toast.success("New chat created successfully!");
-        
-        // Refresh the page after creating a new chat
-        window.location.reload(); // This will reload the page
-      }
-  
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.response?.data?.message || "An error occurred");
-      console.log(error);
+    if (data?.suggestedUsers && user?.followers) {
+      const matched = user.followers
+        .map((followerId) => {
+          const matchedUser = data.suggestedUsers.find(
+            (user) => user._id === followerId
+          );
+          return matchedUser
+            ? {
+                username: matchedUser.username,
+                profilePicture: matchedUser.profilePicture,
+                bio: matchedUser.bio,
+                _id: matchedUser._id,
+              }
+            : null;
+        })
+        .filter(Boolean);
+
+      setMatchedFollowers(matched);
+      sessionStorage.setItem("matchedFollowers", JSON.stringify(matched));
+      isFollowersLoaded.current = true;
     }
-  };
+  }, [data?.suggestedUsers, user?.followers]);
 
-  const handleDeleteChat = async (chatId) => {
-    try {
-      // Send DELETE request to server
-      await axios.delete(`${server}/chat/${chatId}`, {
-        withCredentials: true, // Include credentials if needed
-      });
+  useEffect(() => {
+    if (isFollowingLoaded.current) return;
 
-      // Dispatch the action to remove the chat from the Redux state
-      dispatch(setChat((prevChats) => prevChats.filter((chat) => chat._id !== chatId)));
+    if (data?.suggestedUsers && user?.following) {
+      const matched = user.following
+        .map((followingId) => {
+          const matchedUser = data.suggestedUsers.find(
+            (user) => user._id === followingId
+          );
+          return matchedUser
+            ? {
+                username: matchedUser.username,
+                profilePicture: matchedUser.profilePicture,
+                bio: matchedUser.bio,
+                _id: matchedUser._id,
+              }
+            : null;
+        })
+        .filter(Boolean);
 
-      toast.success("Chat deleted successfully!");
-      
-      // Refresh the chat list after deleting
-      window.location.reload(); // Reloads the page to reflect the change
-    } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred while deleting the chat.");
-      console.log(error);
+      setMatchedFollowing(matched);
+      sessionStorage.setItem("matchedFollowing", JSON.stringify(matched));
+      isFollowingLoaded.current = true;
     }
-  };
+  }, [data?.suggestedUsers, user?.following]);
 
-  const handleSelectChat = (chat) => {
-    dispatch(setSelected(chat));  // Update the selected chat in Redux
+  const handleUserClick = (user) => {
+    setSelectedUser(user);
   };
-
-  // Ensure chats is always an array
-  const validChats = Array.isArray(chats) ? chats : [];
 
   return (
-    <div
-      className={`fixed left-0 top-0 h-full bg-[#1a1a1a] border-r border-gray-700 shadow-lg p-4 flex flex-col transition-all duration-300 ${isCollapsed ? "w-20" : "w-80"}`}
-    >
-      <a
-        href="/"
-        className={`flex items-center mb-4 transition-opacity duration-300 ${
-          isCollapsed ? "opacity-0" : "opacity-100"
-        }`}
-      >
-        <img
-          src={logo}
-          alt="Logo"
-          className="h-10 transition-all duration-300"
-        />
-      </a>
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute top-4 right-[-24px] bg-blue-900 text-white p-2 rounded-full"
-      >
-        <FontAwesomeIcon icon={isCollapsed ? faMaximize : faMinimize} />
-      </button>
-      <button
-        onClick={handleNewChat}
-        className={`flex items-center justify-center gap-2 px-4 py-2 mb-4 bg-green-600 text-white rounded-lg transition-all duration-300 ${
-          isCollapsed ? "w-10 h-10 p-0" : "w-full"
-        }`}
-      >
-        {!isCollapsed && <span className="font-semibold">New Chat</span>}
-        <FontAwesomeIcon icon={faPlus} className="text-lg" />
-      </button>
-      <h2
-        className={`text-xl font-semibold mb-4 text-white transition-opacity duration-300 ${
-          isCollapsed ? "opacity-0" : "opacity-100"
-        }`}
-      >
-        Chats
-      </h2>
-
-      {loading ? (
-        <p className="text-gray-400 flex items-center">
-          <FontAwesomeIcon icon={faSpinner} spin /> Loading chats...
-        </p>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : validChats.length === 0 ? (
-        <p className="text-gray-400">No chats available.</p>
-      ) : (
-        <div
-          className={`flex flex-col gap-3 overflow-y-auto transition-opacity duration-300 ${
-            isCollapsed ? "opacity-0" : "opacity-100"
-          }`}
-        >
-          {validChats.map((chatItem) => (
-            <div
-              key={chatItem._id}
-              className="flex items-center p-2 rounded-lg hover:bg-gray-800 cursor-pointer relative group"
-              onClick={() => handleSelectChat(chatItem._id)} // Select chat on click
-            >
-              <div className="w-10 h-10 mr-3">
-                <FontAwesomeIcon
-                  icon={chatItem.user ? faUserCircle : faRobot}
-                  className="text-gray-400 text-3xl"
-                />
-              </div>
-              <div className={`flex-1 ${isCollapsed ? "hidden" : "block"}`}>
-                <h3 className="font-semibold text-gray-200">{chatItem.name}</h3>
-                <p className="text-sm text-gray-400 truncate">
-                  {chatItem.latestMessage}
-                </p>
-              </div>
-              {!isCollapsed && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteChat(chatItem._id);
-                  }}
-                  className="absolute right-2 text-gray-500 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              )}
-            </div>
-          ))}
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar with Scrollable List */}
+      <div className="w-1/3 border-r border-gray-300 bg-white p-5 flex flex-col">
+        {/* User Info */}
+        <div className="text-2xl font-bold capitalize border-b pb-3 mb-4">
+          {user?.username}
         </div>
-      )}
+
+        {/* Scrollable Section */}
+        <div className="flex-1 overflow-y-auto pr-2">
+          {/* Followers List */}
+          <div className="mb-5">
+            <h2 className="text-lg font-bold border-b pb-2">Followers</h2>
+            {matchedFollowers.length > 0 ? (
+              matchedFollowers.map((follower) => (
+                <div
+                  key={follower._id}
+                  className="flex items-center gap-2 mt-3 cursor-pointer hover:bg-gray-200 p-2 rounded-md"
+                  onClick={() => handleUserClick(follower)}
+                >
+                  <img
+                    src={follower.profilePicture}
+                    alt="follower"
+                    className="w-10 h-10 rounded-full border"
+                  />
+                  <div>
+                    <p className="font-semibold">{follower.username}</p>
+                    <p className="text-gray-500 text-sm">{follower.bio}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400 text-sm mt-2">No followers yet</p>
+            )}
+          </div>
+
+          {/* Suggested Users List */}
+          <div>
+            <h2 className="text-lg font-bold border-b pb-2">Suggested Users</h2>
+            {data?.suggestedUsers.length > 0 ? (
+              data.suggestedUsers.map((user) => (
+                <div
+                  key={user._id}
+                  className="flex items-center gap-2 mt-3 cursor-pointer hover:bg-gray-200 p-2 rounded-md"
+                  onClick={() => handleUserClick(user)}
+                >
+                  <img
+                    src={user.profilePicture}
+                    alt="suggested-user"
+                    className="w-10 h-10 rounded-full border"
+                  />
+                  <div>
+                    <p className="font-semibold">{user.username}</p>
+                    <p className="text-gray-500 text-sm">{user.bio}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400 text-sm mt-2">No suggestions available</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Chat Box */}
+      <div className="w-2/3">
+        <Chats selectedUser={selectedUser} />
+      </div>
     </div>
   );
 };

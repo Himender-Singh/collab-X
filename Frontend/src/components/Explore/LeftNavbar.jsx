@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faTimes,
@@ -14,18 +14,19 @@ import {
   faSheetPlastic,
   faHome,
   faBrain,
-} from '@fortawesome/free-solid-svg-icons';
-import logo from '../../assets/logo.png';
-import Create from './Create';
-import Modal from './Modal';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '@/redux/authSlice';
-import { server } from '@/main';
+  faMessage,
+} from "@fortawesome/free-solid-svg-icons";
+import logo from "../../assets/logo.png";
+import Create from "./Create";
+import Modal from "./Modal";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/redux/authSlice";
+import { server } from "@/main";
 import { VscRemoteExplorer } from "react-icons/vsc";
-import { faWpexplorer } from '@fortawesome/free-brands-svg-icons';
-
+import { faWpexplorer } from "@fortawesome/free-brands-svg-icons";
+import InterviewMode from "../Global/InterviewMode";
 
 const LeftNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,17 +37,16 @@ const LeftNavbar = () => {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
-  const hiddenRoutes = ['/login', '/signup'];
+  const hiddenRoutes = ["/login", "/signup"];
 
   const navLinks = [
-    { to: '/feed', icon: faHome, label: 'Feed' },
-    { to: '/search', icon: faSearch, label: 'Search' },
-    { to: '/dsa-sheet-code-editor', icon: faSheetPlastic, label: 'DSA Sheet' },
-    { to: '/code-editor', icon: faCode, label: 'Compiler' },
-    { to: user ? `/profile/${user._id}` : '#', icon: faUser, label: 'Profile' },
-    { to: '/edit', icon: faEdit, label: 'Edit' },
-    { to: '/session', icon: faComments, label: 'Sessions' },
-    { to: '/inbox', icon: faWpexplorer , label: 'Mock Interview' },
+    { to: "/feed", icon: faHome, label: "Feed" },
+    { to: "/search", icon: faSearch, label: "Search" },
+    { to: "/dsa-sheet-code-editor", icon: faSheetPlastic, label: "DSA Sheet" },
+    { to: "/code-editor", icon: faCode, label: "Compiler" },
+    { to: "/chat", icon: faMessage, label: "Message" },
+    { to: user ? `/profile/${user._id}` : "#", icon: faUser, label: "Profile" },
+    { to: "/edit", icon: faEdit, label: "Edit" },
   ];
 
   if (hiddenRoutes.includes(location.pathname)) {
@@ -61,10 +61,10 @@ const LeftNavbar = () => {
       if (res.data.success) {
         dispatch(logout());
         toast.success(res.data.message);
-        navigate('/login');
+        navigate("/login");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Logout failed');
+      toast.error(error.response?.data?.message || "Logout failed");
     }
   };
 
@@ -87,14 +87,14 @@ const LeftNavbar = () => {
 
       <div
         className={`fixed border-r-2 z-50 border-gray-900 overflow-y-auto top-0 left-0 h-screen w-80 bg-[#1c1c1c] p-5 font-poppins text-white shadow-md shadow-gray-800 transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 lg:block`}
       >
-        <Link to={'/feed'}>
-        <div className="mb-4 flex items-center space-x-3">
-          <img src={logo} alt="Logo" className="w-12" />
-          <span className="text-xl font-semibold">CollabX</span>
-        </div>
+        <Link to={"/feed"}>
+          <div className="mb-4 flex items-center space-x-3">
+            <img src={logo} alt="Logo" className="w-12" />
+            <span className="text-xl font-semibold">CollabX</span>
+          </div>
         </Link>
 
         <nav className="flex flex-col space-y-4">
@@ -105,13 +105,20 @@ const LeftNavbar = () => {
               className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
               onClick={() => {
                 handleLinkClick(); // Close navbar when clicking link
-                if (to === '/inbox') handleInboxClick();
+                if (to === "/inbox") handleInboxClick();
               }}
             >
               <FontAwesomeIcon icon={icon} className="w-5 h-5" />
               <span>{label}</span>
             </Link>
           ))}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
+          >
+            <FontAwesomeIcon icon={faWpexplorer} className="w-5 h-5" />
+            <span>Mock Interview</span>
+          </button>
           <Link
             to="/collabx-ai-chatbot"
             className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
@@ -142,7 +149,7 @@ const LeftNavbar = () => {
       </div>
 
       {/* Modal for no sessions scheduled */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <InterviewMode isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };

@@ -96,7 +96,7 @@ const Session = () => {
 
   return (
     <div className="w-full font-poppins text-white h-full">
-      <div className="border-b border-gray-400 h-14 bg-[#0e082b]" />
+      <div className="border-b border-gray-400 h-14 " />
       <div className="container max-w-screen-lg mx-auto mt-6 px-4">
         <h2 className="text-3xl font-bold mb-2">Explore Your Session History</h2>
         <p className="text-md text-gray-400 font-semibold">
