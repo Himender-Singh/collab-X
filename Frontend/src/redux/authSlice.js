@@ -4,13 +4,13 @@ const authSlice = createSlice({
     name: "auth",
     initialState: {
         user: null,
-        suggestedUsers: [], // Ensure this is initialized as an empty array
+        suggestedUsers: [],
         userProfile: null,
         selectedUser: null,
-        tasks:[],
-        chat:[],
-        selected:null,
-        message:[]
+        tasks: [],
+        chat: [],
+        selected: null,
+        message: []
     },
     reducers: {
         setAuthUser: (state, action) => {
@@ -23,6 +23,7 @@ const authSlice = createSlice({
             state.userProfile = action.payload;
         },
         setSelectedUser: (state, action) => {
+            console.log("actions found",action.payload);
             state.selectedUser = action.payload;
         },
         setTasks: (state,action) => {

@@ -2,9 +2,11 @@ import React, { Suspense, lazy } from 'react';
 import useGetAllPost from '@/hooks/useGetAllPost';
 import { useSelector } from 'react-redux';
 import Post from './Post';
+import { useNavigate } from 'react-router-dom';
 
 const Posts = () => {
   // Call the custom hook to fetch posts
+  const navigate = useNavigate();
   const { loading, error } = useGetAllPost();
   const posts = useSelector(store => store.post.posts) || []; 
   
@@ -12,6 +14,7 @@ const Posts = () => {
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   if (posts.length === 0) {
+    navigate("/login");
     return <p className="text-center text-gray-500">No posts available.</p>;
   }
 

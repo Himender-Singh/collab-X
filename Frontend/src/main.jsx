@@ -29,9 +29,9 @@ import Error from "./Error";
 import CodeEditor from "./components/Pages/CodeEditor";
 import QuestionList from "./components/Pages/QuestionList";
 import RequireRole from "./components/Global/RequireRole";
-import AiBot from "./components/Global/AiBot";
 import AskBot from "./components/Global/AskBot";
 import ChatSidebar from "./components/Explore/ChatSidebar";
+import SocketManager from "./components/Global/SocketManager"; // Import SocketManager
 
 const persist = persistStore(store);
 export const server = "http://localhost:8000/api/v1";
@@ -55,7 +55,7 @@ const router = createBrowserRouter(
         <RequireRole>
           <AskBot />
         </RequireRole>
-        } />
+      } />
       <Route
         path="create"
         element={
@@ -77,6 +77,14 @@ const router = createBrowserRouter(
         element={
           <RequireRole>
             <Mentors />
+          </RequireRole>
+        }
+      />
+      <Route
+        path="dsa-sheet-code-editor"
+        element={
+          <RequireRole>
+            <QuestionList />
           </RequireRole>
         }
       />
@@ -124,14 +132,6 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="code-editor"
-        element={
-          <RequireRole>
-            <CodeEditor />
-          </RequireRole>
-        }
-      />
-      <Route
         path="chat"
         element={
           <RequireRole>
@@ -148,6 +148,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persist}>
+        <SocketManager /> {/* Add SocketManager to handle sockets globally */}
         <RouterProvider router={router} />
         <ToastContainer />
       </PersistGate>

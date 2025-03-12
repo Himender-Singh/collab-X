@@ -1,19 +1,23 @@
 import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Chats from "./Chats";
+import useGetAllMessage from "@/hooks/useGetAllMessage";
+import useGetRTM from "@/hooks/useGetRTM";
 
 const ChatSidebar = () => {
   const { user } = useSelector((store) => store.auth);
+  const { onlineUsers } = useSelector((store) => store.chat);
   const [matchedFollowers, setMatchedFollowers] = useState([]);
   const [matchedFollowing, setMatchedFollowing] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const data = useGetSuggestedUser();
-
-  console.log(data);
+  const dispatch = useDispatch();
 
   const isFollowersLoaded = useRef(false);
   const isFollowingLoaded = useRef(false);
+
+  useGetAllMessage(selectedUser)
 
   useEffect(() => {
     if (isFollowersLoaded.current) return;
@@ -26,10 +30,8 @@ const ChatSidebar = () => {
           );
           return matchedUser
             ? {
-                username: matchedUser.username,
-                profilePicture: matchedUser.profilePicture,
-                bio: matchedUser.bio,
-                _id: matchedUser._id,
+                ...matchedUser,
+                isOnline: onlineUsers?.includes(matchedUser._id),
               }
             : null;
         })
@@ -39,7 +41,7 @@ const ChatSidebar = () => {
       sessionStorage.setItem("matchedFollowers", JSON.stringify(matched));
       isFollowersLoaded.current = true;
     }
-  }, [data?.suggestedUsers, user?.followers]);
+  }, [data?.suggestedUsers, user?.followers, onlineUsers]);
 
   useEffect(() => {
     if (isFollowingLoaded.current) return;
@@ -52,10 +54,8 @@ const ChatSidebar = () => {
           );
           return matchedUser
             ? {
-                username: matchedUser.username,
-                profilePicture: matchedUser.profilePicture,
-                bio: matchedUser.bio,
-                _id: matchedUser._id,
+                ...matchedUser,
+                isOnline: onlineUsers?.includes(matchedUser._id),
               }
             : null;
         })
@@ -65,22 +65,21 @@ const ChatSidebar = () => {
       sessionStorage.setItem("matchedFollowing", JSON.stringify(matched));
       isFollowingLoaded.current = true;
     }
-  }, [data?.suggestedUsers, user?.following]);
+  }, [data?.suggestedUsers, user?.following, onlineUsers]);
 
   const handleUserClick = (user) => {
-    setSelectedUser(user);
-  };
+    console.log("user found", user);
+    dispatch(setSelectedUser(user));
+};
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar with Scrollable List */}
+      {/* Sidebar */}
       <div className="w-1/3 border-r border-gray-300 bg-white p-5 flex flex-col">
-        {/* User Info */}
         <div className="text-2xl font-bold capitalize border-b pb-3 mb-4">
           {user?.username}
         </div>
 
-        {/* Scrollable Section */}
         <div className="flex-1 overflow-y-auto pr-2">
           {/* Followers List */}
           <div className="mb-5">
@@ -99,7 +98,13 @@ const ChatSidebar = () => {
                   />
                   <div>
                     <p className="font-semibold">{follower.username}</p>
-                    <p className="text-gray-500 text-sm">{follower.bio}</p>
+                    <p
+                      className={`text-sm font-semibold ${
+                        follower.isOnline ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {follower.isOnline ? "Online" : "Offline"}
+                    </p>
                   </div>
                 </div>
               ))
@@ -112,23 +117,33 @@ const ChatSidebar = () => {
           <div>
             <h2 className="text-lg font-bold border-b pb-2">Suggested Users</h2>
             {data?.suggestedUsers.length > 0 ? (
-              data.suggestedUsers.map((user) => (
-                <div
-                  key={user._id}
-                  className="flex items-center gap-2 mt-3 cursor-pointer hover:bg-gray-200 p-2 rounded-md"
-                  onClick={() => handleUserClick(user)}
-                >
-                  <img
-                    src={user.profilePicture}
-                    alt="suggested-user"
-                    className="w-10 h-10 rounded-full border"
-                  />
-                  <div>
-                    <p className="font-semibold">{user.username}</p>
-                    <p className="text-gray-500 text-sm">{user.bio}</p>
+              data.suggestedUsers.map((suggestedUser) => {
+                const isOnline = onlineUsers?.includes(suggestedUser._id);
+
+                return (
+                  <div
+                    key={suggestedUser._id}
+                    className="flex items-center gap-2 mt-3 cursor-pointer hover:bg-gray-200 p-2 rounded-md"
+                    onClick={() => handleUserClick(suggestedUser)}
+                  >
+                    <img
+                      src={suggestedUser.profilePicture}
+                      alt="suggested-user"
+                      className="w-10 h-10 rounded-full border"
+                    />
+                    <div>
+                      <p className="font-semibold">{suggestedUser.username}</p>
+                      <p
+                        className={`text-sm font-semibold ${
+                          isOnline ? "text-green-600" : "text-red-600"
+                        }`}
+                      >
+                        {isOnline ? "Online" : "Offline"}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <p className="text-gray-400 text-sm mt-2">No suggestions available</p>
             )}
