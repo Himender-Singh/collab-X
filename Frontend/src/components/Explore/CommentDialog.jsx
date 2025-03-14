@@ -35,6 +35,10 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     (selectedPost.bookmarks || []).includes(user?._id) || false
   );
 
+  if(!bookmark){
+    return null;
+  }
+
   const changeEventHandler = (e) => {
     setText(e.target.value.trim() ? e.target.value : "");
   };

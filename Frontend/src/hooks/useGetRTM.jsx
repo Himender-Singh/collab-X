@@ -7,7 +7,6 @@ const useGetRTM = () => {
     const { socket } = useSelector(store => store.socketio);
     const { messages } = useSelector(store => store.chat);
 
-    console.log(messages,socket,"data fir");
     useEffect(() => {
         socket?.on('newMessage', (newMessage) => {
             dispatch(setMessages([...messages, newMessage]));

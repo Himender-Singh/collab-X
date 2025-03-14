@@ -145,7 +145,6 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persist}>
         <SocketManager /> {/* Add SocketManager to handle sockets globally */}
@@ -153,5 +152,4 @@ createRoot(document.getElementById("root")).render(
         <ToastContainer />
       </PersistGate>
     </Provider>
-  </StrictMode>
 );

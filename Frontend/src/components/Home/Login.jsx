@@ -72,7 +72,7 @@ const Login = () => {
         <div className="title_container mb-4 text-center">
           <p className="text-xl font-bold text-white">Login to your Account</p>
           <span className="text-sm text-gray-300">
-            Get started with our app, just create an account and enjoy the
+            Get started with our app, just login with your account and enjoy the
             experience.
           </span>
         </div>
@@ -95,7 +95,7 @@ const Login = () => {
                 placeholder="name@mail.com"
                 name="email"
                 type="email"
-                className="flex-1 px-2 py-1 bg-[#1e293b] text-white placeholder-gray-400 border-none focus:outline-none"
+                className="flex-1 px-2 py-1 bg-black text-white placeholder-gray-400 border-none focus:outline-none"
                 id="email_field"
                 required
                 value={input.email}
@@ -120,7 +120,7 @@ const Login = () => {
                 placeholder="Password"
                 name="password"
                 type="password"
-                className="flex-1 px-2 py-1 bg-[#1e293b] text-white placeholder-gray-400 border-none focus:outline-none"
+                className="flex-1 px-2 py-1 bg-black text-white placeholder-gray-400 border-none focus:outline-none"
                 id="password_field"
                 required
                 value={input.password}

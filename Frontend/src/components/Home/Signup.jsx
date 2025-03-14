@@ -90,7 +90,7 @@ const Signup = () => {
                 placeholder="John"
                 name="username"
                 type="text"
-                className="flex-1 px-2 py-1 bg-[#1e293b] text-white placeholder-gray-400 border-none focus:outline-none"
+                className="flex-1 px-2 py-1 bg-black text-white placeholder-gray-400 border-none focus:outline-none"
                 id="name_field"
                 value={input.username}
                 onChange={changeEventHandler}
@@ -115,7 +115,7 @@ const Signup = () => {
                 placeholder="John@mail.com"
                 name="email"
                 type="email"
-                className="flex-1 px-2 py-1 bg-[#1e293b] text-white placeholder-gray-400 border-none focus:outline-none"
+                className="flex-1 px-2 py-1 bg-black text-white placeholder-gray-400 border-none focus:outline-none"
                 id="email_field"
                 value={input.email}
                 onChange={changeEventHandler}
@@ -140,7 +140,7 @@ const Signup = () => {
                 placeholder="Password"
                 name="password"
                 type="password"
-                className="flex-1 px-2 py-1 bg-[#1e293b] text-white placeholder-gray-400 border-none focus:outline-none"
+                className="flex-1 px-2 py-1 bg-black text-white placeholder-gray-400 border-none focus:outline-none"
                 id="password_field"
                 value={input.password}
                 onChange={changeEventHandler}
