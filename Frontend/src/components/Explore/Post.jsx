@@ -46,6 +46,7 @@ const Post = ({ post }) => {
     p.caption.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -414,6 +415,7 @@ const Post = ({ post }) => {
           onClick={() => {
             dispatch(setSelectedPost(post));
             setOpen(true);
+            
           }}
         >
           View all {comment.length} comments

@@ -31,13 +31,10 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [showComments, setShowComments] = useState(true);
   const dispatch = useDispatch();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  
   const [bookmark, setBookmark] = useState(
     (selectedPost.bookmarks || []).includes(user?._id) || false
   );
-
-  if(!bookmark){
-    return null;
-  }
 
   const changeEventHandler = (e) => {
     setText(e.target.value.trim() ? e.target.value : "");
@@ -174,6 +171,8 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     setText((prevText) => prevText + event.emoji);
     setShowEmojiPicker(false);
   };
+
+  console.log("data", selectedPost);
 
   if (!selectedPost) {
     return null;
