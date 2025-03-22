@@ -257,7 +257,9 @@ const Profile = () => {
             >
               POSTS
             </span>
-            <span
+            {
+              isLoggedInUserProfile && (
+                <span
               className={`py-3 cursor-pointer ${
                 activeTab === "saved" ? "font-bold text-gray-100" : ""
               }`}
@@ -265,6 +267,9 @@ const Profile = () => {
             >
               SAVED
             </span>
+              )
+
+            }
             <span
               className={`py-3 cursor-pointer ${
                 activeTab === "followers" ? "font-bold text-gray-100" : ""

@@ -12,7 +12,7 @@ export const sendMessage = async (req, res) => {
             return res.status(400).json({ success: false, error: "Message content is required." });
         }
 
-        console.log("Received data:", senderId, receiverId, textMessage);
+        // console.log("Received data:", senderId, receiverId, textMessage);
 
         let conversation = await Conversation.findOne({
             participants: { $all: [senderId, receiverId] }

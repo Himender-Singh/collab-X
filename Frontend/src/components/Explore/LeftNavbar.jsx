@@ -86,7 +86,7 @@ const LeftNavbar = () => {
       </button>
 
       <div
-        className={`fixed border-r-2 z-50 border-gray-900 overflow-y-auto top-0 left-0 h-screen w-80 bg-[#1c1c1c] p-5 font-poppins text-white shadow-md shadow-gray-800 transition-transform duration-300 ${
+        className={`fixed border-r-2 z-50 border-gray-900 overflow-y-auto top-0 left-0 h-screen w-80 bg-[#131313] p-5 font-poppins text-white shadow-md shadow-gray-800 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 lg:block`}
       >
@@ -102,7 +102,11 @@ const LeftNavbar = () => {
             <Link
               key={to}
               to={to}
-              className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
+              className={`flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200 ${
+                location.pathname === to
+                  ? "bg-blue-600 rounded-md" // Active tab style
+                  : ""
+              }`}
               onClick={() => {
                 handleLinkClick(); // Close navbar when clicking link
                 if (to === "/inbox") handleInboxClick();
@@ -121,7 +125,11 @@ const LeftNavbar = () => {
           </button>
           <Link
             to="/collabx-ai-chatbot"
-            className="flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200"
+            className={`flex items-center space-x-3 hover:bg-blue-600 hover:rounded-md p-2 transition-all duration-200 ${
+              location.pathname === "/collabx-ai-chatbot"
+                ? "bg-blue-600 rounded-md" // Active tab style
+                : ""
+            }`}
           >
             <FontAwesomeIcon icon={faBrain} className="w-5 h-5" />
             <span>AI ChatBot</span>

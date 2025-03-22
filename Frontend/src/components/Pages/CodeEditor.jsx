@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 
+
 const CodeEditor = () => {
   const editorRef = useRef();
   const [value, setValue] = useState("");
@@ -49,8 +50,11 @@ const CodeEditor = () => {
       <div className="w-2/3 h-full p-4 border border-gray-300 rounded-lg shadow-lg bg-[#131212]">
         <div className="flex justify-between items-center mb-2">
           {/* Logo Section */}
-          <Link to="/feed" className="flex items-center">
-            <span className="text-2xl text-white"> HOME </span>
+          <Link to={"/feed"}>
+            <div className="mb-4 text-white flex items-center space-x-3">
+              <img src={logo} alt="Logo" className="w-12" />
+              <span className="text-xl font-semibold">CollabX</span>
+            </div>
           </Link>
 
           <LanguageSelector language={language} onSelect={onSelect} />

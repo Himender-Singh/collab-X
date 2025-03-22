@@ -11,53 +11,52 @@ export const addNewPost = async (req, res) => {
     const file = req.file; // This can be an image, PDF, or video
     const authorId = req.id;
 
+    let cloudResponse = null; // To store the uploaded file URL
 
-    if (!file) return res.status(400).json({ message: "File required" });
+    if (file) {
+      if (file.mimetype.startsWith("image")) {
+        // Handle image upload
+        try {
+          const optimizedImageBuffer = await sharp(file.buffer)
+            .resize({ width: 800, height: 800, fit: "inside" })
+            .toFormat("jpeg", { quality: 80 })
+            .toBuffer();
 
-    let cloudResponse;
-
-    if (file.mimetype.startsWith("image")) {
-      // Handle image upload
-      try {
-        const optimizedImageBuffer = await sharp(file.buffer)
-          .resize({ width: 800, height: 800, fit: "inside" })
-          .toFormat("jpeg", { quality: 80 })
-          .toBuffer();
-
-        const fileUri = `data:image/jpeg;base64,${optimizedImageBuffer.toString(
+          const fileUri = `data:image/jpeg;base64,${optimizedImageBuffer.toString(
+            "base64"
+          )}`;
+          cloudResponse = await cloudinary.uploader.upload(fileUri, {
+            resource_type: "image",
+          });
+        } catch (error) {
+          console.error("Error processing image:", error);
+          return res.status(400).json({ message: "Invalid image file" });
+        }
+      } else if (file.mimetype.startsWith("video")) {
+        // Handle video upload
+        const fileUri = `data:${file.mimetype};base64,${file.buffer.toString(
           "base64"
         )}`;
         cloudResponse = await cloudinary.uploader.upload(fileUri, {
-          resource_type: "image",
+          resource_type: "video",
         });
-      } catch (error) {
-        console.error("Error processing image:", error);
-        return res.status(400).json({ message: "Invalid image file" });
+      } else if (file.mimetype === "application/pdf") {
+        // Handle PDF upload
+        const fileUri = `data:application/pdf;base64,${file.buffer.toString(
+          "base64"
+        )}`;
+        cloudResponse = await cloudinary.uploader.upload(fileUri, {
+          resource_type: "raw",
+        });
+      } else {
+        return res.status(400).json({ message: "Unsupported file type" });
       }
-    } else if (file.mimetype.startsWith("video")) {
-      // Handle video upload
-      const fileUri = `data:${file.mimetype};base64,${file.buffer.toString(
-        "base64"
-      )}`;
-      cloudResponse = await cloudinary.uploader.upload(fileUri, {
-        resource_type: "video",
-      });
-    } else if (file.mimetype === "application/pdf") {
-      // Handle PDF upload
-      const fileUri = `data:application/pdf;base64,${file.buffer.toString(
-        "base64"
-      )}`;
-      cloudResponse = await cloudinary.uploader.upload(fileUri, {
-        resource_type: "raw",
-      });
-    } else {
-      return res.status(400).json({ message: "Unsupported file type" });
     }
 
     // Create the post
     const post = await Post.create({
       caption,
-      image: cloudResponse.secure_url, // Store the URL in the `image` field
+      image: cloudResponse ? cloudResponse.secure_url : null, // Store file URL only if uploaded
       author: authorId,
     });
 
@@ -82,6 +81,7 @@ export const addNewPost = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
 
 export const getAllPost = async (req, res) => {
   try {

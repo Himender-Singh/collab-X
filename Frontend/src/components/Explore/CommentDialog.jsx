@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link } from "react-router-dom";
@@ -10,17 +10,8 @@ import { setPosts } from "@/redux/postSlice";
 import Comment from "./Comment";
 import { server } from "@/main";
 import Picker from "emoji-picker-react";
-import {
-  FaThumbsUp,
-  FaComment,
-  FaEye,
-  FaShareSquare,
-  FaEllipsisH,
-  FaFolder,
-  FaHeart,
-  FaBookmark,
-} from "react-icons/fa";
-import { Bookmark, Command, Folder, Heart, Share } from "lucide-react";
+import { Bookmark, Command, Heart, Share } from "lucide-react";
+import { FaBookmark, FaEllipsisH } from "react-icons/fa";
 
 const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [text, setText] = useState("");
@@ -31,7 +22,6 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [showComments, setShowComments] = useState(true);
   const dispatch = useDispatch();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  
   const [bookmark, setBookmark] = useState(
     (selectedPost.bookmarks || []).includes(user?._id) || false
   );
@@ -165,14 +155,12 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     return "unknown";
   };
 
-  const fileType = getFileType(selectedPost.image);
+  const fileType = selectedPost.image?getFileType(selectedPost.image): "unknown";
 
   const onEmojiClick = (event) => {
     setText((prevText) => prevText + event.emoji);
     setShowEmojiPicker(false);
   };
-
-  console.log("data", selectedPost);
 
   if (!selectedPost) {
     return null;
@@ -181,8 +169,9 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-7xl h-[42rem] border-none overflow-y-auto p-0 flex flex-col bg-gray-900 text-white">
-        <div className="flex h-full flex-1">
-          <div className="w-2/3 border-r border-gray-700 h-full overflow-hidden">
+        <div className="flex h-full flex-1 flex-col md:flex-row">
+          {/* Media Section */}
+          <div className="w-full md:w-2/3 border-r border-gray-700 h-full overflow-hidden">
             {fileType === "image" && (
               <img
                 className="w-full aspect-square h-full object-fill"
@@ -235,7 +224,9 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
               </div>
             )}
           </div>
-          <div className="w-[40%] flex flex-col justify-between">
+
+          {/* Content Section */}
+          <div className="w-full md:w-[40%] flex flex-col justify-between">
             <div className="flex items-center justify-between p-4 border-b border-gray-700">
               <div className="flex gap-3 items-center">
                 <Link to={`/profile/${selectedPost.author?._id}`}>
@@ -257,16 +248,15 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 <FaEllipsisH className="cursor-pointer text-gray-400" />
               </div>
             </div>
+
+            {/* Comments Section */}
             <div className="flex-1 overflow-y-auto max-h-96 p-4">
-              {/* Caption as the first comment */}
               {selectedPost.caption && (
                 <div className="my-2">
                   <div className="flex items-start gap-3">
                     <Link to={`/profile/${selectedPost.author?._id}`}>
                       <Avatar>
-                        <AvatarImage
-                          src={selectedPost.author?.profilePicture}
-                        />
+                        <AvatarImage src={selectedPost.author?.profilePicture} />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
                     </Link>
@@ -300,7 +290,6 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 </div>
               )}
 
-              {/* Display Comments */}
               {showComments ? (
                 comments.length > 0 ? (
                   comments.map((comment) => (
@@ -332,6 +321,8 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 </div>
               )}
             </div>
+
+            {/* Actions Section */}
             <div className="border-t w-full border-gray-700 pt-4">
               <div className="flex gap-10 text-xl p-4 text-gray-50">
                 <button
@@ -346,7 +337,6 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 >
                   <Command />
                 </button>
-
                 <button
                   onClick={sharePost}
                   className="flex items-center gap-2 text-gray-50"
@@ -375,6 +365,8 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 )}
               </div>
             </div>
+
+            {/* Comment Input Section */}
             <div className="p-4 border-t border-gray-700">
               <div className="flex items-center mt-4 gap-2">
                 <div className="relative flex-grow">

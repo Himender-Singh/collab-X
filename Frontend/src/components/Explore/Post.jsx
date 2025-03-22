@@ -46,7 +46,6 @@ const Post = ({ post }) => {
     p.caption.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -63,7 +62,7 @@ const Post = ({ post }) => {
     return "unknown";
   };
 
-  const fileType = getFileType(post.image);
+  const fileType = post.image ? getFileType(post.image) : "unknown";
 
   // Handle changes in the comment input field
   const changeEventHandler = (e) => {
@@ -215,7 +214,26 @@ const Post = ({ post }) => {
     }
   };
 
-  // console.log(post,"post");
+  const getTimeAgo = (dateString) => {
+    const postDate = new Date(dateString);
+    const now = new Date();
+    const diffInMs = now - postDate;
+    
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+  
+    if (diffInDays > 0) {
+      return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
+    } else if (diffInHours > 0) {
+      return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+    } else if (diffInMinutes > 0) {
+      return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
+    } else {
+      return `${diffInSeconds} second${diffInSeconds > 1 ? "s" : ""} ago`;
+    }
+  };
 
   const onEmojiClick = (event) => {
     // Append the selected emoji to the existing text only if it exists.
@@ -227,9 +245,11 @@ const Post = ({ post }) => {
 
   if (!post || !post.author) return null;
 
+  const wordCount = post.caption.split(/\s+/).length; // Count the number of words
+
   return (
     <div>
-      <div className="my-8 bg-gray-800 p-4 text-white w-full max-w-lg mx-auto shadow-md transition-all duration-300 ease-in-out">
+      <div className="my-8 bg-[#1C1C1C] p-4 text-white w-full max-w-xl rounded-xl mx-auto shadow-md transition-all duration-300 ease-in-out">
         {/* Post Header */}
 
         <div className="flex items-center justify-between mb-2">
@@ -272,6 +292,38 @@ const Post = ({ post }) => {
             </DialogContent>
           </Dialog>
         </div>
+
+        <p className="text-sm mb-2">
+          <p className="text-gray-500 text-sm italic">Posted at: {getTimeAgo(post.updatedAt)}</p>
+
+          {readmore
+            ? post.caption.split("\n").map((line, index) => (
+                <p key={index} className="mb-2">
+                  {line.split(" ").map((word, idx) => (
+                    <span
+                      key={idx}
+                      className={
+                        word.startsWith(":") && word.endsWith(":")
+                          ? "font-bold"
+                          : ""
+                      }
+                    >
+                      {word}{" "}
+                    </span>
+                  ))}
+                </p>
+              ))
+            : `${post.caption.substring(0, 100)}...`}
+          
+          {wordCount > 50 && (
+            <span
+              className="text-blue-500 cursor-pointer"
+              onClick={() => setReadMore(!readmore)}
+            >
+              {readmore ? " Show less" : " Read more"}
+            </span>
+          )}
+        </p>
 
         {/* Post Media */}
         {fileType === "image" && (
@@ -355,13 +407,11 @@ const Post = ({ post }) => {
 
           {bookmark ? (
             <FaBookmark
-            onClick={bookmarkHandler}
-            size={24}
-            className="cursor-pointer hover:text-gray-600 transition-colors duration-200"
-          />
+              onClick={bookmarkHandler}
+              size={24}
+              className="cursor-pointer hover:text-gray-600 transition-colors duration-200"
+            />
           ) : (
-            
-
             <Bookmark
               onClick={bookmarkHandler}
               size={24}
@@ -370,34 +420,6 @@ const Post = ({ post }) => {
           )}
         </div>
         <span className="font-medium block mb-2">{postLike} likes</span>
-
-        <p className="text-sm mb-2">
-          <span className="font-medium">{post.author?.username}</span>{" "}
-          {readmore
-            ? post.caption.split("\n").map((line, index) => (
-                <p key={index} className="mb-2">
-                  {line.split(" ").map((word, idx) => (
-                    <span
-                      key={idx}
-                      className={
-                        word.startsWith(":") && word.endsWith(":")
-                          ? "font-bold"
-                          : ""
-                      }
-                    >
-                      {word}{" "}
-                    </span>
-                  ))}
-                </p>
-              ))
-            : `${post.caption.substring(0, 100)}...`}
-          <span
-            className="text-blue-500 cursor-pointer"
-            onClick={() => setReadMore(!readmore)}
-          >
-            {readmore ? " Show less" : " Read more"}
-          </span>
-        </p>
 
         {/* Comments Section */}
         {comment.length > 0 && (
@@ -415,7 +437,6 @@ const Post = ({ post }) => {
           onClick={() => {
             dispatch(setSelectedPost(post));
             setOpen(true);
-            
           }}
         >
           View all {comment.length} comments
