@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { LANGUAGE_VERSIONS } from "./constant";
+import { FiChevronDown, FiCode } from "react-icons/fi";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
-const ACTIVE_COLOR = "text-blue-400";
 
 const LanguageSelector = ({ language, onSelect }) => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage dropdown visibility
-  const dropdownRef = useRef(null); // Ref to handle clicks outside the dropdown
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -17,48 +16,43 @@ const LanguageSelector = ({ language, onSelect }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleSelect = (lang) => {
-    onSelect(lang); // Call the parent's onSelect function
-    setIsOpen(false); // Close the dropdown after selection
+    onSelect(lang);
+    setIsOpen(false);
   };
 
   return (
-    <div className="ml-2 mb-4 p-2 border rounded-lg w-1/2 bg-white shadow">
-      {/* <h2 className="mb-2 text-lg font-semibold">Language:</h2> */}
-      <div className="relative inline-block w-full" ref={dropdownRef}>
-        {/* Dropdown Button */}
-        <button
-          className="w-full px-4 py-2 text-left bg-gray-100 border rounded-md focus:outline-none hover:bg-gray-200 transition-colors"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {language}
-        </button>
+    <div className="relative" ref={dropdownRef}>
+      <button
+        className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <FiCode className="text-blue-400" />
+        <span className="font-medium">{language}</span>
+        <FiChevronDown className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+      </button>
 
-        {/* Dropdown Menu */}
-        {isOpen && (
-          <div className="absolute z-[999] left-0 mt-2 w-full bg-white border rounded-md shadow-lg">
+      {isOpen && (
+        <div className="absolute z-50 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-md shadow-lg overflow-hidden">
+          <div className="max-h-96 overflow-y-auto">
             {languages.map(([lang, version]) => (
-              <div
+              <button
                 key={lang}
-                className={`px-4 py-2 cursor-pointer ${
-                  lang === language
-                    ? ACTIVE_COLOR + " bg-gray-200"
-                    : "hover:bg-gray-200"
+                className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors flex justify-between items-center ${
+                  lang === language ? "bg-gray-700 text-blue-400" : "text-gray-300"
                 }`}
                 onClick={() => handleSelect(lang)}
               >
-                {lang}{" "}
-                <span className="text-gray-500 text-sm">({version})</span>
-              </div>
+                <span className="capitalize">{lang}</span>
+                <span className="text-xs text-gray-500">{version}</span>
+              </button>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

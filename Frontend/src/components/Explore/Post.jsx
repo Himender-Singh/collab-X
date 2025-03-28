@@ -215,6 +215,7 @@ const Post = ({ post }) => {
   };
 
   const getTimeAgo = (dateString) => {
+    if(!dateString) return null;
     const postDate = new Date(dateString);
     const now = new Date();
     const diffInMs = now - postDate;
@@ -230,7 +231,8 @@ const Post = ({ post }) => {
       return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
     } else if (diffInMinutes > 0) {
       return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
-    } else {
+    } 
+    else {
       return `${diffInSeconds} second${diffInSeconds > 1 ? "s" : ""} ago`;
     }
   };
@@ -294,7 +296,9 @@ const Post = ({ post }) => {
         </div>
 
         <p className="text-sm mb-2">
-          <p className="text-gray-500 text-sm italic">Posted at: {getTimeAgo(post.updatedAt)}</p>
+          {
+            post.createdAt ? <p className="text-gray-500 text-sm italic">Posted at: {getTimeAgo(post.updatedAt) || ""}</p> : ""
+          }
 
           {readmore
             ? post.caption.split("\n").map((line, index) => (

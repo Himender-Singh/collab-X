@@ -2,39 +2,58 @@ import React, { Suspense, lazy } from "react";
 import useGetAllPost from "@/hooks/useGetAllPost";
 import { useSelector } from "react-redux";
 import Post from "./Post";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PostCreate from "./PostCreate";
+import { FiLoader } from "react-icons/fi";
+import { motion } from "framer-motion";
 
 const Posts = () => {
-  // Call the custom hook to fetch posts
   const navigate = useNavigate();
   const { loading, error } = useGetAllPost();
   const posts = useSelector((store) => store.post.posts) || [];
 
-  if (loading) return <p className="text-center">Loading posts...</p>;
-  if (error) return <p className="text-center text-red-500">Error: {error}</p>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-screen">
+      <FiLoader className="animate-spin text-4xl text-blue-500" />
+    </div>
+  );
+
+  if (error) return (
+    <div className="flex justify-center items-center h-screen">
+      <p className="text-red-500 text-lg">Error: {error}</p>
+    </div>
+  );
 
   if (posts.length === 0) {
     navigate("/login");
-    return <p className="text-center text-gray-500">No posts available.</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-gray-500 text-lg">No posts available.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="relative">
-      <div className="bg-black/50 h-12 z-50 top-0 fixed w-full backdrop-blur-xl">
-        {/* Content inside the fixed header */}
-      </div>
-      <PostCreate/>
-      <div className="p-6 space-y-4">
+    <div className="max-w-2xl mx-auto pb-20">
+      <PostCreate />
+      
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="space-y-6 px-4"
+      >
         {posts.slice().map((post) => (
           <Suspense
             key={post._id}
-            fallback={<p className="text-center">Loading post...</p>}
+            fallback={
+              <div className="bg-gray-800 rounded-xl p-4 h-64 animate-pulse"></div>
+            }
           >
             <Post post={post} />
           </Suspense>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

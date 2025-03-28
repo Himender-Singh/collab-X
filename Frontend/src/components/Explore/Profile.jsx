@@ -4,52 +4,45 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { AtSign, Heart, MessageCircle } from "lucide-react";
+import { AtSign, Heart, MessageCircle, Bookmark, UserPlus, Users } from "lucide-react";
 import useGetUserProfile from "@/hooks/useGetUserProfile";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { followingUpdate } from "@/redux/authSlice";
 import { server } from "@/main";
 import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
-import { setSelectedPost } from "@/redux/postSlice"; // Import the action
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"; // Import Dialog components
-import clsx from "clsx";
+import { setSelectedPost } from "@/redux/postSlice";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import CommentDialog from "./CommentDialog";
 import Create from "./Create";
+import { motion } from "framer-motion";
 
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
-  useGetUserProfile(userId); // Fetch user profile based on userId
+  useGetUserProfile(userId);
   const [activeTab, setActiveTab] = useState("posts");
   const { userProfile, user } = useSelector((store) => store.auth);
-  const { selectedPost } = useSelector((store) => store.post); // Get selectedPost from Redux store
+  const { selectedPost } = useSelector((store) => store.post);
   const dispatch = useDispatch();
   const data = useGetSuggestedUser();
   const [matchedFollowers, setMatchedFollowers] = useState([]);
   const [matchedFollowing, setMatchedFollowing] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [selectedMedia, setSelectedMedia] = useState(null); // State for selected post
-  const [comment, setComment] = useState([]); // State for comments
-
+  const [openPostModal, setOpenPostModal] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState(null);
+  const [comment, setComment] = useState([]);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openFollowersModal, setOpenFollowersModal] = useState(false);
+  const [openFollowingModal, setOpenFollowingModal] = useState(false);
 
-  // Safely determine the file type based on the URL
   const getFileType = (url) => {
-    if (!url) return "unknown"; // Handle undefined or null URLs
-    if (typeof url !== "string") return "unknown"; // Ensure URL is a string
-
-    if (url.match(/\.(jpeg|jpg|gif|png)$/i)) {
-      return "image";
-    } else if (url.match(/\.(mp4|mov|avi|mkv)$/i)) {
-      return "video";
-    } else if (url.includes("raw/upload")) {
-      return "pdf";
-    }
+    if (!url) return "unknown";
+    if (url.match(/\.(jpeg|jpg|gif|png)$/i)) return "image";
+    if (url.match(/\.(mp4|mov|avi|mkv)$/i)) return "video";
+    if (url.includes("raw/upload")) return "pdf";
     return "unknown";
   };
 
-  // Handle post click to open modal
   const handlePostClick = (post) => {
     if (!post || !post.image) {
       toast.error("Invalid post data.");
@@ -57,19 +50,20 @@ const Profile = () => {
     }
     setComment(post.comments);
     dispatch(setSelectedPost(post));
-    setSelectedMedia(post); // Set the entire post object
-    setOpen(true); // Open the modal
-    setComment(post.comments);
+    setSelectedMedia(post);
+    setOpenPostModal(true);
   };
 
-  // Check if userProfile data is still loading
   if (!userProfile) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
-  // Check if the logged-in user is viewing their own profile
   const isLoggedInUserProfile = user?._id === userProfile?._id;
-  const isFollowing = user?.following.includes(userProfile?._id); // Determine if the logged-in user is following the target user
+  const isFollowing = user?.following.includes(userProfile?._id);
   const userRole = userProfile?.role || "Student";
 
   const handleTabChange = (tab) => {
@@ -86,24 +80,12 @@ const Profile = () => {
       setTimeout(() => {
         window.location.reload();
       }, 50);
-      dispatch(followingUpdate(userProfile?._id)); // Update the following state in Redux
+      dispatch(followingUpdate(userProfile?._id));
     } catch (error) {
-      console.error("Error following/unfollowing:", error.response);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Error following user");
     }
   };
 
-  // Determine which posts to display based on the active tab
-  const displayedPost =
-    activeTab === "posts"
-      ? userProfile?.posts || []
-      : userProfile?.bookmarks || [];
-  const displayedFollowers =
-    activeTab === "followers" ? userProfile?.followers || [] : [];
-  const displayedFollowing =
-    activeTab === "following" ? userProfile?.following || [] : [];
-
-  // Match follower IDs with user data
   useEffect(() => {
     if (data?.suggestedUsers && userProfile?.followers) {
       const matched = userProfile.followers.map((followerId) => {
@@ -123,7 +105,6 @@ const Profile = () => {
     }
   }, [data, userProfile?.followers]);
 
-  // Match following IDs with user data
   useEffect(() => {
     if (data?.suggestedUsers && userProfile?.following) {
       const matched = userProfile.following.map((followingId) => {
@@ -144,283 +125,305 @@ const Profile = () => {
   }, [data, userProfile?.following]);
 
   return (
-    <div className="flex flex-col sm:flex-row sm:max-w-5xl justify-center mx-auto p-5 md:p-8 lg:p-10 text-gray-100">
-      <div className="flex flex-col gap-10 sm:gap-20 p-5 sm:p-10 w-full">
-        {/* Profile Header */}
-        <div className="flex flex-col sm:flex-row sm:gap-10">
-          <section className="flex justify-center sm:w-1/3">
-            <Avatar className="h-32 w-32 shadow-lg">
-              <AvatarImage
-                src={userProfile?.profilePicture}
-                alt="profilephoto"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </section>
-          <section className="flex flex-col gap-5 sm:w-2/3">
-            <div className="flex">
-              <span className="text-xl mt-5 sm:text-2xl mr-4 font-semibold">
-                {userProfile?.username}
-              </span>
-              {isLoggedInUserProfile ? (
-                <div className="flex sm:gap-2 mt-5 gap-5">
-                  <Link to="/edit">
-                    <Button
-                      variant="secondary"
-                      className="hover:bg-gray-700 hover:text-white h-8 sm:h-10 text-sm sm:text-base"
-                    >
-                      Edit Profile
-                    </Button>
-                  </Link>
-                  <div className="hidden sm:flex gap-2">
-                    <Link to={"/code-editor"}>
-                      <Button
-                        variant="secondary"
-                        className="hover:bg-gray-700 hover:text-white h-8 sm:h-10 text-sm sm:text-base"
-                      >
-                        Cloud editor
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="secondary"
-                      onClick={() => setOpenCreateModal(true)}
-                      className="hover:bg-gray-700 hover:text-white text-blue-800  h-8 sm:h-10 text-sm sm:text-base"
-                    >
-                      Give advice
-                    </Button>
-                    <Create
-                      open={openCreateModal}
-                      setOpen={setOpenCreateModal}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="flex gap-2 mt-5 sm:gap-5">
+    <div className="max-w-6xl mx-auto p-12 md:p-6 text-gray-100">
+      {/* Profile Header */}
+      <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex-shrink-0"
+        >
+          <Avatar className="h-40 w-40 md:h-48 md:w-48 border-4 border-blue-500/30 shadow-lg">
+            <AvatarImage
+              src={userProfile?.profilePicture}
+              alt="profilephoto"
+              className="object-cover"
+            />
+            <AvatarFallback className="bg-gray-700 text-2xl font-bold">
+              {userProfile?.username?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
+        </motion.div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex-1 w-full"
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold">
+              {userProfile?.username}
+            </h1>
+            
+            {isLoggedInUserProfile ? (
+              <div className="flex gap-3">
+                <Link to="/edit">
                   <Button
-                    onClick={followAndUnfollowHandler}
-                    className={`h-8 sm:h-10 text-sm sm:text-base ${
-                      isFollowing
-                        ? "bg-red-600 hover:bg-red-500"
-                        : "bg-blue-600 hover:bg-blue-500"
-                    }`}
+                    variant="outline"
+                    className="bg-transparent hover:bg-gray-800 hover:text-white border-gray-700"
                   >
-                    {isFollowing ? "Unfollow" : "Follow"}
+                    Edit Profile
                   </Button>
-                  <Button
-                    variant="secondary"
-                    className="h-8 sm:h-10 text-sm sm:text-base"
-                  >
-                    {userRole}
-                  </Button>
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-4 text-gray-400">
-              <p>
-                <span className="font-semibold text-gray-100">
-                  {userProfile?.posts?.length || 0}
-                </span>{" "}
-                posts
-              </p>
-              <p>
-                <span className="font-semibold text-gray-100">
-                  {userProfile?.followers?.length || 0}
-                </span>{" "}
-                followers
-              </p>
-              <p>
-                <span className="font-semibold text-gray-100">
-                  {userProfile?.following?.length || 0}
-                </span>{" "}
-                following
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className="font-semibold text-gray-200">
-                {userProfile?.bio || "bio here..."}
-              </span>
-              <Badge className="w-fit bg-gray-700 hover:bg-white hover:text-gray-700 text-gray-300">
-                <AtSign /> <span className="pl-1">{userProfile?.username}</span>
-              </Badge>
-            </div>
-          </section>
-        </div>
-
-        {/* Posts, Followers, Following Section */}
-        <div className="border-t border-t-gray-700 mt-4">
-          <div className="flex justify-center md:text-lg text-xs gap-4 md:gap-10 text-gray-300">
-            <span
-              className={`py-3 cursor-pointer ${
-                activeTab === "posts" ? "font-bold text-gray-100" : ""
-              }`}
-              onClick={() => handleTabChange("posts")}
-            >
-              POSTS
-            </span>
-            {
-              isLoggedInUserProfile && (
-                <span
-              className={`py-3 cursor-pointer ${
-                activeTab === "saved" ? "font-bold text-gray-100" : ""
-              }`}
-              onClick={() => handleTabChange("saved")}
-            >
-              SAVED
-            </span>
-              )
-
-            }
-            <span
-              className={`py-3 cursor-pointer ${
-                activeTab === "followers" ? "font-bold text-gray-100" : ""
-              }`}
-              onClick={() => handleTabChange("followers")}
-            >
-              FOLLOWERS
-            </span>
-            <span
-              className={`py-3 cursor-pointer ${
-                activeTab === "following" ? "font-bold text-gray-100" : ""
-              }`}
-              onClick={() => handleTabChange("following")}
-            >
-              FOLLOWING
-            </span>
-          </div>
-
-          {/* Display Posts, Followers, or Following */}
-          <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
-            {activeTab === "followers" ? (
-              matchedFollowers.length > 0 ? (
-                matchedFollowers.map((follower) => (
-                  <div
-                    key={follower._id}
-                    className="flex items-center gap-4 p-4 bg-gray-800 rounded-lg shadow-md"
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage
-                        src={follower.profilePicture}
-                        alt={follower.username}
-                      />
-                      <AvatarFallback>
-                        {follower.username && follower.username.length > 0
-                          ? follower.username.charAt(0).toUpperCase()
-                          : "N"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-gray-200 font-medium">
-                        {follower.username || "Anonymous"}
-                      </p>
-                      <p className="text-gray-400 text-sm">
-                        {follower.bio || "Bio is unavailable"}
-                      </p>
-                    </div>
-                    <Link to={`/profile/${follower._id}`} className="ml-auto">
-                      <Button variant="secondary" size="sm">
-                        View
-                      </Button>
-                    </Link>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-400 text-center w-full">
-                  No followers yet.
-                </p>
-              )
-            ) : activeTab === "following" ? (
-              matchedFollowing.length > 0 ? (
-                matchedFollowing.map((following) => (
-                  <div
-                    key={following._id}
-                    className="flex items-center gap-4 p-4 bg-gray-800 rounded-lg shadow-md"
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage
-                        src={following.profilePicture}
-                        alt={following.username}
-                      />
-                      <AvatarFallback>
-                        {following.username && following.username.length > 0
-                          ? following.username.charAt(0).toUpperCase()
-                          : "N"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-gray-200 font-medium">
-                        {following.username || "Anonymous"}
-                      </p>
-                      <p className="text-gray-400 text-sm">
-                        {following.bio || "Bio is unavailable"}
-                      </p>
-                    </div>
-                    <Link to={`/profile/${following._id}`} className="ml-auto">
-                      <Button variant="secondary" size="sm">
-                        View
-                      </Button>
-                    </Link>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-400 text-center w-full">
-                  No following yet.
-                </p>
-              )
+                </Link>
+                <Button
+                  onClick={() => setOpenCreateModal(true)}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  Give Advice
+                </Button>
+                <Create
+                  open={openCreateModal}
+                  setOpen={setOpenCreateModal}
+                />
+              </div>
             ) : (
-              displayedPost.map((post) => {
-                const fileType = getFileType(post?.image);
-                return (
-                  <div
-                    key={post?._id}
-                    className="relative border rounded-md group cursor-pointer"
-                    onClick={() => handlePostClick(post)} // Handle post click
-                  >
-                    {fileType === "image" && (
-                      <img
-                        src={post.image}
-                        alt={post.caption}
-                        className="w-full h-96 object-cover rounded-md"
-                      />
-                    )}
-                    {fileType === "video" && (
-                      <video
-                        src={post.image}
-                        className="w-full h-96 object-cover rounded-md"
-                      />
-                    )}
-                    {fileType === "pdf" && (
-                      <div className="w-full h-96 flex items-center justify-center bg-gray-700 rounded-md">
-                        <span className="text-white">PDF Preview</span>
-                      </div>
-                    )}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="flex items-center text-white space-x-4">
-                        <button className="flex items-center gap-2 hover:text-gray-300">
-                          <Heart />
-                          <span>{post?.likes?.length || 0}</span>
-                        </button>
-                        <button className="flex items-center gap-2 hover:text-gray-300">
-                          <MessageCircle />
-                          <span>{post?.comments?.length || 0}</span>
-                        </button>
-                      </div>
-                      <div className="flex p-3 text-justify flex-col mt-2">
-                        {post.caption.substring(0, 500)}....
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
+              <div className="flex gap-3">
+                <Button
+                  onClick={followAndUnfollowHandler}
+                  className={`${isFollowing ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"}`}
+                >
+                  {isFollowing ? (
+                    <>
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Unfollow
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Follow
+                    </>
+                  )}
+                </Button>
+                <Button variant="outline" className="bg-gray-800 border-gray-700">
+                  {userRole}
+                </Button>
+              </div>
             )}
           </div>
+
+          <div className="flex items-center gap-8 mb-6">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">{userProfile?.posts?.length || 0}</span>
+              <span className="text-gray-400">posts</span>
+            </div>
+            
+            <Dialog className="text-white" open={openFollowersModal} onOpenChange={setOpenFollowersModal}>
+              <DialogTrigger asChild>
+                <button className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
+                  <span className="font-semibold">{userProfile?.followers?.length || 0}</span>
+                  <span className="text-gray-400">followers</span>
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md text-white bg-gray-900 border-gray-800 max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="text-center text-white">Followers</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  {matchedFollowers.length > 0 ? (
+                    matchedFollowers.map((follower) => (
+                      <div key={follower._id} className="flex items-center gap-4 p-3 hover:bg-gray-800 rounded-lg transition-colors">
+                        <Link to={`/profile/${follower._id}`} className="flex items-center gap-4 flex-1">
+                          <Avatar className="h-12 w-12">
+                            <AvatarImage src={follower.profilePicture} />
+                            <AvatarFallback>{follower.username?.charAt(0).toUpperCase()}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium">{follower.username}</p>
+                            <p className="text-sm text-gray-400">{follower.bio?.substring(0, 30)}</p>
+                          </div>
+                        </Link>
+                        {!isLoggedInUserProfile && (
+                          <Button size="sm" variant="outline" className="ml-auto">
+                            Follow
+                          </Button>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-400">
+                      <Users className="mx-auto h-12 w-12 mb-2" />
+                      <p>No followers yet</p>
+                    </div>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog className="text-white" open={openFollowingModal} onOpenChange={setOpenFollowingModal}>
+              <DialogTrigger asChild>
+                <button className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
+                  <span className="font-semibold">{userProfile?.following?.length || 0}</span>
+                  <span className="text-gray-50">following</span>
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md bg-gray-900 border-gray-800 max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="text-center text-white">Following</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  {matchedFollowing.length > 0 ? (
+                    matchedFollowing.map((following) => (
+                      <div key={following._id} className="flex items-center text-white gap-4 p-3 hover:bg-gray-800 rounded-lg transition-colors">
+                        <Link to={`/profile/${following._id}`} className="flex items-center gap-4 flex-1">
+                          <Avatar className="h-12 w-12">
+                            <AvatarImage src={following.profilePicture} />
+                            <AvatarFallback>{following.username?.charAt(0).toUpperCase()}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium">{following.username}</p>
+                            <p className="text-sm text-gray-400">{following.bio?.substring(0, 30)}</p>
+                          </div>
+                        </Link>
+                        {!isLoggedInUserProfile && (
+                          <Button size="sm" variant="outline" className="ml-auto">
+                            Follow
+                          </Button>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-400">
+                      <Users className="mx-auto h-12 w-12 mb-2" />
+                      <p>Not following anyone yet</p>
+                    </div>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="font-semibold text-lg mb-1">{userProfile?.email || "No name provided"}</h2>
+            <p className="text-gray-300 mb-3">{userProfile?.bio || "No bio yet"}</p>
+            <Badge variant="secondary" className="bg-gray-50 hover:bg-gray-400">
+              <AtSign className="h-4 w-4 mr-1" />
+              {userProfile?.username}
+            </Badge>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Tabs */}
+      <div className="border-t border-gray-800 mt-8">
+        <div className="flex justify-center gap-1 md:gap-8 text-gray-400">
+          <button
+            onClick={() => handleTabChange("posts")}
+            className={`py-4 px-2 md:px-4 relative ${activeTab === "posts" ? "text-white" : ""}`}
+          >
+            <span className="flex items-center gap-1">
+              <span className="hidden md:inline">Posts</span>
+              <span className="md:hidden">📝</span>
+            </span>
+            {activeTab === "posts" && (
+              <motion.div 
+                className="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"
+                layoutId="profileTabIndicator"
+              />
+            )}
+          </button>
+
+          {isLoggedInUserProfile && (
+            <button
+              onClick={() => handleTabChange("saved")}
+              className={`py-4 px-2 md:px-4 relative ${activeTab === "saved" ? "text-white" : ""}`}
+            >
+              <span className="flex items-center gap-1">
+                <span className="hidden md:inline">Saved</span>
+                <span className="md:hidden">🔖</span>
+              </span>
+              {activeTab === "saved" && (
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"
+                  layoutId="profileTabIndicator"
+                />
+              )}
+            </button>
+          )}
+
+          <button
+            onClick={() => setOpenFollowersModal(true)}
+            className={`py-4 px-2 md:px-4 relative ${activeTab === "followers" ? "text-white" : ""}`}
+          >
+            <span className="flex items-center gap-1">
+              <span className="hidden md:inline">Followers</span>
+              <span className="md:hidden">👥</span>
+            </span>
+          </button>
+
+          <button
+            onClick={() => setOpenFollowingModal(true)}
+            className={`py-4 px-2 md:px-4 relative ${activeTab === "following" ? "text-white" : ""}`}
+          >
+            <span className="flex items-center gap-1">
+              <span className="hidden md:inline">Following</span>
+              <span className="md:hidden">👤</span>
+            </span>
+          </button>
         </div>
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      {/* Content */}
+      <div className="mt-4">
+        {activeTab === "posts" || activeTab === "saved" ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {(activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks)?.map((post) => {
+              const fileType = getFileType(post?.image);
+              return (
+                <motion.div
+                  key={post?._id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative group aspect-square overflow-hidden rounded-lg shadow-lg cursor-pointer"
+                  onClick={() => handlePostClick(post)}
+                >
+                  {fileType === "image" && (
+                    <img
+                      src={post.image}
+                      alt={post.caption}
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                  )}
+                  {fileType === "video" && (
+                    <video
+                      src={post.image}
+                      className="w-full h-full object-cover"
+                      muted
+                    />
+                  )}
+                  {fileType === "pdf" && (
+                    <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                      <div className="text-center p-4">
+                        <Bookmark className="h-12 w-12 mx-auto text-blue-400" />
+                        <p className="mt-2 text-sm">PDF Document</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6">
+                    <div className="flex items-center text-white">
+                      <Heart className="mr-1" />
+                      <span>{post?.likes?.length || 0}</span>
+                    </div>
+                    <div className="flex items-center text-white">
+                      <MessageCircle className="mr-1" />
+                      <span>{post?.comments?.length || 0}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
+
+      {/* Post Modal */}
+      <Dialog open={openPostModal} onOpenChange={setOpenPostModal}>
         <CommentDialog
-          open={open}
-          setOpen={setOpen}
-          comments={selectedPost.comments}
+          open={openPostModal}
+          setOpen={setOpenPostModal}
+          comments={selectedMedia?.comments || []}
         />
       </Dialog>
     </div>

@@ -54,12 +54,12 @@ const InterviewMode = ({ isOpen, onClose, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center z-50">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="bg-gray-900 text-white rounded-2xl p-6 w-11/12 max-w-2xl shadow-lg"
+        className="bg-[#1c1c1c] text-white rounded-2xl p-6 w-11/12 max-w-2xl shadow-lg"
       >
         <h2 className="text-2xl font-bold mb-6">Select Interview Options</h2>
 
@@ -102,14 +102,14 @@ const InterviewMode = ({ isOpen, onClose, onSubmit }) => {
         <div className="flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-700 border border-white rounded-lg hover:bg-gray-600 transition-colors duration-200"
+            className="px-4 py-2 bg-red-700 border border-white rounded-lg hover:bg-red-600 transition-colors duration-200"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+            className="px-4 py-2 bg-blue-50 text-black font-semibold rounded-lg hover:bg-black hover:text-white transition-colors duration-200"
           >
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>

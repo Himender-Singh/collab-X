@@ -106,26 +106,32 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="flex text-white max-w-2xl mx-auto p-4 bg-black rounded-lg shadow-lg">
-      <section className="flex flex-col gap-6 w-full my-8">
-        <h1 className="font-bold text-2xl text-center">Edit Profile</h1>
-        <div className="flex items-center justify-between bg-gray-800 rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <div className="rounded-full overflow-hidden w-16 h-16">
+    <div className="flex text-white max-w-2xl mx-auto p-4 bg-gray-900 rounded-lg shadow-lg my-8">
+      <section className="flex flex-col gap-6 w-full">
+        <h1 className="font-bold text-3xl text-center mb-6 text-blue-400">Edit Profile</h1>
+        
+        {/* Profile Picture Section */}
+        <div className="flex items-center justify-between bg-gray-800 rounded-xl p-4 border border-gray-700">
+          <div className="flex items-center gap-4">
+            <div className="relative rounded-full overflow-hidden w-20 h-20 border-2 border-blue-500">
               <img
                 src={
                   input.profilePhoto instanceof File
                     ? URL.createObjectURL(input.profilePhoto)
-                    : user?.profilePicture
+                    : user?.profilePicture || "/default-avatar.png"
                 }
                 alt="profile_image"
                 className="object-cover w-full h-full"
               />
             </div>
             <div>
-              <h1 className="font-bold text-lg text-white pb-2">{user?.username}</h1>
-              <span className="text-black font-semibold p-1 rounded bg-white">
-                {user?.role || "student..."}
+              <h1 className="font-bold text-xl text-white">{user?.username}</h1>
+              <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                user?.role === "counselor" 
+                  ? "bg-purple-600 text-white" 
+                  : "bg-green-600 text-white"
+              }`}>
+                {user?.role || "student"}
               </span>
             </div>
           </div>
@@ -133,92 +139,122 @@ const EditProfile = () => {
             ref={imageRef}
             onChange={fileChangeHandler}
             type="file"
+            accept="image/*"
             className="hidden"
           />
           <button
             onClick={() => imageRef?.current.click()}
-            className="bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-500 flex items-center gap-2"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-all flex items-center gap-2"
           >
             <FontAwesomeIcon icon={faCamera} />
-            Change photo
+            Change
           </button>
         </div>
-        <div>
-          <h1 className="font-bold text-xl mb-2">Bio</h1>
+
+        {/* Bio Section */}
+        <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
+          <h1 className="font-bold text-xl mb-3 text-blue-400">Bio</h1>
           <textarea
             value={input.bio}
             onChange={(e) => setInput({ ...input, bio: e.target.value })}
             name="bio"
-            placeholder="Bio here..."
-            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Tell us about yourself..."
+            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
           />
         </div>
-        <div>
-          <h1 className="font-bold text-xl mb-2">Gender</h1>
-          <select
-            value={input.gender}
-            onChange={(e) => selectChangeHandler(e.target.value)}
-            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
+
+        {/* Personal Information Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Gender */}
+          <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
+            <h1 className="font-bold text-xl mb-3 text-blue-400">Gender</h1>
+            <select
+              value={input.gender}
+              onChange={(e) => selectChangeHandler(e.target.value)}
+              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+              <option value="prefer-not-to-say">Prefer not to say</option>
+            </select>
+          </div>
+
+          {/* Role */}
+          <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
+            <h1 className="font-bold text-xl mb-3 text-blue-400">Role</h1>
+            <select
+              value={input.role}
+              onChange={(e) => setInput({ ...input, role: e.target.value })}
+              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="student">Student</option>
+              <option value="counselor">Counselor</option>
+            </select>
+          </div>
         </div>
-        <div>
-          <h1 className="font-bold text-xl mb-2">Experience</h1>
-          <input
-            type="text"
-            value={input.experience}
-            onChange={(e) => setInput({ ...input, experience: e.target.value })}
-            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter your experience"
-          />
-        </div>
-        <div>
-          <h1 className="font-bold text-xl mb-2">Skills</h1>
-          <input
-            type="text"
-            value={input.skills}
-            onChange={(e) => setInput({ ...input, skills: e.target.value })}
-            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Comma-separated skills"
-          />
-        </div>
-        <div>
-          <h1 className="font-bold text-xl mb-2">Role</h1>
-          <select
-            value={input.role}
-            onChange={(e) => setInput({ ...input, role: e.target.value })}
-            className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="student">Student</option>
-            <option value="counselor">Counselor</option>
-          </select>
-        </div>
-        {input.role === "counselor" && (
-          <div>
-            <h1 className="font-bold text-xl mb-2">Sessions</h1>
+
+        {/* Professional Information Section */}
+        <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
+          <h1 className="font-bold text-xl mb-3 text-blue-400">Professional Information</h1>
+          
+          {/* Experience */}
+          <div className="mb-4">
+            <label className="block text-gray-300 mb-2">Experience</label>
             <input
-              type="number"
-              value={input.sessions}
-              onChange={(e) => setInput({ ...input, sessions: e.target.value })}
-              className="w-full p-2 border border-gray-700 rounded-lg bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Number of sessions"
+              type="text"
+              value={input.experience}
+              onChange={(e) => setInput({ ...input, experience: e.target.value })}
+              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Your professional experience"
             />
           </div>
-        )}
-        <div className="flex justify-end">
+
+          {/* Skills */}
+          <div className="mb-4">
+            <label className="block text-gray-300 mb-2">Skills</label>
+            <input
+              type="text"
+              value={input.skills}
+              onChange={(e) => setInput({ ...input, skills: e.target.value })}
+              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Comma-separated skills (e.g., React, Counseling, Psychology)"
+            />
+            <p className="text-xs text-gray-400 mt-1">Separate multiple skills with commas</p>
+          </div>
+
+          {/* Sessions (for counselors) */}
+          {input.role === "counselor" && (
+            <div>
+              <label className="block text-gray-300 mb-2">Sessions Conducted</label>
+              <input
+                type="number"
+                value={input.sessions}
+                onChange={(e) => setInput({ ...input, sessions: e.target.value })}
+                className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Number of sessions conducted"
+                min="0"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Submit Button */}
+        <div className="flex justify-end mt-4">
           {loading ? (
-            <button className="w-fit bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-500 flex items-center gap-2">
+            <button 
+              disabled
+              className="bg-blue-600 text-white py-2 px-6 rounded-lg flex items-center gap-2 opacity-75"
+            >
               <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
-              Please wait
+              Saving...
             </button>
           ) : (
             <button
               onClick={editProfileHandler}
-              className="w-fit bg-blue-600 text-white py-1 px-4 rounded-lg hover:bg-blue-500"
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition-all"
             >
-              Submit
+              Save Changes
             </button>
           )}
         </div>

@@ -11,7 +11,6 @@ const Layout = () => {
   // Hide the LeftNavbar on the home page, error page, and specific routes
   const hideNavbar = 
     location.pathname === '/' || 
-    location.pathname === '/code-editor' || 
     location.pathname === '/login' || 
     location.pathname === '/signup' || 
     location.pathname.includes('*') || 
@@ -21,7 +20,7 @@ const Layout = () => {
     <div className="">
       {/* Conditionally render the LeftNavbar */}
       {!hideNavbar && <LeftNavbar />}
-      <div className={`flex-grow ${hideNavbar ? '' : 'md:ml-80 ml-0'}`}> {/* Adjust margin based on screen size */}
+      <div className={`flex-grow ${hideNavbar ? '' : 'md:ml-64 ml-0'}`}> {/* Adjust margin based on screen size */}
         <Navbar />
         <Outlet /> {/* This renders the current route's component */}
         <Footer />

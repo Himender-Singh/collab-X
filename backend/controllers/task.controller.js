@@ -5,31 +5,22 @@ import {User} from "../models/user.model.js";
 
 export const addTask = async (req, res) => {
   try {
-    const { mentorEmail, task, dateTime } = req.body;
+    const { task,desc, dateTime } = req.body;
     const authorId = req.id; // Adjust based on how you store logged-in user ID
     
-    // Find mentor by email
-    const mentor = await User.findOne({ email: mentorEmail });
-    if (!mentor) {
-      return res.status(404).json({
-        message: "Mentor not found",
-        success: false,
-      });
-    }
-    // Find the author
+    
     const author = await User.findById(authorId);
 
     // Prepare and send emails to mentor and author
     const message = scheduleSessionEmail(task, dateTime);
-    sendEmail(mentor.email, 'New Session Scheduled', message);   // Send email to mentor
     sendEmail(author.email, 'Session Confirmation', message);    // Send email to author
 
     // Create the new task
     const newTask = await Task.create({
       task,
       dateTime,
+      desc,
       author: authorId,
-      mentor: mentor,
       isTaskDone:false,
     });
 
@@ -127,3 +118,67 @@ export const getAllUserTasks = async (req, res) => {
 };
 
 
+// update
+export const updateTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { task, desc, dateTime, isTaskDone } = req.body;
+    const authorId = req.id; // Adjust based on how you store logged-in user ID
+
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: id, author: authorId },
+      { task, desc, dateTime, isTaskDone },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({
+        message: "Task not found or you do not have permission to update it.",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Task updated successfully",
+      success: true,
+      task: updatedTask,
+    });
+  } catch (error) {
+    console.error("Error updating task:", error);
+    return res.status(500).json({
+      message: "An error occurred while updating the task.",
+      success: false,
+      error: error.message,
+    });
+  }
+}
+
+// delete
+export const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const authorId = req.id; // Adjust based on how you store logged-in user ID
+
+    const deletedTask = await Task.findOneAndDelete({ _id: id, author: authorId });
+
+    if (!deletedTask) {
+      return res.status(404).json({
+        message: "Task not found or you do not have permission to delete it.",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Task deleted successfully",
+      success: true,
+      task: deletedTask,
+    });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return res.status(500).json({
+      message: "An error occurred while deleting the task.",
+      success: false,
+      error: error.message,
+    });
+  }
+}

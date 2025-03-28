@@ -29,7 +29,7 @@ const PostCreate = () => {
               <div className="flex gap-2">
                 <h2 className="text-lg font-semibold">{user.username}</h2>
                 <Badge color="blue" className="text-xs capitalize bg-white hover:bg-yellow-500 hover:text-white text-black">
-                  {user.role}
+                  {user.role || "student"}
                 </Badge>
               </div>
               <span className="text-xs font-semibold text-gray-400">

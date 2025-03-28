@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { executeCode } from "./api";
 import { toast } from "react-toastify";
+import { VscRunAll } from "react-icons/vsc";
+import { FiLoader } from "react-icons/fi";
 
 const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
@@ -16,33 +18,56 @@ const Output = ({ editorRef, language }) => {
       setOutput(result.output.split("\n"));
       result.stderr ? setIsError(true) : setIsError(false);
     } catch (error) {
-      console.log(error);
       toast.error(error.message || "Unable to run code");
+      setOutput([error.message]);
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-1/3 p-4 border border-gray-300 text-white rounded-lg shadow-lg bg-[#131212]">
-      <h2 className="mb-2 text-lg font-semibold">Output</h2>
+    <div className="flex-1 h-[38rem] overflow-x-hidden flex flex-col p-4">
       <button
-        className={`w-full px-4 py-2 mb-4 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-colors ${
-          isLoading ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`flex items-center justify-center space-x-2 px-4 py-2 mb-4 rounded-md transition-colors ${
+          isLoading
+            ? "bg-blue-700 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-500"
+        } text-white`}
         disabled={isLoading}
         onClick={runCode}
       >
-        {isLoading ? "Running..." : "Run Code"}
+        {isLoading ? (
+          <>
+            <FiLoader className="animate-spin" />
+            <span>Running...</span>
+          </>
+        ) : (
+          <>
+            <VscRunAll />
+            <span>Run Code</span>
+          </>
+        )}
       </button>
+
       <div
-        className={`h-[75vh] p-2 border rounded-md overflow-y-auto ${
-          isError ? "border-red-500 text-red-400" : "border-gray-300"
+        className={`flex-1 p-4 rounded-md font-mono text-sm overflow-auto ${
+          isError
+            ? "bg-red-900/20 text-red-400 border border-red-800"
+            : "bg-gray-900/50 text-gray-300 border border-gray-700"
         }`}
       >
-        {output
-          ? output.map((line, i) => <p key={i}>{line}</p>)
-          : 'Click "Run Code" to see the output here'}
+        {output ? (
+          output.map((line, i) => (
+            <div key={i} className="whitespace-pre-wrap">
+              {line}
+            </div>
+          ))
+        ) : (
+          <div className="h-full flex items-center justify-center text-gray-500">
+            Click "Run Code" to see output
+          </div>
+        )}
       </div>
     </div>
   );

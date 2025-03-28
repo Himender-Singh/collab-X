@@ -2,24 +2,24 @@ import { useRef, useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import Output from "./Output";
 import LanguageSelector from "./LanguageSelector";
-import { CODE_SNIPPETS, LANGUAGE_VERSIONS } from "./constant";
+import { CODE_SNIPPETS } from "./constant";
 import { toast } from "react-toastify";
-import logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
-
+import { FiSun, FiMoon, FiRefreshCw, FiMinus, FiPlus } from "react-icons/fi";
+import { RiTerminalLine } from "react-icons/ri";
+import { VscRunAll } from "react-icons/vsc";
 
 const CodeEditor = () => {
   const editorRef = useRef();
   const [value, setValue] = useState("");
-  const [language, setLanguage] = useState("java");
+  const [language, setLanguage] = useState("javascript");
   const [theme, setTheme] = useState("vs-dark");
-  const [fontSize, setFontSize] = useState(14); // State for font size
-  const [isEditorReady, setIsEditorReady] = useState(false); // State to track editor readiness
+  const [fontSize, setFontSize] = useState(14);
+  const [isEditorReady, setIsEditorReady] = useState(false);
 
   const onMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
-    setIsEditorReady(true); // Set editor as ready
+    setIsEditorReady(true);
   };
 
   const onSelect = (language) => {
@@ -28,15 +28,11 @@ const CodeEditor = () => {
   };
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "vs-dark" ? "vs-light" : "vs-dark"));
+    setTheme((prevTheme) => (prevTheme === "vs-dark" ? "light" : "vs-dark"));
   };
 
-  const increaseFontSize = () => {
-    setFontSize((prevSize) => Math.min(24, prevSize + 2)); // Cap font size at 24
-  };
-
-  const decreaseFontSize = () => {
-    setFontSize((prevSize) => Math.max(10, prevSize - 2)); // Cap font size at 10
+  const adjustFontSize = (increase) => {
+    setFontSize((prevSize) => Math.max(10, Math.min(24, increase ? prevSize + 1 : prevSize - 1)));
   };
 
   const resetCode = () => {
@@ -45,71 +41,81 @@ const CodeEditor = () => {
   };
 
   return (
-    <div className="flex gap-4 bg-[#131212] p-4 h-screen">
-      {/* Editor Section */}
-      <div className="w-2/3 h-full p-4 border border-gray-300 rounded-lg shadow-lg bg-[#131212]">
-        <div className="flex justify-between items-center mb-2">
-          {/* Logo Section */}
-          <Link to={"/feed"}>
-            <div className="mb-4 text-white flex items-center space-x-3">
-              <img src={logo} alt="Logo" className="w-12" />
-              <span className="text-xl font-semibold">CollabX</span>
-            </div>
-          </Link>
-
+    <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+      {/* Header */}
+      <div className="bg-gray-800 px-6 py-3 flex justify-between items-center border-b border-gray-700">
+        <div className="flex items-center space-x-2">
+          <RiTerminalLine className="text-blue-400 text-2xl" />
+          <h1 className="text-xl font-bold text-white">CollabX Code Editor</h1>
+        </div>
+        <div className="flex items-center space-x-4">
           <LanguageSelector language={language} onSelect={onSelect} />
-
-          <div className="flex gap-2">
-            <button
-              onClick={toggleTheme}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          
+          <div className="flex items-center space-x-2 bg-gray-700 rounded-lg px-2 py-1">
+            <button 
+              onClick={() => adjustFontSize(false)}
+              className="text-gray-300 hover:text-white p-1 rounded hover:bg-gray-600"
             >
-              {theme === "vs-dark" ? "Light Theme" : "Dark Theme"}
+              <FiMinus size={16} />
             </button>
-            <button
-              onClick={resetCode}
-              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+            <span className="text-sm text-gray-300 w-8 text-center">{fontSize}px</span>
+            <button 
+              onClick={() => adjustFontSize(true)}
+              className="text-gray-300 hover:text-white p-1 rounded hover:bg-gray-600"
             >
-              Reset Code
+              <FiPlus size={16} />
             </button>
           </div>
-        </div>
 
-        {/* Font Size Adjustments */}
-        <div className="flex gap-2 mb-4">
           <button
-            onClick={decreaseFontSize}
-            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+            onClick={toggleTheme}
+            className="flex items-center space-x-2 px-3 py-1.5 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 transition-colors"
           >
-            A-
+            {theme === "vs-dark" ? <FiSun size={18} /> : <FiMoon size={18} />}
+            <span>{theme === "vs-dark" ? "Light" : "Dark"}</span>
           </button>
+
           <button
-            onClick={increaseFontSize}
-            className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
+            onClick={resetCode}
+            className="flex items-center space-x-2 px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
           >
-            A+
+            <FiRefreshCw size={18} />
+            <span>Reset</span>
           </button>
         </div>
-
-        {/* Code Editor */}
-        <Editor
-          options={{
-            minimap: { enabled: false },
-            fontSize: fontSize, // Dynamic font size
-            readOnly: !isEditorReady, // Disable editor until ready
-          }}
-          height="70vh" // Adjusted height for additional UI
-          theme={theme}
-          language={language}
-          defaultValue={CODE_SNIPPETS[language]}
-          onMount={onMount}
-          value={value}
-          onChange={(value) => setValue(value)}
-        />
       </div>
 
-      {/* Output Section */}
-      <Output editorRef={editorRef} language={language} />
+      {/* Main Content */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Editor Section */}
+        <div className="flex-1 flex flex-col border-r border-gray-700">
+          <Editor
+            options={{
+              minimap: { enabled: false },
+              fontSize: fontSize,
+              readOnly: !isEditorReady,
+              scrollBeyondLastLine: false,
+              padding: { top: 20 },
+              wordWrap: "on",
+            }}
+            theme={theme}
+            language={language}
+            defaultValue={CODE_SNIPPETS[language]}
+            onMount={onMount}
+            value={value}
+            onChange={(value) => setValue(value)}
+            className="flex-1"
+          />
+        </div>
+
+        {/* Output Section */}
+        <div className="w-1/3 h-full flex flex-col bg-gray-800">
+          <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+            
+            <Output editorRef={editorRef} language={language} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,9 +4,12 @@ const taskSchema = new mongoose.Schema({
   mentor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
   },
   task: {
+    type: String,
+    required: true,
+  },
+  desc:{
     type: String,
     required: true,
   },
