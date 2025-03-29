@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 import { Post } from "../models/post.model.js";
+
 export const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -117,7 +118,7 @@ export const getProfile = async (req, res) => {
 export const editProfile = async (req, res) => {
     try {
         const userId = req.id;
-        const { bio, gender, experience, skills, role, sessions } = req.body;
+        const { bio, gender, experience, skills, role, sessions,leetcode,github,linkedin,twiter,address,college,check } = req.body;
         const profilePicture = req.file;
         let cloudResponse;
 
@@ -144,6 +145,13 @@ export const editProfile = async (req, res) => {
         if (role && ['student', 'counselor'].includes(role)) user.role = role;
         if (sessions && Number.isInteger(Number(sessions))) user.sessions = Number(sessions);
         if (profilePicture) user.profilePicture = cloudResponse.secure_url;
+        if (leetcode) user.leetcode = leetcode;
+        if (github) user.github = github;
+        if (twiter) user.twiter = twiter;
+        if (linkedin) user.linkedin = linkedin;
+        if (address) user.address = address;
+        if (college) user.college = college;
+        if (check) user.check = check;
 
         // Save updated user profile
         await user.save();
@@ -242,3 +250,4 @@ export const followOrUnfollow = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error', success: false });
     }
 };
+

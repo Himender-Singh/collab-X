@@ -4,7 +4,14 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
-import { AtSign, Heart, MessageCircle, Bookmark, UserPlus, Users } from "lucide-react";
+import {
+  AtSign,
+  Heart,
+  MessageCircle,
+  Bookmark,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import useGetUserProfile from "@/hooks/useGetUserProfile";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -12,10 +19,18 @@ import { followingUpdate } from "@/redux/authSlice";
 import { server } from "@/main";
 import useGetSuggestedUser from "@/hooks/useGetSuggestedUser";
 import { setSelectedPost } from "@/redux/postSlice";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import CommentDialog from "./CommentDialog";
 import Create from "./Create";
 import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLandmark, faLocation } from "@fortawesome/free-solid-svg-icons";
 
 const Profile = () => {
   const params = useParams();
@@ -128,7 +143,7 @@ const Profile = () => {
     <div className="max-w-6xl mx-auto p-12 md:p-6 text-gray-100">
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-start">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex-shrink-0"
@@ -145,7 +160,7 @@ const Profile = () => {
           </Avatar>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
@@ -155,7 +170,7 @@ const Profile = () => {
             <h1 className="text-2xl md:text-3xl font-bold">
               {userProfile?.username}
             </h1>
-            
+
             {isLoggedInUserProfile ? (
               <div className="flex gap-3">
                 <Link to="/edit">
@@ -172,16 +187,17 @@ const Profile = () => {
                 >
                   Give Advice
                 </Button>
-                <Create
-                  open={openCreateModal}
-                  setOpen={setOpenCreateModal}
-                />
+                <Create open={openCreateModal} setOpen={setOpenCreateModal} />
               </div>
             ) : (
               <div className="flex gap-3">
                 <Button
                   onClick={followAndUnfollowHandler}
-                  className={`${isFollowing ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"}`}
+                  className={`${
+                    isFollowing
+                      ? "bg-red-600 hover:bg-red-700"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  }`}
                 >
                   {isFollowing ? (
                     <>
@@ -195,7 +211,10 @@ const Profile = () => {
                     </>
                   )}
                 </Button>
-                <Button variant="outline" className="bg-gray-800 border-gray-700">
+                <Button
+                  variant="outline"
+                  className="bg-gray-800 border-gray-700"
+                >
                   {userRole}
                 </Button>
               </div>
@@ -204,37 +223,61 @@ const Profile = () => {
 
           <div className="flex items-center gap-8 mb-6">
             <div className="flex items-center gap-2">
-              <span className="font-semibold">{userProfile?.posts?.length || 0}</span>
+              <span className="font-semibold">
+                {userProfile?.posts?.length || 0}
+              </span>
               <span className="text-gray-400">posts</span>
             </div>
-            
-            <Dialog className="text-white" open={openFollowersModal} onOpenChange={setOpenFollowersModal}>
+
+            <Dialog
+              className="text-white"
+              open={openFollowersModal}
+              onOpenChange={setOpenFollowersModal}
+            >
               <DialogTrigger asChild>
                 <button className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
-                  <span className="font-semibold">{userProfile?.followers?.length || 0}</span>
+                  <span className="font-semibold">
+                    {userProfile?.followers?.length || 0}
+                  </span>
                   <span className="text-gray-400">followers</span>
                 </button>
               </DialogTrigger>
               <DialogContent className="max-w-md text-white bg-gray-900 border-gray-800 max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-center text-white">Followers</DialogTitle>
+                  <DialogTitle className="text-center text-white">
+                    Followers
+                  </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   {matchedFollowers.length > 0 ? (
                     matchedFollowers.map((follower) => (
-                      <div key={follower._id} className="flex items-center gap-4 p-3 hover:bg-gray-800 rounded-lg transition-colors">
-                        <Link to={`/profile/${follower._id}`} className="flex items-center gap-4 flex-1">
+                      <div
+                        key={follower._id}
+                        className="flex items-center gap-4 p-3 hover:bg-gray-800 rounded-lg transition-colors"
+                      >
+                        <Link
+                          to={`/profile/${follower._id}`}
+                          className="flex items-center gap-4 flex-1"
+                        >
                           <Avatar className="h-12 w-12">
                             <AvatarImage src={follower.profilePicture} />
-                            <AvatarFallback>{follower.username?.charAt(0).toUpperCase()}</AvatarFallback>
+                            <AvatarFallback>
+                              {follower.username?.charAt(0).toUpperCase()}
+                            </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="font-medium">{follower.username}</p>
-                            <p className="text-sm text-gray-400">{follower.bio?.substring(0, 30)}</p>
+                            <p className="text-sm text-gray-400">
+                              {follower.bio?.substring(0, 30)}
+                            </p>
                           </div>
                         </Link>
                         {!isLoggedInUserProfile && (
-                          <Button size="sm" variant="outline" className="ml-auto">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="ml-auto"
+                          >
                             Follow
                           </Button>
                         )}
@@ -250,33 +293,55 @@ const Profile = () => {
               </DialogContent>
             </Dialog>
 
-            <Dialog className="text-white" open={openFollowingModal} onOpenChange={setOpenFollowingModal}>
+            <Dialog
+              className="text-white"
+              open={openFollowingModal}
+              onOpenChange={setOpenFollowingModal}
+            >
               <DialogTrigger asChild>
                 <button className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer">
-                  <span className="font-semibold">{userProfile?.following?.length || 0}</span>
+                  <span className="font-semibold">
+                    {userProfile?.following?.length || 0}
+                  </span>
                   <span className="text-gray-50">following</span>
                 </button>
               </DialogTrigger>
               <DialogContent className="max-w-md bg-gray-900 border-gray-800 max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-center text-white">Following</DialogTitle>
+                  <DialogTitle className="text-center text-white">
+                    Following
+                  </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   {matchedFollowing.length > 0 ? (
                     matchedFollowing.map((following) => (
-                      <div key={following._id} className="flex items-center text-white gap-4 p-3 hover:bg-gray-800 rounded-lg transition-colors">
-                        <Link to={`/profile/${following._id}`} className="flex items-center gap-4 flex-1">
+                      <div
+                        key={following._id}
+                        className="flex items-center text-white gap-4 p-3 hover:bg-gray-800 rounded-lg transition-colors"
+                      >
+                        <Link
+                          to={`/profile/${following._id}`}
+                          className="flex items-center gap-4 flex-1"
+                        >
                           <Avatar className="h-12 w-12">
                             <AvatarImage src={following.profilePicture} />
-                            <AvatarFallback>{following.username?.charAt(0).toUpperCase()}</AvatarFallback>
+                            <AvatarFallback>
+                              {following.username?.charAt(0).toUpperCase()}
+                            </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="font-medium">{following.username}</p>
-                            <p className="text-sm text-gray-400">{following.bio?.substring(0, 30)}</p>
+                            <p className="text-sm text-gray-400">
+                              {following.bio?.substring(0, 30)}
+                            </p>
                           </div>
                         </Link>
                         {!isLoggedInUserProfile && (
-                          <Button size="sm" variant="outline" className="ml-auto">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="ml-auto"
+                          >
                             Follow
                           </Button>
                         )}
@@ -294,12 +359,96 @@ const Profile = () => {
           </div>
 
           <div className="mb-6">
-            <h2 className="font-semibold text-lg mb-1">{userProfile?.email || "No name provided"}</h2>
-            <p className="text-gray-300 mb-3">{userProfile?.bio || "No bio yet"}</p>
+            <h2 className="font-semibold text-lg mb-1">
+              {userProfile?.email || "No name provided"}
+            </h2>
+            <p className="text-gray-300 mb-3">
+              {userProfile?.bio || "No bio yet"}
+            </p>
             <Badge variant="secondary" className="bg-gray-50 hover:bg-gray-400">
               <AtSign className="h-4 w-4 mr-1" />
               {userProfile?.username}
             </Badge>
+          </div>
+
+          <div>
+            <h2 className="text-2xl mb-2 font-mono text-yellow-600 underline">Social Links</h2>
+            <div className="flex gap-4 items-center">
+              {userProfile?.leetcode && (
+                <a
+                  href={`https://leetcode.com/${userProfile.leetcode}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-1 rounded-full bg-white gap-1 text-black font-bold hover:underline"
+                  title="LeetCode Profile"
+                >
+                  <img
+                    src="https://leetcode.com/favicon.ico"
+                    alt="LeetCode"
+                    className="w-4 h-4"
+                  />
+                  LeetCode
+                </a>
+              )}
+              {userProfile?.github && (
+                <a
+                  href={`https://github.com/${userProfile.github}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-1 rounded-full bg-white gap-1 text-black font-bold hover:underline"
+                  title="GitHub Profile"
+                >
+                  <img
+                    src="https://github.githubassets.com/favicons/favicon.png"
+                    alt="GitHub"
+                    className="w-4 h-4"
+                  />
+                  GitHub
+                </a>
+              )}
+              {userProfile?.linkedin && (
+                <a
+                  href={
+                    userProfile.linkedin.startsWith("http")
+                      ? userProfile.linkedin
+                      : `https://linkedin.com/in/${userProfile.linkedin}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-1 rounded-full bg-white gap-1 text-black font-bold  hover:underline"
+                  title="LinkedIn Profile"
+                >
+                  <img
+                    src="https://static.licdn.com/sc/h/akt4ae504epesldzj74dzred8"
+                    alt="LinkedIn"
+                    className="w-4 h-4"
+                  />
+                  LinkedIn
+                </a>
+              )}
+              {userProfile?.twiter && (
+                <a
+                  href={`https://twitter.com/${userProfile.twiter}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-1 rounded-full bg-white gap-1 text-black font-bold  hover:underline"
+                  title="Twitter Profile"
+                >
+                  <img
+                    src="https://abs.twimg.com/favicons/twitter.3.ico"
+                    alt="Twitter"
+                    className="w-4 h-4"
+                  />
+                  Twitter
+                </a>
+              )}
+              {userProfile?.address && (
+                <div className="flex items-center gap-1 text-gray-300">
+                  <FontAwesomeIcon icon={faLandmark} className="h-4 w-4" />
+                  {userProfile.address}
+                </div>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
@@ -309,14 +458,16 @@ const Profile = () => {
         <div className="flex justify-center gap-1 md:gap-8 text-gray-400">
           <button
             onClick={() => handleTabChange("posts")}
-            className={`py-4 px-2 md:px-4 relative ${activeTab === "posts" ? "text-white" : ""}`}
+            className={`py-4 px-2 md:px-4 relative ${
+              activeTab === "posts" ? "text-white" : ""
+            }`}
           >
             <span className="flex items-center gap-1">
               <span className="hidden md:inline">Posts</span>
               <span className="md:hidden">📝</span>
             </span>
             {activeTab === "posts" && (
-              <motion.div 
+              <motion.div
                 className="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"
                 layoutId="profileTabIndicator"
               />
@@ -326,14 +477,16 @@ const Profile = () => {
           {isLoggedInUserProfile && (
             <button
               onClick={() => handleTabChange("saved")}
-              className={`py-4 px-2 md:px-4 relative ${activeTab === "saved" ? "text-white" : ""}`}
+              className={`py-4 px-2 md:px-4 relative ${
+                activeTab === "saved" ? "text-white" : ""
+              }`}
             >
               <span className="flex items-center gap-1">
                 <span className="hidden md:inline">Saved</span>
                 <span className="md:hidden">🔖</span>
               </span>
               {activeTab === "saved" && (
-                <motion.div 
+                <motion.div
                   className="absolute bottom-0 left-0 right-0 h-1 bg-blue-500"
                   layoutId="profileTabIndicator"
                 />
@@ -343,7 +496,9 @@ const Profile = () => {
 
           <button
             onClick={() => setOpenFollowersModal(true)}
-            className={`py-4 px-2 md:px-4 relative ${activeTab === "followers" ? "text-white" : ""}`}
+            className={`py-4 px-2 md:px-4 relative ${
+              activeTab === "followers" ? "text-white" : ""
+            }`}
           >
             <span className="flex items-center gap-1">
               <span className="hidden md:inline">Followers</span>
@@ -353,7 +508,9 @@ const Profile = () => {
 
           <button
             onClick={() => setOpenFollowingModal(true)}
-            className={`py-4 px-2 md:px-4 relative ${activeTab === "following" ? "text-white" : ""}`}
+            className={`py-4 px-2 md:px-4 relative ${
+              activeTab === "following" ? "text-white" : ""
+            }`}
           >
             <span className="flex items-center gap-1">
               <span className="hidden md:inline">Following</span>
@@ -367,7 +524,10 @@ const Profile = () => {
       <div className="mt-4">
         {activeTab === "posts" || activeTab === "saved" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks)?.map((post) => {
+            {(activeTab === "posts"
+              ? userProfile?.posts
+              : userProfile?.bookmarks
+            )?.map((post) => {
               const fileType = getFileType(post?.image);
               return (
                 <motion.div

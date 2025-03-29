@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faSpinner, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -12,6 +12,7 @@ const EditProfile = () => {
   const imageRef = useRef();
   const { user } = useSelector((store) => store.auth);
   const [loading, setLoading] = useState(false);
+  const [profileComplete, setProfileComplete] = useState(false);
   const [input, setInput] = useState({
     profilePhoto: user?.profilePicture || "",
     bio: user?.bio || "",
@@ -19,7 +20,13 @@ const EditProfile = () => {
     experience: user?.experience || "",
     skills: user?.skills || "",
     role: user?.role || "student",
-    sessions: user?.sessions,
+    sessions: user?.sessions || 0,
+    leetcode: user?.leetcode || "",
+    github: user?.github || "",
+    linkedin: user?.linkedin || "",
+    twiter: user?.twiter || "",
+    address: user?.address || "",
+    college: user?.college || "",
   });
 
   const navigate = useNavigate();
@@ -35,17 +42,36 @@ const EditProfile = () => {
         skills: Array.isArray(user.skills) ? user.skills.join(", ") : "",
         role: user.role || "student",
         sessions: user.sessions || 0,
+        leetcode: user.leetcode || "",
+        github: user.github || "",
+        linkedin: user.linkedin || "",
+        twiter: user.twiter || "",
+        address: user.address || "",
+        college: user.college || "",
       });
+      checkProfileCompletion(user);
     }
   }, [user]);
+
+  const checkProfileCompletion = (userData) => {
+    const requiredFields = [
+      'profilePicture', 'bio', 'gender', 'skills', 'leetcode', 
+      'github', 'college', 'address'
+    ];
+    
+    const isComplete = requiredFields.every(field => {
+      if (field === 'skills') {
+        return userData[field]?.length > 0;
+      }
+      return !!userData[field];
+    });
+    
+    setProfileComplete(isComplete);
+  };
 
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
     if (file) setInput({ ...input, profilePhoto: file });
-  };
-
-  const selectChangeHandler = (value) => {
-    setInput({ ...input, gender: value });
   };
 
   const editProfileHandler = async () => {
@@ -59,9 +85,17 @@ const EditProfile = () => {
     );
     formData.append("role", input.role);
     formData.append("sessions", input.sessions);
+    formData.append("leetcode", input.leetcode);
+    formData.append("github", input.github);
+    formData.append("linkedin", input.linkedin);
+    formData.append("twiter", input.twiter);
+    formData.append("address", input.address);
+    formData.append("college", input.college);
+    
     if (input.profilePhoto) {
       formData.append("profilePhoto", input.profilePhoto);
     }
+
     try {
       setLoading(true);
       const res = await axios.post(
@@ -75,6 +109,7 @@ const EditProfile = () => {
           withCredentials: true,
         }
       );
+
       if (res.data.success) {
         const updatedUserData = {
           ...user,
@@ -85,8 +120,17 @@ const EditProfile = () => {
           skills: res.data.user?.skills,
           role: res.data.user?.role,
           sessions: res.data.user?.sessions,
+          leetcode: res.data.user?.leetcode,
+          github: res.data.user?.github,
+          linkedin: res.data.user?.linkedin,
+          twiter: res.data.user?.twiter,
+          address: res.data.user?.address,
+          college: res.data.user?.college,
+          isProfileComplete: true
         };
+        
         dispatch(setAuthUser(updatedUserData));
+        checkProfileCompletion(updatedUserData);
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -106,9 +150,17 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="flex text-white max-w-2xl mx-auto p-4 bg-gray-900 rounded-lg shadow-lg my-8">
+    <div className="flex text-white max-w-6xl mx-auto p-4 bg-gray-900 rounded-lg shadow-lg my-8">
       <section className="flex flex-col gap-6 w-full">
-        <h1 className="font-bold text-3xl text-center mb-6 text-blue-400">Edit Profile</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="font-bold text-3xl text-blue-400">Edit Profile</h1>
+          {profileComplete && (
+            <div className="flex items-center gap-2 text-green-400">
+              <FontAwesomeIcon icon={faCheckCircle} />
+              <span>Profile Complete</span>
+            </div>
+          )}
+        </div>
         
         {/* Profile Picture Section */}
         <div className="flex items-center justify-between bg-gray-800 rounded-xl p-4 border border-gray-700">
@@ -151,65 +203,140 @@ const EditProfile = () => {
           </button>
         </div>
 
-        {/* Bio Section */}
+        {/* 1. Personal Details Section */}
         <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
-          <h1 className="font-bold text-xl mb-3 text-blue-400">Bio</h1>
-          <textarea
-            value={input.bio}
-            onChange={(e) => setInput({ ...input, bio: e.target.value })}
-            name="bio"
-            placeholder="Tell us about yourself..."
-            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
-          />
-        </div>
-
-        {/* Personal Information Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Gender */}
-          <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
-            <h1 className="font-bold text-xl mb-3 text-blue-400">Gender</h1>
-            <select
-              value={input.gender}
-              onChange={(e) => selectChangeHandler(e.target.value)}
-              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
-            </select>
-          </div>
-
-          {/* Role */}
-          <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
-            <h1 className="font-bold text-xl mb-3 text-blue-400">Role</h1>
-            <select
-              value={input.role}
-              onChange={(e) => setInput({ ...input, role: e.target.value })}
-              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="student">Student</option>
-              <option value="counselor">Counselor</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Professional Information Section */}
-        <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
-          <h1 className="font-bold text-xl mb-3 text-blue-400">Professional Information</h1>
+          <h1 className="font-bold text-xl mb-4 text-blue-400 border-b border-gray-700 pb-2">
+            Personal Details
+          </h1>
           
-          {/* Experience */}
+          {/* Bio */}
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2">Experience</label>
-            <input
-              type="text"
-              value={input.experience}
-              onChange={(e) => setInput({ ...input, experience: e.target.value })}
-              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Your professional experience"
+            <label className="block text-gray-300 mb-2">Bio</label>
+            <textarea
+              value={input.bio}
+              onChange={(e) => setInput({ ...input, bio: e.target.value })}
+              placeholder="Tell us about yourself..."
+              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
             />
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Gender */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">Gender</label>
+              <select
+                value={input.gender}
+                onChange={(e) => setInput({ ...input, gender: e.target.value })}
+                className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+
+            {/* College */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">College/University</label>
+              <input
+                type="text"
+                value={input.college}
+                onChange={(e) => setInput({ ...input, college: e.target.value })}
+                className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Your college or university"
+              />
+            </div>
+          </div>
+
+          {/* Address */}
+          <div className="mb-4">
+            <label className="block text-gray-300 mb-2">Address</label>
+            <input
+              type="text"
+              value={input.address}
+              onChange={(e) => setInput({ ...input, address: e.target.value })}
+              className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Your current address"
+            />
+          </div>
+        </div>
+
+        {/* 2. Social Links Section */}
+        <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
+          <h1 className="font-bold text-xl mb-4 text-blue-400 border-b border-gray-700 pb-2">
+            Social Links
+          </h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Leetcode */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">LeetCode</label>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">leetcode.com/</span>
+                <input
+                  type="text"
+                  value={input.leetcode}
+                  onChange={(e) => setInput({ ...input, leetcode: e.target.value })}
+                  className="flex-1 p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="username"
+                />
+              </div>
+            </div>
+
+            {/* GitHub */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">GitHub</label>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">github.com/</span>
+                <input
+                  type="text"
+                  value={input.github}
+                  onChange={(e) => setInput({ ...input, github: e.target.value })}
+                  className="flex-1 p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="username"
+                />
+              </div>
+            </div>
+
+            {/* LinkedIn */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">LinkedIn</label>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">linkedin.com/in/</span>
+                <input
+                  type="text"
+                  value={input.linkedin}
+                  onChange={(e) => setInput({ ...input, linkedin: e.target.value })}
+                  className="flex-1 p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="profile-id"
+                />
+              </div>
+            </div>
+
+            {/* twiter */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">X</label>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">X.com/</span>
+                <input
+                  type="text"
+                  value={input.twiter}
+                  onChange={(e) => setInput({ ...input, twiter: e.target.value })}
+                  className="flex-1 p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="username"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Skills and Professional Section */}
+        <div className="bg-gray-800 p-4 rounded-xl border border-gray-700">
+          <h1 className="font-bold text-xl mb-4 text-blue-400 border-b border-gray-700 pb-2">
+            Skills & Professional Information
+          </h1>
+          
           {/* Skills */}
           <div className="mb-4">
             <label className="block text-gray-300 mb-2">Skills</label>
@@ -221,6 +348,33 @@ const EditProfile = () => {
               placeholder="Comma-separated skills (e.g., React, Counseling, Psychology)"
             />
             <p className="text-xs text-gray-400 mt-1">Separate multiple skills with commas</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Role */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">Role</label>
+              <select
+                value={input.role}
+                onChange={(e) => setInput({ ...input, role: e.target.value })}
+                className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="student">Student</option>
+                <option value="counselor">Counselor</option>
+              </select>
+            </div>
+
+            {/* Experience */}
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2">Experience</label>
+              <input
+                type="text"
+                value={input.experience}
+                onChange={(e) => setInput({ ...input, experience: e.target.value })}
+                className="w-full p-3 border border-gray-700 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Your professional experience"
+              />
+            </div>
           </div>
 
           {/* Sessions (for counselors) */}

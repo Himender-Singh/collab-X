@@ -1,21 +1,44 @@
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RequireRole = ({ children }) => {
-  const { user } = useSelector((store) => store.auth); // Access the user from Redux store
+  const { user } = useSelector((store) => store.auth);
   const location = useLocation();
 
-  // If the user is logged in and tries to access the root URL, redirect to the feed page
-  if (user && location.pathname === "/") {
-    return <Navigate to="/feed" replace />;
-  }
+  // Whitelisted routes that don't require auth or complete profile
+  const PUBLIC_ROUTES = ['/login', '/signup', '/about'];
+  const INCOMPLETE_PROFILE_ALLOWED = ['/edit', ...PUBLIC_ROUTES];
 
-  // If the user is not logged in and tries to access a protected route (except the root), redirect to the login page
-  if (!user && location.pathname !== "/") {
+  // Check if profile is complete (customize these fields as needed)
+  const isProfileComplete = user && 
+    user.profilePicture && 
+    user.bio && 
+    user.skills?.length > 0 && 
+    user.college && 
+    (user.leetcode || user.github);
+
+  // Redirect to login if not authenticated
+  if (!user && !PUBLIC_ROUTES.includes(location.pathname)) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Otherwise, render the children (the requested component)
+  // Redirect to profile edit if profile is incomplete
+  if (user && !isProfileComplete && !INCOMPLETE_PROFILE_ALLOWED.includes(location.pathname)) {
+    toast.info('Please complete your profile first');
+    return <Navigate to="/edit" state={{ from: location }} replace />;
+  }
+
+  // Redirect authenticated users away from auth pages
+  if (user && ['/login', '/signup'].includes(location.pathname)) {
+    return <Navigate to="/feed" replace />;
+  }
+
+  // Redirect from root based on auth status
+  if (location.pathname === "/") {
+    return <Navigate to={user ? "/feed" : "/login"} replace />;
+  }
+
   return children;
 };
 
