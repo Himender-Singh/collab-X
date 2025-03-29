@@ -74,7 +74,8 @@ export const login = async (req, res) => {
             bio: user.bio,
             followers: user.followers,
             following: user.following,
-            posts: populatedPosts
+            posts: populatedPosts,
+            check: user.check,
         };
 
         return res.cookie('token', token, { httpOnly: true, sameSite: 'strict', maxAge: 7 * 24 * 60 * 60 * 1000 }).json({
@@ -151,7 +152,7 @@ export const editProfile = async (req, res) => {
         if (linkedin) user.linkedin = linkedin;
         if (address) user.address = address;
         if (college) user.college = college;
-        if (check) user.check = check;
+        if (check) user.check = true;
 
         // Save updated user profile
         await user.save();

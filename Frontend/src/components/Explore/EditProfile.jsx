@@ -27,6 +27,7 @@ const EditProfile = () => {
     twiter: user?.twiter || "",
     address: user?.address || "",
     college: user?.college || "",
+    check: true,  
   });
 
   const navigate = useNavigate();
@@ -126,7 +127,7 @@ const EditProfile = () => {
           twiter: res.data.user?.twiter,
           address: res.data.user?.address,
           college: res.data.user?.college,
-          isProfileComplete: true
+          check: true
         };
         
         dispatch(setAuthUser(updatedUserData));

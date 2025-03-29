@@ -6,6 +6,8 @@ const RequireRole = ({ children }) => {
   const { user } = useSelector((store) => store.auth);
   const location = useLocation();
 
+  console.log("user", user);
+
   // Whitelisted routes that don't require auth or complete profile
   const PUBLIC_ROUTES = ['/login', '/signup', '/about'];
   const INCOMPLETE_PROFILE_ALLOWED = ['/edit', ...PUBLIC_ROUTES];
@@ -24,8 +26,8 @@ const RequireRole = ({ children }) => {
   }
 
   // Redirect to profile edit if profile is incomplete
-  if (user && !isProfileComplete && !INCOMPLETE_PROFILE_ALLOWED.includes(location.pathname)) {
-    toast.info('Please complete your profile first');
+  if (user && !user?.check && isProfileComplete && !INCOMPLETE_PROFILE_ALLOWED.includes(location.pathname)) {
+    toast.info('Please complete your profile first. If it is already complete, please click on save changes.');
     return <Navigate to="/edit" state={{ from: location }} replace />;
   }
 
