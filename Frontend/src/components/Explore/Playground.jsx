@@ -24,6 +24,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCode } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+import { server } from '@/main';
 
 // Register ChartJS components
 ChartJS.register(
@@ -81,51 +82,19 @@ const Playground = () => {
   const fetchLeetCodeData = async (username) => {
     setLoading(prev => ({ ...prev, leetcode: true }));
     try {
-      const response = await axios.post('https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql', {
-        query: `
-          query getUserProfile($username: String!) {
-            matchedUser(username: $username) {
-              username
-              submitStats {
-                acSubmissionNum {
-                  difficulty
-                  count
-                }
-              }
-              profile {
-                ranking
-              }
-            }
-            userContestRanking(username: $username) {
-              rating
-            }
-          }
-        `,
-        variables: { username }
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-
-      const data = response.data.data;
-      if (!data.matchedUser) {
-        throw new Error('User not found on LeetCode');
-      }
-
-      const solvedStats = data.matchedUser.submitStats.acSubmissionNum;
+      const response = await axios.post(`${server}/user/leetcode`, { username });
 
       setProfiles(prev => ({
         ...prev,
         leetcode: {
           ...prev.leetcode,
           data: {
-            totalSolved: solvedStats.find(d => d.difficulty === "All")?.count || 0,
-            easySolved: solvedStats.find(d => d.difficulty === "Easy")?.count || 0,
-            mediumSolved: solvedStats.find(d => d.difficulty === "Medium")?.count || 0,
-            hardSolved: solvedStats.find(d => d.difficulty === "Hard")?.count || 0,
-            ranking: data.matchedUser.profile.ranking,
-            contestRating: data.userContestRanking?.rating || "N/A"
+            totalSolved: response.data.totalSolved,
+            easySolved: response.data.easySolved,
+            mediumSolved: response.data.mediumSolved,
+            hardSolved: response.data.hardSolved,
+            ranking: response.data.ranking,
+            contestRating: response.data.contestRating
           },
           connected: true
         }

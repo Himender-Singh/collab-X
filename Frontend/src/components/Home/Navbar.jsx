@@ -115,22 +115,22 @@ const Navbar = () => {
                       ref={dropdownRef}
                     >
                       <Link
-                        to="/connect"
+                        to="/search"
                         className="block px-4 py-2 hover:bg-gray-200"
                       >
                         Connect
                       </Link>
                       <Link
-                        to="/mock-interview"
+                        to="/playground"
                         className="block px-4 py-2 hover:bg-gray-200"
                       >
-                        Mock Interview
+                        Playground
                       </Link>
                       <Link
-                        to="/find-peers"
+                        to="/feed"
                         className="block px-4 py-2 hover:bg-gray-200"
                       >
-                        Find Peers
+                        Advice
                       </Link>
                     </div>
                   )}
@@ -241,7 +241,7 @@ const Navbar = () => {
                     ref={dropdownRef}
                   >
                     <Link
-                      to="/connect"
+                      to="/search"
                       className="block px-4 py-2 hover:bg-gray-200"
                     >
                       Connect

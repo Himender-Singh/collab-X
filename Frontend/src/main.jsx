@@ -32,6 +32,8 @@ import AskBot from "./components/Global/AskBot";
 import ChatSidebar from "./components/Explore/ChatSidebar";
 import SocketManager from "./components/Global/SocketManager";
 import Playground from "./components/Explore/Playground";
+import Premium from "./components/Explore/Premium";
+import Help from "./components/Explore/Help";
 
 const persist = persistStore(store);
 export const server = "http://localhost:8000/api/v1";
@@ -92,6 +94,8 @@ const router = createBrowserRouter(
           <Roadmaps />
         </RequireRole>
       } />
+      <Route path="/premium" element={ <Premium/> } />
+      <Route path="/need-help" element={ <Help/> } />
       <Route path="code-editor" element={
         <RequireRole>
           <CodeEditor />
