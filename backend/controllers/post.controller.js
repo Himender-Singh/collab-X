@@ -206,6 +206,7 @@ export const dislikePost = async (req, res) => {
     return res.status(200).json({ message: "Post disliked", success: true });
   } catch (error) {}
 };
+
 export const addComment = async (req, res) => {
   try {
     const postId = req.params.id;
@@ -243,25 +244,142 @@ export const addComment = async (req, res) => {
     console.log(error);
   }
 };
+
+export const addReplyToComment = async (req, res) => {
+  try {
+    const { postId, commentId } = req.params;
+    const userId = req.id;
+    const { text } = req.body;
+
+    if (!text) {
+      return res.status(400).json({ message: "Text is required", success: false });
+    }
+
+    // Create the reply
+    const reply = await Comment.create({
+      text,
+      author: userId,
+      post: postId,
+      parentComment: commentId
+    });
+
+    // Add the reply to the parent comment's replies array
+    await Comment.findByIdAndUpdate(commentId, {
+      $push: { replies: reply._id }
+    });
+
+    // Populate all necessary fields
+    const populatedReply = await Comment.findById(reply._id)
+      .populate({
+        path: "author",
+        select: "username profilePicture"
+      })
+      .populate({
+        path: "parentComment",
+        select: "text author"
+      });
+
+    return res.status(201).json({
+      message: "Reply added successfully",
+      reply: populatedReply,
+      success: true
+    });
+
+  } catch (error) {
+    console.error("Error in addReplyToComment:", error);
+    return res.status(500).json({ 
+      message: "Internal server error", 
+      error: error.message 
+    });
+  }
+};
+
+// Update getRepliesForComment to better handle population
+export const getRepliesForComment = async (req, res) => {
+  try {
+    const commentId = req.params.commentId;
+
+    const replies = await Comment.find({ parentComment: commentId })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "author",
+        select: "username profilePicture"
+      })
+      .populate({
+        path: "replies",
+        populate: {
+          path: "author",
+          select: "username profilePicture"
+        }
+      });
+
+    return res.status(200).json({
+      success: true,
+      replies
+    });
+
+  } catch (error) {
+    console.error("Error in getRepliesForComment:", error);
+    return res.status(500).json({ 
+      message: "Internal server error", 
+      error: error.message 
+    });
+  }
+};
+
+// Update getCommentsOfPost to include nested replies
 export const getCommentsOfPost = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    const comments = await Comment.find({ post: postId }).populate(
-      "author",
-      "username profilePicture"
-    );
+    // Get top-level comments with their replies populated
+    const comments = await Comment.find({ 
+      post: postId,
+      parentComment: { $exists: false }
+    })
+    .sort({ createdAt: -1 })
+    .populate({
+      path: "author",
+      select: "username profilePicture"
+    })
+    .populate({
+      path: "replies",
+      populate: [
+        {
+          path: "author",
+          select: "username profilePicture"
+        },
+        {
+          path: "replies",
+          populate: {
+            path: "author",
+            select: "username profilePicture"
+          }
+        }
+      ]
+    });
 
-    if (!comments)
-      return res
-        .status(404)
-        .json({ message: "No comments found for this post", success: false });
+    if (!comments || comments.length === 0) {
+      return res.status(404).json({ 
+        message: "No comments found for this post", 
+        success: false 
+      });
+    }
 
-    return res.status(200).json({ success: true, comments });
+    return res.status(200).json({ 
+      success: true, 
+      comments 
+    });
+
   } catch (error) {
-    console.log(error);
+    console.error("Error in getCommentsOfPost:", error);
+    return res.status(500).json({ 
+      message: "Internal server error", 
+      error: error.message 
+    });
   }
 };
+
 export const deletePost = async (req, res) => {
   try {
     const postId = req.params.id;

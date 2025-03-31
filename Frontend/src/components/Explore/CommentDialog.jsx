@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link } from "react-router-dom";
@@ -10,11 +10,12 @@ import { setPosts } from "@/redux/postSlice";
 import Comment from "./Comment";
 import { server } from "@/main";
 import Picker from "emoji-picker-react";
-import { Bookmark, Command, Heart, Share } from "lucide-react";
+import { Bookmark, Command, Heart, Share, Reply, ChevronDown, ChevronUp } from "lucide-react";
 import { FaBookmark, FaEllipsisH } from "react-icons/fa";
 
 const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const [text, setText] = useState("");
+  const [replyingTo, setReplyingTo] = useState(null);
   const { selectedPost, posts, user } = useSelector((store) => store.post);
   const [comments, setComments] = useState(initialComments || []);
   const [liked, setLiked] = useState(false);
@@ -23,28 +24,157 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   const dispatch = useDispatch();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [bookmark, setBookmark] = useState(
-    (selectedPost.bookmarks || []).includes(user?._id) || false
+    (selectedPost?.bookmarks || []).includes(user?._id) || false
   );
+  const [expandedReplies, setExpandedReplies] = useState({});
+  const [pdfModalOpen, setPdfModalOpen] = useState(false);
+
+  // Fetch initial state and comments
+  useEffect(() => {
+    if (selectedPost) {
+      setLiked(selectedPost.likes?.includes(user?._id) || false);
+      setPostLikes(selectedPost.likes?.length || 0);
+      setBookmark((selectedPost.bookmarks || []).includes(user?._id) || false);
+    }
+
+    if (open && selectedPost?._id) {
+      fetchComments();
+    }
+  }, [selectedPost, user, open]);
+
+  const fetchComments = async () => {
+    try {
+      const res = await axios.get(
+        `${server}/post/${selectedPost._id}/comment/all`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        setComments(res.data.comments);
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      toast.error("Failed to load comments.");
+    }
+  };
+
+  const fetchReplies = async (commentId) => {
+    try {
+      const res = await axios.get(
+        `${server}/post/comment/${commentId}/replies`,
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        setComments(prev => prev.map(comment => 
+          comment._id === commentId 
+            ? { ...comment, replies: res.data.replies } 
+            : comment
+        ));
+      }
+    } catch (error) {
+      console.error("Error fetching replies:", error);
+      toast.error("Failed to load replies.");
+    }
+  };
 
   const changeEventHandler = (e) => {
     setText(e.target.value.trim() ? e.target.value : "");
+  };
+
+  const toggleReplies = (commentId) => {
+    setExpandedReplies(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId]
+    }));
+    
+    if (!expandedReplies[commentId]) {
+      const comment = comments.find(c => c._id === commentId);
+      if (!comment.replies || comment.replies.length === 0) {
+        fetchReplies(commentId);
+      }
+    }
+  };
+
+  const startReply = (comment) => {
+    setReplyingTo(comment);
+    setText(`@${comment.author.username} `);
+    document.getElementById("comment-input")?.focus();
+  };
+
+  const sendMessageHandler = async () => {
+    if (!text.trim() || !selectedPost?._id) return;
+
+    try {
+      let endpoint, body = { text };
+      
+      if (replyingTo) {
+        endpoint = `${server}/post/${selectedPost._id}/comment/${replyingTo._id}/reply`;
+      } else {
+        endpoint = `${server}/post/${selectedPost._id}/comment`;
+      }
+
+      const res = await axios.post(
+        endpoint,
+        body,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.success) {
+        const newComment = res.data.comment || res.data.reply;
+        toast.info("Reply added successfully!");
+
+        if (replyingTo) {
+          // Update the parent comment with the new reply
+          setComments(prev => prev.map(comment => 
+            comment._id === replyingTo._id
+              ? { 
+                  ...comment, 
+                  replies: [...(comment.replies || []), newComment] 
+                }
+              : comment
+          ));
+          setExpandedReplies(prev => ({ ...prev, [replyingTo._id]: true }));
+        } else {
+          // Add new top-level comment
+          setComments(prev => [newComment, ...prev]);
+        }
+
+        // Update Redux store
+        const updatedPosts = posts.map(post =>
+          post._id === selectedPost._id
+            ? {
+                ...post,
+                comments: replyingTo 
+                  ? post.comments 
+                  : [...(post.comments || []), newComment._id]
+              }
+            : post
+        );
+        dispatch(setPosts(updatedPosts));
+
+        setText("");
+        setReplyingTo(null);
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.error("Error posting comment:", error);
+      toast.error("Failed to post comment.");
+    }
   };
 
   const bookmarkHandler = async () => {
     try {
       const res = await axios.get(
         `${server}/post/${selectedPost._id}/bookmark`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       if (res.data.success) {
         toast.success(res.data.message);
-        const newBookmarkState = !bookmark;
-        setBookmark(newBookmarkState);
+        setBookmark(!bookmark);
 
-        // Update Redux state
-        const updatedPosts = posts.map((p) =>
+        const updatedPosts = posts.map(p =>
           p._id === selectedPost._id
             ? { ...p, bookmarks: res.data.updatedBookmarks }
             : p
@@ -57,60 +187,23 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     }
   };
 
-  const sendMessageHandler = async () => {
-    if (!text.trim() || !selectedPost?._id) return;
-
-    try {
-      const res = await axios.post(
-        `${server}/post/${selectedPost._id}/comment`,
-        { text },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-
-      if (res.data.success) {
-        const newComment = res.data.comment;
-        const updatedComments = [...comments, newComment];
-        setComments(updatedComments);
-
-        const updatedPosts = posts.map((post) =>
-          post._id === selectedPost._id
-            ? { ...post, comments: updatedComments }
-            : post
-        );
-        dispatch(setPosts(updatedPosts));
-
-        toast.success(res.data.message);
-        setText("");
-      }
-    } catch (error) {
-      console.error("Error posting comment:", error);
-      toast.error("Failed to post comment.");
-    }
-  };
-
   const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
         `${server}/post/${selectedPost._id}/${action}`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       if (res.data.success) {
-        const updatedLikes = liked ? postLikes - 1 : postLikes + 1;
-        setPostLikes(updatedLikes);
+        setPostLikes(liked ? postLikes - 1 : postLikes + 1);
         setLiked(!liked);
 
-        const updatedPostData = posts.map((p) =>
+        const updatedPostData = posts.map(p =>
           p._id === selectedPost._id
             ? {
                 ...p,
                 likes: liked
-                  ? p.likes.filter((id) => id !== user._id)
+                  ? p.likes.filter(id => id !== user._id)
                   : [...p.likes, user._id],
               }
             : p
@@ -142,24 +235,58 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
     }
   };
 
-  const [pdfModalOpen, setPdfModalOpen] = useState(false);
-
   const getFileType = (url) => {
-    if (url.match(/\.(jpeg|jpg|gif|png)$/i)) {
-      return "image";
-    } else if (url.match(/\.(mp4|mov|avi|mkv)$/i)) {
-      return "video";
-    } else if (url.includes("raw/upload")) {
-      return "pdf";
-    }
+    if (!url) return "unknown";
+    if (url.match(/\.(jpeg|jpg|gif|png)$/i)) return "image";
+    if (url.match(/\.(mp4|mov|avi|mkv)$/i)) return "video";
+    if (url.includes("raw/upload")) return "pdf";
     return "unknown";
   };
 
-  const fileType = selectedPost.image?getFileType(selectedPost.image): "unknown";
+  const fileType = getFileType(selectedPost.image);
 
   const onEmojiClick = (event) => {
-    setText((prevText) => prevText + event.emoji);
+    setText(prev => prev + event.emoji);
     setShowEmojiPicker(false);
+  };
+
+  // Render replies for a comment
+  const renderReplies = (comment) => {
+    if (!comment.replies || comment.replies.length === 0) return null;
+
+    return (
+      <div className="ml-8 mt-2 border-l-2 border-gray-700 pl-4">
+        {expandedReplies[comment._id] ? (
+          <>
+            {comment.replies.map(reply => (
+              <div key={reply._id} className="my-2">
+                <Comment 
+                  comment={reply} 
+                  onReply={() => startReply(comment)}
+                  isReply
+                />
+                {renderReplies(reply)} {/* Recursive rendering for nested replies */}
+              </div>
+            ))}
+            <button 
+              onClick={() => toggleReplies(comment._id)}
+              className="text-gray-400 text-sm flex items-center mt-1"
+            >
+              <ChevronUp size={16} className="mr-1" />
+              Hide replies
+            </button>
+          </>
+        ) : (
+          <button 
+            onClick={() => toggleReplies(comment._id)}
+            className="text-gray-400 text-sm flex items-center"
+          >
+            <ChevronDown size={16} className="mr-1" />
+            {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
+          </button>
+        )}
+      </div>
+    );
   };
 
   if (!selectedPost) {
@@ -294,7 +421,11 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 comments.length > 0 ? (
                   comments.map((comment) => (
                     <div key={comment._id} className="my-2">
-                      <Comment comment={comment} />
+                      <Comment 
+                        comment={comment} 
+                        onReply={() => startReply(comment)}
+                      />
+                      {renderReplies(comment)}
                     </div>
                   ))
                 ) : (
@@ -358,7 +489,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                 )}
               </div>
               <div>
-                {postLikes && (
+                {postLikes > 0 && (
                   <div className="text-gray-50 p-4 text-start">
                     {postLikes} {postLikes === 1 ? "like" : "likes"}
                   </div>
@@ -368,14 +499,27 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
 
             {/* Comment Input Section */}
             <div className="p-4 border-t border-gray-700">
+              {replyingTo && (
+                <div className="flex items-center text-sm text-gray-400 mb-2">
+                  <span>Replying to @{replyingTo.author.username}</span>
+                  <button 
+                    onClick={() => setReplyingTo(null)}
+                    className="ml-2 text-gray-500 hover:text-gray-300"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
               <div className="flex items-center mt-4 gap-2">
                 <div className="relative flex-grow">
                   <input
+                    id="comment-input"
                     type="text"
                     value={text}
                     onChange={changeEventHandler}
-                    placeholder="Add a comment..."
+                    placeholder={replyingTo ? "Write your reply..." : "Add a comment..."}
                     className="w-full outline-none text-sm border-b border-gray-600 p-2 bg-transparent text-white"
+                    onKeyPress={(e) => e.key === 'Enter' && sendMessageHandler()}
                   />
                   <button
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -394,7 +538,7 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
                   onClick={sendMessageHandler}
                   className="text-blue-500 font-bold hover:text-blue-600"
                 >
-                  Post
+                  {replyingTo ? "Reply" : "Post"}
                 </button>
               </div>
             </div>
