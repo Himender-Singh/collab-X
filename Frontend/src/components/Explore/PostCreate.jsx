@@ -23,7 +23,7 @@ const PostCreate = () => {
             <img
               src={user.profilePicture}
               alt="User"
-              className="w-20 h-14 rounded-full"
+              className="w-14 h-14 rounded-full"
             />
             <div>
               <div className="flex gap-2">

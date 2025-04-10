@@ -36,7 +36,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/redux/authSlice";
 import { server } from "@/main";
-import InterviewMode from "../Global/InterviewMode";
+import InterviewMode from "./InterviewMode";
 
 const LeftNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);

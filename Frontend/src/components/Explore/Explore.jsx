@@ -4,7 +4,7 @@ import Feed from './Feed'
 
 const Explore = () => {
   return (
-    <div>
+    <div className=''>
         <LeftNavbar/>
         <Feed/>
     </div>

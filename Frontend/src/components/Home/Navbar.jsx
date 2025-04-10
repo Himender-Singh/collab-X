@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { logout } from "../../redux/authSlice";
 import { server } from "@/main";
-import InterviewMode from "../Global/InterviewMode";
+import InterviewMode from "../Explore/InterviewMode";
 
 const Navbar = () => {
   const location = useLocation();

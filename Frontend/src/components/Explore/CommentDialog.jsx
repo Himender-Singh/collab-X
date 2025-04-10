@@ -236,14 +236,14 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   };
 
   const getFileType = (url) => {
-    if (!url) return "unknown";
+    if (!url) return null;
     if (url.match(/\.(jpeg|jpg|gif|png)$/i)) return "image";
     if (url.match(/\.(mp4|mov|avi|mkv)$/i)) return "video";
     if (url.includes("raw/upload")) return "pdf";
-    return "unknown";
+    return null;
   };
 
-  const fileType = getFileType(selectedPost.image);
+  const fileType = selectedPost?.image ? getFileType(selectedPost.image) : null;
 
   const onEmojiClick = (event) => {
     setText(prev => prev + event.emoji);
@@ -290,70 +290,80 @@ const CommentDialog = ({ open, setOpen, comments: initialComments }) => {
   };
 
   if (!selectedPost) {
-    return null;
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-7xl h-[42rem] border-none overflow-y-auto p-0 flex flex-col bg-gray-900 text-white">
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-400">No post selected or post not found.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-7xl h-[42rem] border-none overflow-y-auto p-0 flex flex-col bg-gray-900 text-white">
         <div className="flex h-full flex-1 flex-col md:flex-row">
-          {/* Media Section */}
-          <div className="w-full md:w-2/3 border-r border-gray-700 h-full overflow-hidden">
-            {fileType === "image" && (
-              <img
-                className="w-full aspect-square h-full object-fill"
-                src={selectedPost.image}
-                alt="selectedPost_img"
-              />
-            )}
-            {fileType === "video" && (
-              <video
-                className="w-full aspect-square h-full object-fill"
-                controls
-                autoPlay
-              >
-                <source src={selectedPost.image} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            )}
-            {fileType === "pdf" && (
-              <div className="flex flex-col p-2 gap-2">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <iframe
-                      className="my-2 w-full h-[35rem] cursor-pointer"
-                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                        selectedPost.image
-                      )}&embedded=true`}
-                      title="PDF Viewer"
-                      onClick={() => setPdfModalOpen(true)}
-                    />
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl h-[90vh]">
-                    <iframe
-                      className="w-[28rem] h-full"
-                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                        selectedPost.image
-                      )}&embedded=true`}
-                      title="PDF Viewer"
-                    />
-                  </DialogContent>
-                </Dialog>
-                <div className="flex justify-center items-center">
-                  <a
-                    href={selectedPost.image}
-                    download
-                    className="text-gray-50 rounded-lg p-2 bg-blue-600 hover:underline text-center"
-                  >
-                    Download PDF
-                  </a>
+          {/* Media Section - Only render if there's a file to display */}
+          {fileType && (
+            <div className="w-full md:w-2/3 border-r border-gray-700 h-full overflow-hidden">
+              {fileType === "image" && (
+                <img
+                  className="w-full aspect-square h-full object-fill"
+                  src={selectedPost.image}
+                  alt="Post content"
+                />
+              )}
+              {fileType === "video" && (
+                <video
+                  className="w-full aspect-square h-full object-fill"
+                  controls
+                  autoPlay
+                >
+                  <source src={selectedPost.image} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+              {fileType === "pdf" && (
+                <div className="flex flex-col p-2 gap-2">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <iframe
+                        className="my-2 w-full h-[35rem] cursor-pointer"
+                        src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                          selectedPost.image
+                        )}&embedded=true`}
+                        title="PDF Viewer"
+                        onClick={() => setPdfModalOpen(true)}
+                      />
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl h-[90vh]">
+                      <iframe
+                        className="w-[28rem] h-full"
+                        src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                          selectedPost.image
+                        )}&embedded=true`}
+                        title="PDF Viewer"
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <div className="flex justify-center items-center">
+                    <a
+                      href={selectedPost.image}
+                      download
+                      className="text-gray-50 rounded-lg p-2 bg-blue-600 hover:underline text-center"
+                    >
+                      Download PDF
+                    </a>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* Content Section */}
-          <div className="w-full md:w-[40%] flex flex-col justify-between">
+          <div className={`w-full ${fileType ? 'md:w-[40%]' : 'md:w-full'} flex flex-col justify-between`}>
             <div className="flex items-center justify-between p-4 border-b border-gray-700">
               <div className="flex gap-3 items-center">
                 <Link to={`/profile/${selectedPost.author?._id}`}>
