@@ -14,7 +14,7 @@ const SocketManager = () => {
 
   useEffect(() => {
     if (user) {
-      const socketio = io("http://localhost:8000", {
+      const socketio = io("https://try1-eupj.onrender.com", {
         query: { userId: user?._id },
         transports: ["websocket"],
       });

@@ -32,7 +32,7 @@ export const ChatProvider = ({ children }) => {
       setNewRequestLoading(false);
 
       const { data } = await axios.post(
-        `http://localhost:8000/api/chat/${selected}`,
+        `https://try1-eupj.onrender.com/api/chat/${selected}`,
         {
           question: prompt,
           answer:
@@ -56,7 +56,7 @@ export const ChatProvider = ({ children }) => {
 
   async function fetchChats() {
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/chat/all`, {
+      const { data } = await axios.get(`https://try1-eupj.onrender.com/api/chat/all`, {
         headers: {
           token: localStorage.getItem("token"),
         },
@@ -75,7 +75,7 @@ export const ChatProvider = ({ children }) => {
     setCreateLod(true);
     try {
       const { data } = await axios.post(
-        `http://localhost:8000/api/chat/new`,
+        `https://try1-eupj.onrender.com/api/chat/new`,
         {},
         {
           headers: {
@@ -97,7 +97,7 @@ export const ChatProvider = ({ children }) => {
   async function fetchMessages() {
     setLoading(true);
     try {
-      const { data } = await axios.get(`http://localhost:8000/api/chat/${selected}`, {
+      const { data } = await axios.get(`https://try1-eupj.onrender.com/api/chat/${selected}`, {
         headers: {
           token: localStorage.getItem("token"),
         },
@@ -112,7 +112,7 @@ export const ChatProvider = ({ children }) => {
 
   async function deleteChat(id) {
     try {
-      const { data } = await axios.delete(`http://localhost:8000/api/chat/${id}`, {
+      const { data } = await axios.delete(`https://try1-eupj.onrender.com/api/chat/${id}`, {
         headers: {
           token: localStorage.getItem("token"),
         },

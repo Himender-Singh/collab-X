@@ -29,7 +29,7 @@ const Chats = ({ selectedUser }) => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/v1/message/send/${selectedUser._id}`,
+        `https://try1-eupj.onrender.com/api/v1/message/send/${selectedUser._id}`,
         { textMessage: textMessage },
         {
           headers: { "Content-Type": "application/json" },

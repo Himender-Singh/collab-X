@@ -53,7 +53,7 @@ const Ask = () => {
   const fetchChatMessages = async (chatId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/v1/chat/${chatId}`,
+        `https://try1-eupj.onrender.com/api/v1/chat/${chatId}`,
         { withCredentials: true }
       );
   
