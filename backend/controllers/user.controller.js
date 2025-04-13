@@ -84,10 +84,13 @@ export const login = async (req, res) => {
       check: user.check,
     };
 
+    console.log(user,"data");
+
     return res
       .cookie("token", token, {
         httpOnly: true,
         sameSite: "strict",
+        secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .json({

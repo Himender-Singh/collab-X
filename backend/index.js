@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: [ "https://try1-eupj.onrender.com" , "http://localhost:5173"],
+  origin: [ "https://collab-x-frontend.onrender.com" , "http://localhost:5173"],
   methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
   allowedHeaders: "Content-Type,Authorization",
   credentials: true,
@@ -39,12 +39,6 @@ app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 app.use("/api/v1/task", taskRoute);
 app.use("/api/v1/chat", chatRoute);
-
-// Serving static files
-// app.use(express.static(path.join(__dirname, "Frontend", "dist")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirname, "Frontend", "dist", "index.html"));
-// });
 
 // Error handling middleware
 app.use((err, req, res, next) => {

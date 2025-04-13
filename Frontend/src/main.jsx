@@ -36,7 +36,7 @@ import Premium from "./components/Explore/Premium";
 import Help from "./components/Explore/Help";
 
 const persist = persistStore(store);
-export const server = "https://try-ghcr.onrender.com/api/v1";
+export const server = "http://localhost:8000/api/v1";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

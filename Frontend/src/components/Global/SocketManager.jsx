@@ -11,10 +11,11 @@ const SocketManager = () => {
   const { socket } = useSelector((store) => store.socketio);
   const dispatch = useDispatch();
   const {selectedUser} = useSelector(store=>store.auth);
-
+  
+  // https://try1-eupj.onrender.com
   useEffect(() => {
     if (user) {
-      const socketio = io("https://try1-eupj.onrender.com", {
+      const socketio = io("https://collabx-oydc.onrender.com", {
         query: { userId: user?._id },
         transports: ["websocket"],
       });
