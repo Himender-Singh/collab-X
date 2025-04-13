@@ -41,10 +41,10 @@ app.use("/api/v1/task", taskRoute);
 app.use("/api/v1/chat", chatRoute);
 
 // Serving static files
-app.use(express.static(path.join(__dirname, "Frontend", "dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "Frontend", "dist", "index.html"));
-});
+// app.use(express.static(path.join(__dirname, "Frontend", "dist")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "Frontend", "dist", "index.html"));
+// });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
