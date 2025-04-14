@@ -6,7 +6,6 @@ const RequireRole = ({ children }) => {
   const { user } = useSelector((store) => store.auth);
   const location = useLocation();
 
-  console.log("user", user);
 
   // Whitelisted routes that don't require auth or complete profile
   const PUBLIC_ROUTES = ['/login', '/signup', '/about'];

@@ -197,7 +197,6 @@ const Post = ({ post }) => {
   const sharePost = async () => {
     if (navigator.share) {
       const shareUrl = `${post.image}`; // Use post._id directly
-      console.log("Sharing URL:", shareUrl); // Log the URL to check if it's correct
       try {
         await navigator.share({
           title: post.caption, // Use the post caption as the title
@@ -242,7 +241,6 @@ const Post = ({ post }) => {
     const emoji = event.emoji || "";
     setText((prevText) => prevText + emoji);
     setShowEmojiPicker(false);
-    console.log(emoji, "data ");
   };
 
   if (!post || !post.author) return null;

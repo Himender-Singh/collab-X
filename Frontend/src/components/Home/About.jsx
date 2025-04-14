@@ -21,9 +21,6 @@ const About = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Log form data to console for now (simulating form submission)
-    console.log("Form Data Submitted: ", formData);
-    // Clear form after submission
     setFormData({ name: "", email: "", message: "" });
   };
 

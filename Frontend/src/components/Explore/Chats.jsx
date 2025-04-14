@@ -46,8 +46,6 @@ const Chats = ({ selectedUser }) => {
     }
   };
 
-  console.log(messages);
-
   // Handle "Enter" key press
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {

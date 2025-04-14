@@ -58,7 +58,6 @@ const Ask = () => {
       );
   
       const chatData = response.data;
-      console.log("Full data from chat:", chatData);
   
       if (Array.isArray(chatData) && chatData.length > 0) {
         const transformedMessages = chatData.map((msg) => [
@@ -66,7 +65,6 @@ const Ask = () => {
           { type: "bot", text: parseResponse(msg.answer) },
         ]).flat();
   
-        console.log("Transformed messages:", transformedMessages);
         setMessages(transformedMessages);
         dispatch(setChat(chatData));
       } else {

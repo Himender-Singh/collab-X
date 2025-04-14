@@ -55,7 +55,6 @@ const AskBot = () => {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const result = await model.generateContent(prompt);
       const aiMessage = result.response.text();
-      console.log(aiMessage);
 
       setChatHistory((prev) => [
         ...prev,

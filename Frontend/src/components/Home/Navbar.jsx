@@ -60,12 +60,7 @@ const Navbar = () => {
     }
   };
 
-  const handleInterviewSubmit = (selection) => {
-    console.log("Selected Interview Type:", selection.selectedType);
-    console.log("Selected Interview Mode:", selection.selectedMode);
-    // You can add logic here to navigate or perform actions based on the selection
-  };
-
+  
   return (
     shouldShowNavbar() && (
       <>

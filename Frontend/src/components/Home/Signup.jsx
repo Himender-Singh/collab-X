@@ -22,7 +22,6 @@ const Signup = () => {
 
   const signupHandler = async (e) => {
     e.preventDefault();
-    console.log("Request body:", input); // Log input before sending
     try {
       const res = await axios.post(
         `${server}/user/register`,

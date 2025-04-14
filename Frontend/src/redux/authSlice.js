@@ -23,7 +23,6 @@ const authSlice = createSlice({
             state.userProfile = action.payload;
         },
         setSelectedUser: (state, action) => {
-            console.log("actions found",action.payload);
             state.selectedUser = action.payload;
         },
         setTasks: (state,action) => {

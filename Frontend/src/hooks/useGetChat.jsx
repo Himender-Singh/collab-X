@@ -16,11 +16,8 @@ const useGetChat = () => {
             withCredentials: true, // Ensure credentials are sent with the request
           }
         );
-        console.log(response,"res from chat");
         dispatch(setChat(response.data)); // Dispatch the action to set chat data in Redux
         setSelected(response.data[0]._id);
-        // console.log(response.data[0]._id);
-        console.log(response.data , "selected data");
       } catch (err) {
         console.error("Error fetching chats:", err);
       } 
