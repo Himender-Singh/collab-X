@@ -16,7 +16,8 @@ const PostCreate = () => {
 
   return (
     <>
-      <div className="bg-[#1C1C1C] p-4 mt-14 text-white w-full max-w-xl rounded-xl mx-auto shadow-md transition-all duration-300 ease-in-out">
+     <div className="p-2">
+     <div className="bg-[#1C1C1C] p-4 text-white w-full max-w-xl rounded-xl mx-auto shadow-md transition-all duration-300 ease-in-out">
         {/* User Profile Section */}
         <Link to={`/profile/${user._id}`}>
           <div className="flex items-center space-x-3">
@@ -77,6 +78,7 @@ const PostCreate = () => {
 
       {/* Create Modal */}
       <Create open={openCreateModal} setOpen={setOpenCreateModal} />
+     </div>
     </>
   );
 };
