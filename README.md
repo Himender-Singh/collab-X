@@ -79,12 +79,14 @@ You can't able to explore all the section's because they need auth token for aut
 - ⏰ Booking sessions with availability
 - 🧠 Personalized AI recommendations
 - 🔄 GitHub/LinkedIn integrations
+![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/b53c5bd3-48c2-474b-9e12-80954172bf9c)
+![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/742aab52-1a31-4a94-9740-eb38e9fa9ba6)
 
 ---
 
 ## 📬 Contact
 
-📧 **Email:** himendersingh8v@gmail.com  
+📧 **Email:** himendersingh8@gmail.com  
 🔗 **LinkedIn:** [linkedin.com/in/himendersingh]([https://www.linkedin.com/in/himendersingh](https://www.linkedin.com/in/himender-singh-54ba88282/))
 
 ---
