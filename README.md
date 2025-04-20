@@ -2,7 +2,7 @@
   <h1>🤝 CollabX</h1>
   <p><strong>A Collaborative Platform to Exchange Skills and Learn Together</strong></p>
   <a href="https://skillsync-frontend.onrender.com/">🌐 Live Site</a> |
-  <a href="https://github.com/Himender-Singh/SkillSync-Frontend">📦 GitHub Repo</a>
+  <a href="https://github.com/Himender-Singh/Collab-X">📦 GitHub Repo</a>
 </div>
 
 ---
