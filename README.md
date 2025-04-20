@@ -19,7 +19,10 @@
 
 Whether you're a designer wanting to learn coding or a developer looking to learn music — CollabX bridges the gap between skillsets!
 
----![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/159db93c-e3bd-4703-8d17-ba67683a073e)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/7ceba36d-4792-4a9e-89e3-9d757062aafd" alt="Demo GIF" width="100%" />
+</p>
+
 
 
 ## 🧱 Tech Stack
