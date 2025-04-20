@@ -1,4 +1,4 @@
-<div align="center">
+![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/7ceba36d-4792-4a9e-89e3-9d757062aafd)<div align="center">
   <h1>🤝 CollabX</h1>
   <p><strong>A Collaborative Platform to Exchange Skills and Learn Together</strong></p>
   <a href="https://skillsync-frontend.onrender.com/">🌐 Live Site</a> |
@@ -19,7 +19,8 @@
 
 Whether you're a designer wanting to learn coding or a developer looking to learn music — CollabX bridges the gap between skillsets!
 
----
+---![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/159db93c-e3bd-4703-8d17-ba67683a073e)
+
 
 ## 🧱 Tech Stack
 
