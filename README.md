@@ -19,10 +19,6 @@
 
 Whether you're a designer wanting to learn coding or a developer looking to learn music — CollabX bridges the gap between skillsets!
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/7ceba36d-4792-4a9e-89e3-9d757062aafd" alt="Demo GIF" width="100%" />
-</p>
-
 
 
 ## 🧱 Tech Stack
@@ -92,6 +88,7 @@ You can't able to explore all the section's because they need auth token for aut
 
 📧 **Email:** himendersingh8@gmail.com  
 🔗 **LinkedIn:** [linkedin.com/in/himendersingh]([https://www.linkedin.com/in/himendersingh](https://www.linkedin.com/in/himender-singh-54ba88282/))
+📽️ **video link** ([https://drive.google.com/file/d/18m_WPYXZiah553F93XIgNKmKbCJ4TowI/view?usp=sharing])
 
 ---
 
