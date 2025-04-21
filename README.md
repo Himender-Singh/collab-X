@@ -1,7 +1,7 @@
-![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/7ceba36d-4792-4a9e-89e3-9d757062aafd)<div align="center">
+<div align="center">
   <h1>🤝 CollabX</h1>
   <p><strong>A Collaborative Platform to Exchange Skills and Learn Together</strong></p>
-  <a href="https://skillsync-frontend.onrender.com/">🌐 Live Site</a> |
+  <a href="https://fluffy-kitten-dc65c9.netlify.app/">🌐 Live Site</a> |
   <a href="https://github.com/Himender-Singh/Collab-X">📦 GitHub Repo</a>
 </div>
 
@@ -69,8 +69,8 @@ You can't able to explore all the section's because they need auth token for aut
 
 ## 📷 UI Preview (Optional)
 
-> Screenshots of peer matching, chat, code editor, and AI assistant in action can be added here for visual reference.
-
+> video of peer matching, chat, code editor, and AI assistant in action can be added here for visual reference.
+📽️ **video link** ([https://drive.google.com/file/d/18m_WPYXZiah553F93XIgNKmKbCJ4TowI/view?usp=sharing])
 ---
 
 ## 💡 Future Enhancements
@@ -79,8 +79,6 @@ You can't able to explore all the section's because they need auth token for aut
 - ⏰ Booking sessions with availability
 - 🧠 Personalized AI recommendations
 - 🔄 GitHub/LinkedIn integrations
-![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/b53c5bd3-48c2-474b-9e12-80954172bf9c)
-![Screen+Recording+2025-04-20+220310+(1)](https://github.com/user-attachments/assets/742aab52-1a31-4a94-9740-eb38e9fa9ba6)
 
 ---
 
@@ -88,7 +86,6 @@ You can't able to explore all the section's because they need auth token for aut
 
 📧 **Email:** himendersingh8@gmail.com  
 🔗 **LinkedIn:** [linkedin.com/in/himendersingh]([https://www.linkedin.com/in/himendersingh](https://www.linkedin.com/in/himender-singh-54ba88282/))
-📽️ **video link** ([https://drive.google.com/file/d/18m_WPYXZiah553F93XIgNKmKbCJ4TowI/view?usp=sharing])
 
 ---
 
